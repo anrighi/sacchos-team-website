@@ -1,6 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { SiteNav } from "#/components/SiteNav";
 import { club } from "#/lib/club";
+import { publicUrl } from "#/lib/public-url";
 import appCss from "#/styles.css?url";
 import type { ReactNode } from "react";
 
@@ -29,8 +30,8 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.jpg", type: "image/jpeg" },
-      { rel: "apple-touch-icon", href: "/brand/logo-sacchos.jpg" },
+      { rel: "icon", href: publicUrl("/favicon.jpg"), type: "image/jpeg" },
+      { rel: "apple-touch-icon", href: publicUrl("/brand/logo-sacchos.jpg") },
     ],
   }),
   shellComponent: RootDocument,

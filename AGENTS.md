@@ -32,7 +32,7 @@ pnpm install   # Node 26
 pnpm test
 pnpm dev       # http://127.0.0.1:43123
 pnpm build
-pnpm deploy    # wrangler, after build
+pnpm deploy    # build statico GitHub Pages (`dist/client`)
 pnpm run sync:github-tasks:dry-run
 pnpm run sync:github-tasks
 ```

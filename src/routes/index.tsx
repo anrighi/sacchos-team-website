@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Button } from "#/components/ui/button";
 import { club } from "#/lib/club";
+import { publicUrl } from "#/lib/public-url";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -14,7 +15,7 @@ function Home() {
       <section className="relative mx-auto flex min-h-[100dvh] max-w-5xl flex-col justify-center gap-8 px-5 py-16 md:px-8">
         <div className="flex items-center gap-4">
           <img
-            src="/brand/logo-sacchos.jpg"
+            src={publicUrl("/brand/logo-sacchos.jpg")}
             alt=""
             className="h-16 w-16 rounded-full object-cover ring-2 ring-pink/70 md:h-20 md:w-20"
           />
@@ -40,7 +41,7 @@ function Home() {
         </div>
         <figure className="mt-4 max-w-xl">
           <img
-            src="/brand/maglie-scoutball.jpg"
+            src={publicUrl("/brand/maglie-scoutball.jpg")}
             alt="Kit casa bianco e trasferta navy con artigli rosa"
             className="w-full rounded-sm border border-white/10 object-cover"
           />

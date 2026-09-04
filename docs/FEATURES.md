@@ -19,7 +19,7 @@
 - **Remaining tasks:**
   - [ ] [F1](features/F1-rosa.md) Ingest Sheet, carte, illustrazioni, filtri
   - [ ] [F2](features/F2-visual.md) Hero, font, loghi, motion
-- **Open blockers:** URL CSV dello Sheet rosa e secret Cloudflare (deploy su `main`)
+- **Open blockers:** URL CSV dello Sheet rosa; Pages source = GitHub Actions
 
 ## Feature index
 
@@ -39,7 +39,8 @@
 | Date | Decision | Rationale | Rejected alternative |
 |------|----------|-----------|---------------------|
 | 2026-09-04 | Estendere `anrighi/agent-repo-template` (merge git, non copia file) | Banner GitHub *generated from* solo se il remote GitHub nasce dal template | Copiare i file a mano |
-| 2026-09-04 | TanStack Start + Cloudflare Workers | SSR, routing file-based, piano gratuito Workers | Next.js / Pages |
+| 2026-09-04 | TanStack Start statico su GitHub Pages | Niente token Cloudflare ora; SSR/Workers dopo | Deploy Wrangler da F0 |
+| 2026-09-04 | TanStack Start + Cloudflare Workers (poi) | SSR e dominio club quando l’account CF è pronto | Next.js / Pages come stack definitivo |
 | 2026-09-04 | Node 26 + pnpm | Current LTS-adjacent del template alzato; lockfile unico | Node 22 del template |
 | 2026-09-04 | Rosa da Google Sheet a build, partite su Sheet in append | I giocatori editano senza DB; niente PII in repo | Postgres / JSON editato a mano |
 | 2026-09-04 | Solo brand Saccho's Team; Saccios Tim = filtro | Un'identità visiva, due rose | Due loghi in nav |
@@ -50,7 +51,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-04 | Cursor | 0 | F0: shell branded; GitHub `anrighi/sacchos-team-website` (from template) | F1 ingest Sheet + carte FUT; PR F0 su GitHub | CSV URL Sheet rosa; secret Cloudflare |
+| 2026-09-04 | Cursor | 0 | Deploy F0 su GitHub Pages (static) | Merge PR #9; F1 ingest Sheet | Pages: source GitHub Actions |
 
 ## Useful commands
 

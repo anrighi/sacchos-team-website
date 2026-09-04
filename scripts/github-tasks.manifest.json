@@ -30,7 +30,7 @@
   "features": [
     {
       "id": "F0",
-      "title": "Bootstrap TanStack Start e CI Cloudflare",
+      "title": "Bootstrap TanStack Start e GitHub Pages",
       "phase": "0",
       "status": "done",
       "spec": "docs/features/F0-bootstrap.md"

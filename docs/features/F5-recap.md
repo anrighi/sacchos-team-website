@@ -30,4 +30,4 @@
 
 ## Notes
 
-Canonical `https://sacchos.agescipesaro1.it`.
+Canonical oggi: `https://anrighi.github.io/sacchos-team-website/`. Quando arriva Cloudflare: `https://sacchos.agescipesaro1.it`.

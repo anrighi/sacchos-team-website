@@ -32,5 +32,6 @@ shadcn può usare `@/` (stesso `src/`). Nel codice scritto a mano preferisci `#/
 ## Dati
 
 - Rosa: Google Sheet CSV a **build** (`ROSTER_SHEET_CSV_URL`)
-- Partite: altro Sheet in append a runtime
+- Partite: altro Sheet in append a runtime (richiede server; su Pages la sfida resta nel link)
 - Snapshot: `data/players.generated.ts` (F1+). Niente cognomi nel JSON pubblico
+- Deploy attuale: GitHub Pages. Cloudflare Workers più avanti.

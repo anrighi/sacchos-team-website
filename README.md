@@ -2,7 +2,8 @@
 
 Sito della squadra di **Scoutball 7 vs 7** dei **Saccho's Team** (AGESCI Pesaro 1, since 2016).
 
-Produzione: [https://sacchos.agescipesaro1.it](https://sacchos.agescipesaro1.it)
+Produzione provvisoria: [https://anrighi.github.io/sacchos-team-website/](https://anrighi.github.io/sacchos-team-website/)  
+Dominio club (più avanti, Cloudflare): [https://sacchos.agescipesaro1.it](https://sacchos.agescipesaro1.it)
 
 Repo: [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-website), generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-repo-template).
 
@@ -12,7 +13,7 @@ Repo: [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-web
 - [TanStack Start](https://tanstack.com/start) (React, Vite, file router)
 - Tailwind v4, shadcn/ui per le primitive
 - Vitest sulla logica (ingest, sfida)
-- Deploy: **Cloudflare Workers** (`wrangler`)
+- Deploy: **GitHub Pages** (static). Cloudflare Workers + `sacchos.agescipesaro1.it` arrivano dopo.
 
 ## Avvio locale
 
@@ -53,12 +54,14 @@ Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete
 
 `.github/workflows/ci.yml`:
 
-- **pull_request:** `pnpm test` + `pnpm build`
-- **push `main`:** test + build + `wrangler deploy`
+- **pull_request:** `pnpm test` + `pnpm run build:pages`
+- **push `main`:** stesso, poi publish su **GitHub Pages** (`dist/client`)
 
-Secret GitHub: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `ROSTER_SHEET_CSV_URL` (e in seguito il webhook partite).
+URL: `https://anrighi.github.io/sacchos-team-website/`
 
-Worker name: `sacchos`. Hostname pubblico da attaccare a mano sull’account Cloudflare: `sacchos.agescipesaro1.it` (zona `agescipesaro1.it` o CNAME dal registrar). HTTPS sul piano gratuito.
+In Settings → Pages, source **GitHub Actions**. Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
+
+Cloudflare Workers (`wrangler.jsonc`) e il dominio `sacchos.agescipesaro1.it` sono rimandati: niente token, niente DNS in questo slice.
 
 ## Identità git
 

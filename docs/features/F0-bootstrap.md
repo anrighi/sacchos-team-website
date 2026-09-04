@@ -1,15 +1,15 @@
-# F0 — Bootstrap TanStack Start e CI Cloudflare
+# F0 — Bootstrap TanStack Start e GitHub Pages
 
 | Field | Value |
 |-------|-------|
 | Status | done |
 | Phase | 0 |
-| Files | `package.json`, `src/`, `.github/workflows/ci.yml`, `wrangler.jsonc`, `docs/` |
+| Files | `package.json`, `src/`, `.github/workflows/ci.yml`, `docs/`, `wrangler.jsonc` (CF dopo) |
 | Tests | `pnpm test` (Node ≥26 + club brand); `pnpm build` |
 
 ## Goal
 
-App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build, deploy Wrangler su `main`.
+App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build, publish statico su GitHub Pages.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build,
 - [x] Rotte `/`, `/rosa`, `/sfida`, `/sfide` con nav mobile-bottom / desktop-top
 - [x] Font MrAlex, palette navy/rosa, logo in `public/brand/`
 - [x] Vitest smoke + `pnpm build`
-- [x] CI: PR test+build; push `main` test+build+wrangler deploy
+- [x] CI: PR test+build Pages; push `main` → GitHub Pages
 - [x] Manifest F0–F7, FEATURES.md, regole Cursor stack
 - [x] Spec status e manifest F0 → `done`
 - [ ] PR mergiata con `Closes #<issue>` su [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-website)
@@ -30,9 +30,9 @@ App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build,
 ## Deliverables
 
 - Shell branded (home + placeholder rosa/sfida/archivio)
-- CI Cloudflare, `.nvmrc`, `.env.example`
-- README prodotto (template, DNS, Sheet, identità git)
+- CI GitHub Pages, `.nvmrc`, `.env.example`
+- README prodotto (template, Sheet, identità git; Cloudflare rimandato)
 
 ## Notes
 
-F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Custom domain `sacchos.agescipesaro1.it` si attacca sul account Cloudflare, non in questo file finché il Worker non esiste.
+F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Deploy attuale: GitHub Pages (`https://anrighi.github.io/sacchos-team-website/`). Cloudflare Workers e `sacchos.agescipesaro1.it` arrivano in uno slice successivo; `wrangler.jsonc` resta come gancio.

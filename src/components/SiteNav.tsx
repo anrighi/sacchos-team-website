@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { club } from "#/lib/club";
+import { publicUrl } from "#/lib/public-url";
 
 const items = [
   { to: "/", label: "Home", exact: true },
@@ -14,7 +15,7 @@ export function SiteNav() {
       <div className="mx-auto flex max-w-5xl items-center justify-around gap-2 px-3 py-2 md:justify-between md:px-6">
         <Link to="/" className="hidden items-center gap-2 md:flex">
           <img
-            src="/brand/logo-sacchos.jpg"
+            src={publicUrl("/brand/logo-sacchos.jpg")}
             alt={club.name}
             className="h-10 w-10 rounded-full object-cover"
           />
