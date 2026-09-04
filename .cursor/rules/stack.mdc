@@ -1,0 +1,36 @@
+---
+description: Stack Saccho's Team — UI italiana, import, TanStack
+alwaysApply: true
+---
+
+# Stack
+
+Sito **Saccho's Team** (Scoutball, AGESCI Pesaro 1). UI in **italiano**. Tema dark fisso.
+
+## Import
+
+Usa alias assoluti `#/` → `src/` (es. `import { club } from "#/lib/club"`). Niente import relativi `../`.
+
+shadcn può usare `@/` (stesso `src/`). Nel codice scritto a mano preferisci `#/`.
+
+## Codice
+
+- Early return, niente if-else a catena
+- Pochi commenti; nomi autoesplicativi
+- Niente ricorsione se basta un ciclo
+- Logica sfida/ingest in `src/lib/` senza DOM; test Vitest lì
+
+## UI
+
+- Mobile-first; `md`/`lg` solo per allargare
+- Tap target ≥ 44px; `prefers-reduced-motion` = fade only
+- Brand: navy `#1a2634`, rosa `#f867a5`, bianco. Font titoli **MrAlex**
+- Solo identità **Saccho's Team**. Saccios Tim = valore filtro, logo pennarello solo sul chip
+- In UI: nickname se c'è, altrimenti nome. Mai cognomi, mai foto reali
+- shadcn per primitive (Button, Dialog, …); skin custom, non look dashboard
+
+## Dati
+
+- Rosa: Google Sheet CSV a **build** (`ROSTER_SHEET_CSV_URL`)
+- Partite: altro Sheet in append a runtime
+- Snapshot: `data/players.generated.ts` (F1+). Niente cognomi nel JSON pubblico

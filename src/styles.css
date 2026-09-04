@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "MrAlex";
+  src: url("./fonts/MrAlex-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-navy: #1a2634;
+  --color-navy-deep: #0d141c;
+  --color-pink: #f867a5;
+  --color-pink-hot: #ff3399;
+  --color-primary: #f867a5;
+  --color-primary-foreground: #0d141c;
+  --color-secondary: #1a2634;
+  --color-secondary-foreground: #f4f1ea;
+  --color-background: #0d141c;
+  --color-foreground: #f4f1ea;
+  --color-accent: #1a2634;
+  --color-accent-foreground: #f867a5;
+  --color-muted: #1a2634;
+  --color-muted-foreground: rgb(244 241 234 / 0.6);
+  --color-destructive: #ff3399;
+  --color-border: rgb(248 103 165 / 0.3);
+  --color-input: #1a2634;
+  --color-ring: #f867a5;
+  --font-display: "MrAlex", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-navy-deep);
+  color: #f4f1ea;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-navy-deep);
+}
+
+.pitch-lines {
+  background:
+    radial-gradient(
+      ellipse at 20% 10%,
+      rgba(248, 103, 165, 0.28),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(26, 38, 52, 0.95),
+      transparent 40%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 47px,
+      rgba(248, 103, 165, 0.06) 48px,
+      transparent 49px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 47px,
+      rgba(244, 241, 234, 0.04) 48px,
+      transparent 49px
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

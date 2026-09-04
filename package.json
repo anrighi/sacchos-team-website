@@ -1,20 +1,62 @@
 {
-  "name": "agent-repo-template",
+  "name": "sacchos",
   "version": "0.1.0",
   "private": true,
-  "description": "Stack-agnostic GitHub template for agent-first feature workflows (phases, specs, issue sync, Cursor rules)",
+  "description": "Sito Saccho's Team — Scoutball AGESCI Pesaro 1. Generated from anrighi/agent-repo-template.",
   "type": "module",
   "packageManager": "pnpm@10.12.4",
   "engines": {
-    "node": ">=22"
+    "node": ">=26"
+  },
+  "imports": {
+    "#/*": "./src/*"
   },
   "scripts": {
+    "dev": "vite dev --port 43123 --host 127.0.0.1",
+    "generate-routes": "tsr generate",
+    "build": "vite build",
+    "preview": "vite preview --port 43123 --host 127.0.0.1",
+    "deploy": "pnpm run build && wrangler deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "sync:github-tasks": "bash scripts/sync-github-tasks.sh",
     "sync:github-tasks:dry-run": "bash scripts/sync-github-tasks.sh --dry-run",
     "sync:github-tasks:force": "bash scripts/sync-github-tasks.sh --force-closed"
   },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.3.3",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-router": "^1.170.32",
+    "@tanstack/react-start": "^1.168.49",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.41.0",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.1.18"
+  },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.26.0",
+    "@tanstack/router-cli": "^1.132.0",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2",
+    "vite": "^8.0.0",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.70.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "lightningcss",
+      "sharp",
+      "workerd"
+    ]
   }
 }

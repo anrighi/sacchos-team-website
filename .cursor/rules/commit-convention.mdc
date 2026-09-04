@@ -20,11 +20,11 @@ feat(scope): short description
 - bullet points for notable changes
 ```
 
-Suggested scopes (customize per project): `docs`, `ci`, `tooling`, `core`, `api`, `ui`
+Suggested scopes: `docs`, `ci`, `tooling`, `ui`, `roster`, `challenge`
 
 ## Branches and PRs
 
-- Feature branches: `phase-<n>/<id>-<slug>` (e.g. `phase-0/f0-bootstrap`)
+- Feature branches: `cursor/phase-<n>-f<id>-<slug>-91b9` (e.g. `cursor/phase-0-f0-bootstrap-91b9`)
 - PRs target `main` and must include `Closes #N` for completed features
 - See `.cursor/rules/github-workflow.mdc` for the full checklist
 
