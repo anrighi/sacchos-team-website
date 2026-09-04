@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest an improvement or new capability
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check existing [feature issues](../../issues?q=is%3Aissue+label%3Afeature) — your idea may already be on the backlog.
+        Tracked features use `[Fx]` titles synced from `docs/features/`.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What problem does this solve? Who benefits?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like it to work?
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: Suggested phase
+      description: Match a phase id from docs/FEATURES.md (e.g. 0, 1, 0+)
+      placeholder: "1"
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this

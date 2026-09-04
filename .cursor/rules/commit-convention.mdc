@@ -1,0 +1,44 @@
+---
+description: Commit conventions when completing a feature
+alwaysApply: true
+---
+
+# Commit convention
+
+## When a feature is completed
+
+1. Run project tests (and build if application code changed)
+2. Update `docs/features/F*.md` (`status` → `done`)
+3. Set matching `"status": "done"` in `scripts/github-tasks.manifest.json`
+4. Merge PR to `main` with `Closes #<issue>` in the body (CI syncs issue state)
+5. Update `docs/FEATURES.md` handoff log (and phase completion if applicable)
+6. Commit with conventional format:
+
+```
+feat(scope): short description
+
+- bullet points for notable changes
+```
+
+Suggested scopes (customize per project): `docs`, `ci`, `tooling`, `core`, `api`, `ui`
+
+## Branches and PRs
+
+- Feature branches: `phase-<n>/<id>-<slug>` (e.g. `phase-0/f0-bootstrap`)
+- PRs target `main` and must include `Closes #N` for completed features
+- See `.cursor/rules/github-workflow.mdc` for the full checklist
+
+## Examples
+
+```
+feat(docs): add feature registry and handoff log
+feat(ci): sync manifest to GitHub Issues
+feat(tooling): generalize phase labels from manifest
+docs: bootstrap agent workflow template
+```
+
+## Do not
+
+- Commit secrets (`.env`, credentials, private keys)
+- Mark a feature done without updating `docs/features/`, `github-tasks.manifest.json`, and a merged PR with `Closes #N`
+- Mix unrelated features in one commit when they can be split logically

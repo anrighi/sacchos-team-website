@@ -1,0 +1,42 @@
+---
+description: Agent-first maintenance — session lifecycle for feature work
+alwaysApply: true
+---
+
+# Agent-first maintenance
+
+Replace `{{PROJECT_NAME}}` with your project name after cloning this template.
+
+## Before each session
+
+1. Read open GitHub feature issues (`label:feature`) and `docs/FEATURES.md` for phase context
+2. Follow `.cursor/rules/github-workflow.mdc` — verify issue, phase, spec, and branch before coding
+3. Read `AGENTS.md` for project conventions and commands
+4. Run the project test command before invasive changes (define `test` in `package.json`, e.g. `pnpm run test`)
+
+## During work
+
+- Work only on the phase/feature indicated in `docs/FEATURES.md`, the linked GitHub issue, and your `phase-<n>/` branch
+- Prefer small diffs, early returns, and self-explanatory names over comments
+- Do not skip phases defined in `docs/FEATURES.md`
+- Add stack-specific conventions in additional `.cursor/rules/*.mdc` files (language, imports, UI locale, etc.)
+
+## End of session
+
+1. Update the linked GitHub issue and feature spec in `docs/features/F*.md`
+2. Set `status` in `scripts/github-tasks.manifest.json` when a feature completes (CI syncs issues on merge to `main`)
+3. Update phase completion in `docs/FEATURES.md` when a phase closes
+4. Add a row to the **Handoff log** in `docs/FEATURES.md` with a concrete next step
+5. Open or update PR with `Closes #N`; merge via `main` (see `github-workflow.mdc`)
+6. Run tests (and build if application code changed)
+7. Follow `commit-convention.mdc` when marking features complete
+
+## Commands (template)
+
+```bash
+pnpm install
+pnpm run sync:github-tasks:dry-run
+pnpm run sync:github-tasks
+```
+
+Add your app commands (`dev`, `test`, `build`) to `package.json` and document them in `AGENTS.md` / `docs/FEATURES.md`.

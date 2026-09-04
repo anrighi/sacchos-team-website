@@ -1,0 +1,20 @@
+{
+  "name": "agent-repo-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stack-agnostic GitHub template for agent-first feature workflows (phases, specs, issue sync, Cursor rules)",
+  "type": "module",
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "sync:github-tasks": "bash scripts/sync-github-tasks.sh",
+    "sync:github-tasks:dry-run": "bash scripts/sync-github-tasks.sh --dry-run",
+    "sync:github-tasks:force": "bash scripts/sync-github-tasks.sh --force-closed"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
