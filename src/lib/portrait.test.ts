@@ -19,7 +19,6 @@ function sample(overrides: Partial<Player> = {}): Player {
     sex: "F",
     number: 10,
     birthYear: 2000,
-    appearances: 0,
     overall: 75,
     stats,
     ...overrides,

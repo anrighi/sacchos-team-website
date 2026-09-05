@@ -16,11 +16,7 @@ function validateRosaSearch(raw: Record<string, unknown>): RosterFilters {
   const team =
     raw.team === "sacchos" || raw.team === "saccios" ? raw.team : undefined;
   const role = isRole(raw.role) ? raw.role : undefined;
-  const appearances =
-    raw.appearances === "none" || raw.appearances === "some"
-      ? raw.appearances
-      : undefined;
-  return { team, role, appearances };
+  return { team, role };
 }
 
 function RosaPage() {
@@ -120,26 +116,6 @@ function RosaFilters({ search }: { search: RosterFilters }) {
           </FilterChip>
         ))}
       </FilterRow>
-      <FilterRow label="Presenze">
-        <FilterChip
-          search={withFilter(search, { appearances: undefined })}
-          active={!search.appearances}
-        >
-          Tutte
-        </FilterChip>
-        <FilterChip
-          search={withFilter(search, { appearances: "none" })}
-          active={search.appearances === "none"}
-        >
-          0 presenze
-        </FilterChip>
-        <FilterChip
-          search={withFilter(search, { appearances: "some" })}
-          active={search.appearances === "some"}
-        >
-          Con presenze
-        </FilterChip>
-      </FilterRow>
     </div>
   );
 }
@@ -195,7 +171,6 @@ function withFilter(
   return {
     team: "team" in patch ? patch.team : search.team,
     role: "role" in patch ? patch.role : search.role,
-    appearances: "appearances" in patch ? patch.appearances : search.appearances,
   };
 }
 

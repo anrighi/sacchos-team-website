@@ -47,7 +47,6 @@ function PlayerPage() {
         #{player.number}
         {player.role ? ` · ${ROLE_LABELS[player.role]}` : ""}
         {player.birthYear ? ` · ${player.birthYear}` : ""}
-        {` · ${player.appearances} presenze`}
       </p>
       <div className="mx-auto mt-8 max-w-sm">
         <PlayerCard player={player} size="hero" linked={false} />

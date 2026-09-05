@@ -9,7 +9,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 4,
     "birthYear": 1993,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -28,7 +27,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 5,
     "birthYear": 1993,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -47,7 +45,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 7,
     "birthYear": 1998,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -66,7 +63,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 8,
     "birthYear": 1997,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -85,7 +81,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 10,
     "birthYear": 2002,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -105,7 +100,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 13,
     "birthYear": 2000,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -124,7 +118,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 14,
     "birthYear": 1998,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -143,7 +136,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 23,
     "birthYear": 1998,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -162,7 +154,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 29,
     "birthYear": 1994,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -181,7 +172,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 33,
     "birthYear": 1983,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -200,7 +190,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 42,
     "birthYear": 2005,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -219,7 +208,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 99,
     "birthYear": 1981,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -238,7 +226,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 9,
     "birthYear": 2005,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -257,7 +244,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 11,
     "birthYear": 2008,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -276,7 +262,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 15,
     "birthYear": 2006,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -295,7 +280,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 18,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -314,7 +298,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 21,
     "birthYear": 2007,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -333,7 +316,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 22,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -352,7 +334,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 28,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -371,7 +352,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 30,
     "birthYear": 2008,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -390,7 +370,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 39,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -409,7 +388,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 67,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -428,7 +406,6 @@ export const players: Player[] = [
     "sex": "F",
     "number": 81,
     "birthYear": 2009,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -447,7 +424,6 @@ export const players: Player[] = [
     "sex": "M",
     "number": 0,
     "birthYear": 2008,
-    "appearances": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,

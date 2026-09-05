@@ -3,7 +3,7 @@ import { clampStat, displayName, filterPlayers, overallFromStats, parseRosterCsv
 import type { Player, PlayerStats } from "#/lib/player";
 
 const header =
-  "firstName,nickname,number,birthYear,team,sex,role,appearances,velocita,salto,intercetto,scalpo,finalizzazione,gk";
+  "firstName,nickname,number,birthYear,team,sex,role,velocita,salto,intercetto,scalpo,finalizzazione,gk";
 
 describe("clampStat", () => {
   it("defaults empty values to 75", () => {
@@ -41,7 +41,7 @@ describe("parseRosterCsv", () => {
   });
 
   it("clamps stats and computes overall", () => {
-    const csv = `${header}\nAda,,1,2000,Saccho's Team,F,,0,10,150,80,80,80,80`;
+    const csv = `${header}\nAda,,1,2000,Saccho's Team,F,,10,150,80,80,80,80`;
     const [player] = parseRosterCsv(csv);
     expect(player?.stats.velocita).toBe(75);
     expect(player?.stats.salto).toBe(100);
@@ -50,9 +50,9 @@ describe("parseRosterCsv", () => {
 
   it("discards rows without number or firstName", () => {
     const csv = `${header}
-, ,1,2000,Saccho's Team,F,,0,75,75,75,75,75,75
-Ada,, ,2000,Saccho's Team,F,,0,75,75,75,75,75,75
-Ada,,2,2000,Saccho's Team,F,,0,75,75,75,75,75,75`;
+, ,1,2000,Saccho's Team,F,,75,75,75,75,75,75
+Ada,, ,2000,Saccho's Team,F,,75,75,75,75,75,75
+Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
     const players = parseRosterCsv(csv);
     expect(players).toHaveLength(1);
     expect(players[0]?.firstName).toBe("Ada");
@@ -76,15 +76,13 @@ Ada,,2,2000,Saccho's Team,F,,0,75,75,75,75,75,75`;
 
 describe("filterPlayers", () => {
   const sample: Player[] = [
-    player("a", "Saccho's Team", 0, "CEN"),
-    player("b", "Saccios Tim", 3, "POR"),
+    player("a", "Saccho's Team", "CEN"),
+    player("b", "Saccios Tim", "POR"),
   ];
 
-  it("filters by team, role and appearances", () => {
+  it("filters by team and role", () => {
     expect(filterPlayers(sample, { team: "saccios" }).map((p) => p.slug)).toEqual(["b"]);
     expect(filterPlayers(sample, { role: "CEN" }).map((p) => p.slug)).toEqual(["a"]);
-    expect(filterPlayers(sample, { appearances: "some" }).map((p) => p.slug)).toEqual(["b"]);
-    expect(filterPlayers(sample, { appearances: "none" }).map((p) => p.slug)).toEqual(["a"]);
   });
 });
 
@@ -102,7 +100,6 @@ describe("playerSlug", () => {
 function player(
   slug: string,
   team: Player["team"],
-  appearances: number,
   role: Player["role"],
 ): Player {
   return {
@@ -113,7 +110,6 @@ function player(
     sex: "F",
     number: 1,
     birthYear: 2000,
-    appearances,
     overall: 75,
     stats: {
       velocita: 75,

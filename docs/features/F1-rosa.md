@@ -9,7 +9,7 @@
 
 ## Goal
 
-Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illustrate, filtri squadra/ruolo/presenze, scheda `/giocatori/$slug`.
+Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illustrate, filtri squadra/ruolo, scheda `/giocatori/$slug`.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 - [x] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
 - [x] Stats clamp 75–100, default 75; overall arrotondato
 - [x] UI: nickname se c'è, senno firstName; disambiguazione col numero
-- [x] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo, presenze
+- [x] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo
 - [x] Badge carte sempre Saccho's Team
 - [x] Silhouette se manca il PNG illustrato
 - [x] Spec + manifest `done` e PR con `Closes #N`
@@ -35,4 +35,4 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, appearances, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: SVG cel-shaded in `public/players/{slug}.svg` (stesso crop, non foto); silhouette inline se il file manca.
+Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: SVG cel-shaded in `public/players/{slug}.svg` (stesso crop, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.

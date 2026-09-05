@@ -7,7 +7,6 @@ const STAT_DEFAULT = 75;
 export type RosterFilters = {
   team?: "sacchos" | "saccios";
   role?: Role;
-  appearances?: "none" | "some";
 };
 
 export function displayName(player: Pick<Player, "firstName" | "nickname">) {
@@ -94,7 +93,6 @@ export function parseRosterCsv(csv: string): Player[] {
     const nickname = nicknameRaw || undefined;
     const stats = parseStats(row);
     const birthYearRaw = Number(cell(row, "birthYear", "anno"));
-    const appearancesRaw = Number(cell(row, "appearances", "presenze"));
 
     players.push({
       slug: playerSlug(firstName, nickname, number, used),
@@ -105,7 +103,6 @@ export function parseRosterCsv(csv: string): Player[] {
       sex,
       number,
       birthYear: Number.isFinite(birthYearRaw) ? birthYearRaw : 0,
-      appearances: Number.isFinite(appearancesRaw) ? Math.max(0, Math.round(appearancesRaw)) : 0,
       overall: overallFromStats(stats),
       stats,
     });
@@ -125,12 +122,6 @@ export function filterPlayers(players: readonly Player[], filters: RosterFilters
     if (filters.role && player.role !== filters.role) {
       return false;
     }
-    if (filters.appearances === "none" && player.appearances !== 0) {
-      return false;
-    }
-    if (filters.appearances === "some" && player.appearances < 1) {
-      return false;
-    }
     return true;
   });
 }
@@ -143,7 +134,6 @@ export function serializePlayer(player: Player): Player {
     sex: player.sex,
     number: player.number,
     birthYear: player.birthYear,
-    appearances: player.appearances,
     overall: player.overall,
     stats: player.stats,
   };

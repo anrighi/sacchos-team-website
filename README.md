@@ -71,7 +71,7 @@ Finché l’URL non è configurato, la build tiene lo snapshot dei 24 giocatori 
 
 Quando lo Sheet è pronto:
 
-1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `appearances`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`
+1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`
 2. File → Condividi → **Pubblica sul web** → formato **CSV**
 3. Copia l’URL del CSV
 4. In locale: mettilo in `.env` come `ROSTER_SHEET_CSV_URL=...` (vedi `.env.example`) e lancia `pnpm ingest-roster`

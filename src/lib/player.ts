@@ -28,7 +28,6 @@ export type Player = {
   sex: Sex;
   number: number;
   birthYear: number;
-  appearances: number;
   photo?: string;
   overall: number;
   stats: PlayerStats;
