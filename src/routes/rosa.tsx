@@ -1,8 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { PlayerCard } from "#/components/PlayerCard";
+import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
-import { ROLES, type Role } from "#/lib/player";
+import { ROLES, TEAMS, type Role, type TeamName } from "#/lib/player";
 import { displayName, filterPlayers, type RosterFilters } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
@@ -11,6 +12,11 @@ export const Route = createFileRoute("/rosa")({
   validateSearch: validateRosaSearch,
   component: RosaPage,
 });
+
+const TEAM_LOGOS: Record<TeamName, string> = {
+  "Saccho's Team": "/brand/logo-sacchos.jpg",
+  "Saccios Tim": "/brand/logo-saccios-tim.jpg",
+};
 
 function validateRosaSearch(raw: Record<string, unknown>): RosterFilters {
   const team =
@@ -22,100 +28,158 @@ function validateRosaSearch(raw: Record<string, unknown>): RosterFilters {
 function RosaPage() {
   const search = Route.useSearch();
   const filtered = filterPlayers(sortedPlayers(players), search);
-  const emptyRoster = players.length === 0;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-10">
-      <p className="text-xs uppercase tracking-[0.35em] text-pink">Scoutball</p>
-      <h1 className="mt-3 font-display text-4xl text-white md:text-5xl">Rosa</h1>
-      <p className="mt-4 max-w-lg text-white/70">
-        Nickname se c’è, altrimenti il nome. Il numero sulla maglia distingue
-        chi si chiama uguale — mai i cognomi.
-      </p>
-
-      {emptyRoster ? (
-        <p className="mt-8 rounded-sm border border-white/10 bg-navy px-4 py-6 text-sm text-white/60">
-          Nessuna carta ancora. Lo Sheet viene letto a ogni build.
+    <main className="bg-black text-white">
+      <header className="relative isolate overflow-hidden px-5 pb-10 pt-12 text-center md:px-8 md:pb-14 md:pt-20">
+        <div aria-hidden className="landing-hero-glow pointer-events-none absolute inset-0" />
+        <p className="relative text-sm font-medium text-pink">Scoutball</p>
+        <h1 className="relative mt-3 font-display text-[clamp(3rem,10vw,6rem)] leading-[0.9] tracking-tight">
+          Rosa
+        </h1>
+        <p className="relative mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/60">
+          {players.length} carte illustrate. Nickname se c&apos;è, altrimenti il
+          nome: il numero sulla maglia distingue chi si chiama uguale.
         </p>
+      </header>
+
+      {players.length === 0 ? (
+        <EmptyState>
+          Nessuna carta ancora. Lo Sheet viene letto a ogni build.
+        </EmptyState>
       ) : (
         <>
           <RosaFilters search={search} />
-          {filtered.length === 0 ? (
-            <p className="mt-8 rounded-sm border border-dashed border-pink/40 bg-navy px-4 py-6 text-sm text-white/70">
-              Nessun giocatore corrisponde ai filtri.
-            </p>
-          ) : (
-            <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {filtered.map((player) => (
-                <li key={player.slug}>
-                  <PlayerCard player={player} />
-                </li>
-              ))}
-            </ul>
-          )}
+          <RosaResults filtered={filtered} />
         </>
       )}
 
-      <Link
-        to="/sfida"
-        className="mt-10 inline-flex min-h-11 items-center text-sm uppercase tracking-wider text-pink"
-      >
-        Vai alla sfida
-      </Link>
+      <section className="border-t border-white/10 px-5 py-16 text-center md:py-24">
+        <h2 className="font-display text-[clamp(2rem,6vw,3.5rem)] leading-none tracking-tight">
+          Sette in campo.
+        </h2>
+        <p className="mx-auto mt-4 max-w-sm text-white/55">
+          Scegli la formazione e manda il link a chi ti sfida.
+        </p>
+        <Link
+          to="/sfida"
+          className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
+        >
+          Lancia una sfida
+        </Link>
+      </section>
     </main>
+  );
+}
+
+function RosaResults({ filtered }: { filtered: typeof players }) {
+  if (filtered.length === 0) {
+    return (
+      <EmptyState>
+        Nessun giocatore corrisponde ai filtri.{" "}
+        <Link to="/rosa" className="text-pink hover:text-pink/80">
+          Azzera
+        </Link>
+      </EmptyState>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 pb-8 md:px-8">
+      {TEAMS.map((team) => {
+        const squad = filtered.filter((player) => player.team === team);
+        if (squad.length === 0) {
+          return null;
+        }
+        return (
+          <section key={team} className="pt-10 first:pt-6 md:pt-14">
+            <div className="flex items-center gap-3">
+              <img
+                src={publicUrl(TEAM_LOGOS[team])}
+                alt=""
+                className="size-9 rounded-full object-cover ring-1 ring-white/15"
+              />
+              <h2 className="text-lg font-semibold tracking-tight text-white md:text-xl">
+                {team}
+              </h2>
+              <span className="text-sm text-white/40">{squad.length}</span>
+            </div>
+            <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-5 lg:grid-cols-4 xl:grid-cols-5">
+              {squad.map((player) => (
+                <li key={player.slug}>
+                  <Reveal>
+                    <PlayerCard player={player} />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
+function EmptyState({ children }: { children: ReactNode }) {
+  return (
+    <p className="mx-auto max-w-md rounded-[20px] border border-white/10 bg-[#14181f] px-6 py-10 text-center text-[15px] text-white/60">
+      {children}
+    </p>
   );
 }
 
 function RosaFilters({ search }: { search: RosterFilters }) {
   return (
-    <div className="mt-8 space-y-4">
-      <FilterRow label="Squadra">
-        <FilterChip
-          search={withFilter(search, { team: undefined })}
-          active={!search.team}
-        >
-          Tutte
-        </FilterChip>
-        <FilterChip
-          search={withFilter(search, { team: "sacchos" })}
-          active={search.team === "sacchos"}
-        >
-          <img
-            src={publicUrl("/brand/logo-sacchos.jpg")}
-            alt=""
-            className="h-7 w-7 rounded-full object-cover"
-          />
-          Saccho&apos;s Team
-        </FilterChip>
-        <FilterChip
-          search={withFilter(search, { team: "saccios" })}
-          active={search.team === "saccios"}
-        >
-          <img
-            src={publicUrl("/brand/logo-saccios-tim.jpg")}
-            alt=""
-            className="h-7 w-7 rounded-full object-cover"
-          />
-          Saccios Tim
-        </FilterChip>
-      </FilterRow>
-      <FilterRow label="Ruolo">
-        <FilterChip
-          search={withFilter(search, { role: undefined })}
-          active={!search.role}
-        >
-          Tutti
-        </FilterChip>
-        {ROLES.map((role) => (
+    <div className="sticky top-0 z-30 border-y border-white/10 bg-black/75 backdrop-blur-xl md:top-16">
+      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:gap-6 md:px-8">
+        <FilterRow label="Squadra">
           <FilterChip
-            key={role}
-            search={withFilter(search, { role })}
-            active={search.role === role}
+            search={withFilter(search, { team: undefined })}
+            active={!search.team}
           >
-            {role}
+            Tutte
           </FilterChip>
-        ))}
-      </FilterRow>
+          <FilterChip
+            search={withFilter(search, { team: "sacchos" })}
+            active={search.team === "sacchos"}
+          >
+            <img
+              src={publicUrl("/brand/logo-sacchos.jpg")}
+              alt=""
+              className="size-5 rounded-full object-cover"
+            />
+            Saccho&apos;s
+          </FilterChip>
+          <FilterChip
+            search={withFilter(search, { team: "saccios" })}
+            active={search.team === "saccios"}
+          >
+            <img
+              src={publicUrl("/brand/logo-saccios-tim.jpg")}
+              alt=""
+              className="size-5 rounded-full object-cover"
+            />
+            Saccios Tim
+          </FilterChip>
+        </FilterRow>
+        <FilterRow label="Ruolo">
+          <FilterChip
+            search={withFilter(search, { role: undefined })}
+            active={!search.role}
+          >
+            Tutti
+          </FilterChip>
+          {ROLES.map((role) => (
+            <FilterChip
+              key={role}
+              search={withFilter(search, { role })}
+              active={search.role === role}
+            >
+              {role}
+            </FilterChip>
+          ))}
+        </FilterRow>
+      </div>
     </div>
   );
 }
@@ -128,11 +192,11 @@ function FilterRow({
   children: ReactNode;
 }) {
   return (
-    <div>
-      <p className="text-[11px] uppercase tracking-[0.28em] text-white/45">
+    <div className="flex min-w-0 items-center gap-3">
+      <p className="hidden shrink-0 text-[11px] uppercase tracking-[0.2em] text-white/35 md:block">
         {label}
       </p>
-      <div className="mt-2 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex gap-2 overflow-x-auto py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
     </div>
@@ -153,10 +217,10 @@ function FilterChip({
       to="/rosa"
       search={search}
       className={cn(
-        "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border px-3 text-sm tracking-wide",
+        "inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium tracking-tight transition-colors",
         active
-          ? "border-pink bg-pink font-medium text-navy-deep"
-          : "border-white/20 text-white/80 hover:border-pink/60 hover:text-white",
+          ? "bg-pink text-navy-deep"
+          : "bg-white/8 text-white/70 hover:bg-white/15 hover:text-white",
       )}
     >
       {children}

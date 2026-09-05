@@ -99,6 +99,26 @@ body {
     radial-gradient(ellipse 50% 30% at 50% 0%, rgba(26, 38, 52, 0.85), transparent 55%);
 }
 
+.kit-glow-home {
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 50% 12%,
+      rgba(255, 255, 255, 0.16),
+      transparent 62%
+    ),
+    linear-gradient(180deg, #1d2836 0%, #0f151d 100%);
+}
+
+.kit-glow-away {
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 50% 12%,
+      rgba(248, 103, 165, 0.22),
+      transparent 62%
+    ),
+    linear-gradient(180deg, #223142 0%, #0d141c 100%);
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(28px);

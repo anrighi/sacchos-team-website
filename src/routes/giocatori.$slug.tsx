@@ -1,8 +1,10 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { ChevronLeft } from "lucide-react";
 import { PlayerCard } from "#/components/PlayerCard";
 import { players } from "#/data/players.generated";
 import { ROLE_LABELS, STAT_KEYS, STAT_NAMES } from "#/lib/player";
 import { club } from "#/lib/club";
+import { kitKind } from "#/lib/portrait";
 import { displayName } from "#/lib/roster";
 
 export const Route = createFileRoute("/giocatori/$slug")({
@@ -36,66 +38,90 @@ export const Route = createFileRoute("/giocatori/$slug")({
 function PlayerPage() {
   const { player } = Route.useLoaderData();
   const name = displayName(player);
+  const kit = kitKind(player.team);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
-      <p className="text-xs uppercase tracking-[0.35em] text-pink">{club.name}</p>
-      <h1 className="mt-3 font-display text-4xl text-white md:text-5xl">
-        {name}
-      </h1>
-      <p className="mt-2 text-white/65">
-        #{player.number}
-        {player.role ? ` · ${ROLE_LABELS[player.role]}` : ""}
-        {player.birthYear ? ` · ${player.birthYear}` : ""}
-      </p>
-      <div className="mx-auto mt-8 max-w-sm">
-        <PlayerCard player={player} size="hero" linked={false} />
-      </div>
-      <section className="mt-10">
-        <h2 className="font-display text-2xl text-pink">Statistiche</h2>
-        <dl className="mt-4 divide-y divide-white/10 rounded-sm border border-white/10 bg-navy">
-          {STAT_KEYS.map((key) => (
-            <div
-              key={key}
-              className="flex items-center justify-between gap-4 px-4 py-3"
-            >
-              <dt className="text-sm text-white/70">{STAT_NAMES[key]}</dt>
-              <dd className="font-display text-2xl text-white">
-                {player.stats[key]}
-              </dd>
+    <main className="relative isolate bg-black text-white">
+      <div aria-hidden className="landing-hero-glow pointer-events-none absolute inset-x-0 top-0 h-[70vh]" />
+      <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-8 md:px-8 md:pt-14">
+        <Link
+          to="/rosa"
+          className="inline-flex min-h-11 items-center gap-0.5 text-sm font-medium text-pink hover:text-pink/80"
+        >
+          <ChevronLeft className="size-4" aria-hidden />
+          Rosa
+        </Link>
+
+        <div className="mt-6 grid gap-10 md:grid-cols-[minmax(0,320px)_1fr] md:items-start md:gap-14">
+          <PlayerCard player={player} size="hero" linked={false} />
+
+          <div className="md:pt-4">
+            <p className="text-sm font-medium text-pink">{player.team}</p>
+            <h1 className="mt-3 font-display text-[clamp(2.6rem,9vw,4.5rem)] leading-none tracking-tight">
+              {name}
+            </h1>
+            <p className="mt-4 text-lg text-white/55">
+              {`#${player.number}`}
+              {player.role ? ` · ${ROLE_LABELS[player.role]}` : ""}
+              {player.birthYear ? ` · ${player.birthYear}` : ""}
+              {` · maglia ${kit === "home" ? "casa" : "trasferta"}`}
+            </p>
+
+            <div className="mt-10">
+              <h2 className="text-[15px] font-semibold tracking-tight text-white">
+                Statistiche
+              </h2>
+              <dl className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                {STAT_KEYS.map((key) => (
+                  <div key={key}>
+                    <div className="flex items-baseline justify-between gap-3">
+                      <dt className="text-[15px] text-white/60">
+                        {STAT_NAMES[key]}
+                      </dt>
+                      <dd className="font-display text-2xl leading-none text-white">
+                        {player.stats[key]}
+                      </dd>
+                    </div>
+                    <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-full rounded-full bg-pink"
+                        style={{
+                          width: `${Math.min(100, Math.max(6, ((player.stats[key] - 70) / 30) * 100))}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-8 flex items-baseline justify-between gap-3 border-t border-white/10 pt-6">
+                <p className="text-sm uppercase tracking-[0.2em] text-white/45">
+                  Overall
+                </p>
+                <p className="font-display text-5xl leading-none text-pink">
+                  {player.overall}
+                </p>
+              </div>
             </div>
-          ))}
-          <div className="flex items-center justify-between gap-4 px-4 py-3">
-            <dt className="text-sm uppercase tracking-wider text-pink">
-              Overall
-            </dt>
-            <dd className="font-display text-2xl text-pink">{player.overall}</dd>
           </div>
-        </dl>
-      </section>
-      <Link
-        to="/rosa"
-        className="mt-10 inline-flex min-h-11 items-center text-sm uppercase tracking-wider text-pink"
-      >
-        Torna alla rosa
-      </Link>
+        </div>
+      </div>
     </main>
   );
 }
 
 function PlayerMissing() {
   return (
-    <main className="mx-auto max-w-3xl px-5 py-16">
-      <p className="text-xs uppercase tracking-[0.35em] text-pink">404</p>
-      <h1 className="mt-3 font-display text-4xl text-white">
+    <main className="bg-black px-5 py-24 text-center text-white">
+      <p className="text-sm font-medium text-pink">404</p>
+      <h1 className="mt-4 font-display text-[clamp(2.2rem,8vw,4rem)] leading-none tracking-tight">
         Giocatore non trovato
       </h1>
-      <p className="mt-4 max-w-md text-white/70">
+      <p className="mx-auto mt-5 max-w-sm text-white/55">
         Questa carta non è in rosa. Controlla il link oppure torna all’elenco.
       </p>
       <Link
         to="/rosa"
-        className="mt-8 inline-flex min-h-11 items-center text-sm uppercase tracking-wider text-pink"
+        className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
       >
         Vai alla rosa
       </Link>

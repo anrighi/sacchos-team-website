@@ -1,12 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { PlayerPortrait } from "#/components/PlayerPortrait";
-import { STAT_KEYS, STAT_LABELS, type Player } from "#/lib/player";
+import { STAT_KEYS, STAT_LABELS, type Player, type StatKey } from "#/lib/player";
 import { kitKind } from "#/lib/portrait";
 import { displayName } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
 type CardSize = "grid" | "hero";
+
+const STAT_FLOOR = 70;
+const STAT_RANGE = 30;
 
 export function PlayerCard({
   player,
@@ -18,31 +21,41 @@ export function PlayerCard({
   linked?: boolean;
 }) {
   const name = displayName(player);
+  const hero = size === "hero";
   const kit = kitKind(player.team);
+
   const card = (
     <article
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-md bg-linear-to-br from-pink via-pink/55 to-navy p-[2px] shadow-[0_16px_36px_rgba(0,0,0,0.45)]",
-        size === "hero" && "p-[3px]",
+        "group/card relative flex h-full flex-col overflow-hidden rounded-[20px] border border-white/10 bg-[#14181f] transition-transform duration-300 group-hover/link:-translate-y-1",
+        hero && "rounded-[26px]",
       )}
     >
-      <div
-        className={cn(
-          "relative flex h-full flex-col rounded-[6px] bg-linear-to-b from-[#2b3d51] to-[#101820] p-2",
-          size === "hero" && "p-3 md:p-4",
-        )}
-      >
-        <div className="flex items-start justify-between gap-2">
-          <div>
+      <div className={cn("relative overflow-hidden", hero ? "aspect-4/5" : "aspect-4/5")}>
+        <div
+          aria-hidden
+          className={cn(
+            "absolute inset-0",
+            kit === "home" ? "kit-glow-home" : "kit-glow-away",
+          )}
+        />
+        <PlayerPortrait player={player} className="relative" />
+        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2.5">
+          <div className="rounded-xl bg-black/45 px-2 py-1 backdrop-blur-md">
             <p
               className={cn(
                 "font-display leading-none text-pink",
-                size === "hero" ? "text-5xl md:text-6xl" : "text-3xl",
+                hero ? "text-4xl md:text-5xl" : "text-2xl",
               )}
             >
               {player.overall}
             </p>
-            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/70">
+            <p
+              className={cn(
+                "mt-0.5 font-semibold uppercase tracking-[0.2em] text-white/65",
+                hero ? "text-[11px]" : "text-[9px]",
+              )}
+            >
               {player.role ?? "—"}
             </p>
           </div>
@@ -50,54 +63,40 @@ export function PlayerCard({
             src={publicUrl("/brand/logo-sacchos.jpg")}
             alt="Saccho's Team"
             className={cn(
-              "rounded-full object-cover ring-1 ring-pink/70",
-              size === "hero" ? "h-12 w-12" : "h-8 w-8",
+              "rounded-full object-cover ring-1 ring-white/25",
+              hero ? "size-11" : "size-7",
             )}
           />
         </div>
-        <div
-          className={cn(
-            "relative mx-auto mt-1 aspect-3/4 w-full overflow-hidden rounded-sm",
-            size === "hero" && "mt-2",
-          )}
-        >
-          <PlayerPortrait player={player} />
-          <p className="absolute bottom-1.5 left-1.5 rounded-full bg-navy-deep/80 px-2 py-0.5 text-[9px] uppercase tracking-[0.18em] text-pink">
-            {kit === "home" ? "Casa" : "Trasferta"}
+        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/45 to-transparent px-3 pb-2.5 pt-10">
+          <h2
+            className={cn(
+              "truncate font-display uppercase leading-none tracking-tight text-white",
+              hero ? "text-3xl md:text-4xl" : "text-base",
+            )}
+          >
+            {name}
+          </h2>
+          <p
+            className={cn(
+              "mt-1 text-white/55",
+              hero ? "text-[13px]" : "text-[11px]",
+            )}
+          >
+            {`#${player.number} · ${kit === "home" ? "Casa" : "Trasferta"}`}
           </p>
         </div>
-        <h2
-          className={cn(
-            "mt-2 truncate text-center font-display uppercase tracking-wide text-white",
-            size === "hero" ? "text-2xl md:text-3xl" : "text-sm",
-          )}
-        >
-          {name}
-        </h2>
-        <p className="text-center text-xs text-pink">{`#${player.number}`}</p>
-        <dl
-          className={cn(
-            "mt-2 grid grid-cols-2 gap-x-2 gap-y-0.5 border-t border-white/10 pt-2",
-            size === "hero" && "mt-4 gap-y-1 pt-4",
-          )}
-        >
-          {STAT_KEYS.map((key) => (
-            <div key={key} className="flex items-baseline justify-between gap-1">
-              <dt className="text-[10px] uppercase tracking-wider text-white/50">
-                {STAT_LABELS[key]}
-              </dt>
-              <dd
-                className={cn(
-                  "font-display text-white",
-                  size === "hero" ? "text-xl" : "text-sm",
-                )}
-              >
-                {player.stats[key]}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
+      <dl
+        className={cn(
+          "grid grid-cols-3 gap-x-2.5 gap-y-2 px-3 py-3",
+          hero && "gap-x-4 gap-y-4 px-5 py-5",
+        )}
+      >
+        {STAT_KEYS.map((key) => (
+          <StatCell key={key} statKey={key} value={player.stats[key]} hero={hero} />
+        ))}
+      </dl>
     </article>
   );
 
@@ -109,10 +108,47 @@ export function PlayerCard({
     <Link
       to="/giocatori/$slug"
       params={{ slug: player.slug }}
-      className="block h-full rounded-md outline-none focus-visible:ring-2 focus-visible:ring-pink"
+      className="group/link block h-full rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-pink"
       aria-label={`${name}, numero ${player.number}, overall ${player.overall}`}
     >
       {card}
     </Link>
+  );
+}
+
+function StatCell({
+  statKey,
+  value,
+  hero,
+}: {
+  statKey: StatKey;
+  value: number;
+  hero: boolean;
+}) {
+  const fill = Math.min(100, Math.max(6, ((value - STAT_FLOOR) / STAT_RANGE) * 100));
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-1">
+        <dt
+          className={cn(
+            "uppercase tracking-wider text-white/45",
+            hero ? "text-[11px]" : "text-[9px]",
+          )}
+        >
+          {STAT_LABELS[statKey]}
+        </dt>
+        <dd
+          className={cn(
+            "font-display leading-none text-white",
+            hero ? "text-xl" : "text-sm",
+          )}
+        >
+          {value}
+        </dd>
+      </div>
+      <div className="mt-1 h-[3px] overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-pink" style={{ width: `${fill}%` }} />
+      </div>
+    </div>
   );
 }

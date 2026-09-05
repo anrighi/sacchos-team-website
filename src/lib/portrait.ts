@@ -10,19 +10,21 @@ const INK = "#0d141c";
 const WHITE = "#ffffff";
 
 const SKINS = [
-  { base: "#f3d0b6", shadow: "#d9a07a", blush: "#e8a090" },
-  { base: "#e8c09a", shadow: "#c4926a", blush: "#d99080" },
-  { base: "#d09b6c", shadow: "#a56b42", blush: "#c07a68" },
-  { base: "#a56b42", shadow: "#7a4a2c", blush: "#9a5a48" },
+  { base: "#f6d5bb", shadow: "#d9a97f", blush: "#e79a8c" },
+  { base: "#eec49c", shadow: "#c8956a", blush: "#d98a78" },
+  { base: "#cf9a6b", shadow: "#a56b42", blush: "#bd7a62" },
+  { base: "#a66c43", shadow: "#7a4a2c", blush: "#95573f" },
 ] as const;
 
 const HAIRS = [
-  { base: "#1a2634", light: "#4a5d72", dark: "#0d141c" },
-  { base: "#2a1810", light: "#6a4030", dark: "#140c08" },
-  { base: "#5a4634", light: "#8a6e52", dark: "#3a2c20" },
-  { base: "#f867a5", light: "#ff9cc8", dark: "#c44580" },
-  { base: "#1f5c5c", light: "#5ec0c0", dark: "#0d3333" },
+  { base: "#20303f", light: "#3d5568", dark: "#101a24" },
+  { base: "#2f1a12", light: "#5a3524", dark: "#1a0e08" },
+  { base: "#6b5238", light: "#96764f", dark: "#43331f" },
+  { base: "#c9503f", light: "#e87a5c", dark: "#8f3324" },
+  { base: "#1f5c5c", light: "#49a0a0", dark: "#0f3636" },
 ] as const;
+
+const EYE = { white: "#f4f7fa", iris: "#2f8fb5", irisLight: "#5ec0e0" } as const;
 
 export type KitKind = "home" | "away";
 
@@ -36,27 +38,33 @@ export function kitKind(team: TeamName): KitKind {
 type KitPalette = {
   kind: KitKind;
   bg: string;
+  bgGlow: string;
+  bgFloor: string;
   shirt: string;
   shade: string;
-  cuff: string;
+  seam: string;
 };
 
 function kitPalette(kind: KitKind): KitPalette {
   if (kind === "away") {
     return {
       kind,
-      bg: "#2a3d4f",
+      bg: "#2b3f52",
+      bgGlow: "#3f5a70",
+      bgFloor: "#1d2b38",
       shirt: NAVY,
-      shade: "#101820",
-      cuff: "#0d141c",
+      shade: "#111a24",
+      seam: "#0e161e",
     };
   }
   return {
     kind,
-    bg: "#15202c",
+    bg: "#182430",
+    bgGlow: "#27394a",
+    bgFloor: "#101a23",
     shirt: WHITE,
-    shade: "#cfc8bc",
-    cuff: "#e6e0d6",
+    shade: "#d5cec2",
+    seam: "#b9b1a4",
   };
 }
 
@@ -66,18 +74,18 @@ type Grid = {
   data: (string | null)[];
 };
 
+type Skin = (typeof SKINS)[number];
+type Hair = (typeof HAIRS)[number];
+
 export function portraitSvg(player: Player): string {
   const kind = kitKind(player.team);
-  const kit = kitPalette(kind);
-  const grid = paintPortrait(player, kit);
-  const body = emitRects(grid);
+  const grid = paintPortrait(player, kitPalette(kind));
   const desc = kind === "home" ? "Maglia casa bianca" : "Maglia trasferta navy";
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W * 8}" height="${H * 8}" shape-rendering="crispEdges" role="img" aria-label="">
   <desc>${desc}</desc>
-  <rect width="${W}" height="${H}" fill="${kit.bg}"/>
-  <g id="kit-body">${body}</g>
+  <g id="kit-body">${emitRects(grid)}</g>
   <g id="claw-slashes"/>
   <g id="badge-agesci"/>
   <g id="badge-sacchos"/>
@@ -89,226 +97,192 @@ function paintPortrait(player: Player, kit: KitPalette): Grid {
   const g = createGrid(W, H);
   const hash = hashString(player.slug);
   const skin = SKINS[hash % SKINS.length] ?? SKINS[0];
-  const hair = HAIRS[Math.floor(hash / 5) % HAIRS.length] ?? HAIRS[0];
-  const hairStyle = hash % 6;
+  const hair = HAIRS[Math.floor(hash / 7) % HAIRS.length] ?? HAIRS[0];
+  const style = hash % 5;
+  const longHair = player.sex === "F" && hash % 3 !== 2;
   const older = player.birthYear > 0 && player.birthYear <= 1986;
-  const isFemale = player.sex === "F";
-  const faceRight = hash % 2 === 0;
 
-  paintJersey(g, kit, hash);
   paintNeck(g, skin);
-  paintHair(g, hair, hairStyle, isFemale, older, "back");
-  paintHead(g, skin, hash);
-  paintHair(g, hair, hairStyle, isFemale, older, "front");
-  paintFace(g, skin, hair, hash, isFemale);
+  paintJersey(g, kit, hash);
+  if (longHair) {
+    paintLongHair(g, hair);
+  }
+  paintHair(g, hair, style);
+  paintFace(g, skin, hair, hash);
+  if (older) {
+    paintBeard(g, hair);
+  }
   addOutline(g, INK);
-  addOutline(g, INK);
+  paintBackdrop(g, kit);
 
-  if (faceRight) {
+  if (hash % 2 === 0) {
     return g;
   }
   return mirrorX(g);
 }
 
-function paintHead(g: Grid, skin: (typeof SKINS)[number], hash: number): void {
-  const spans: Array<[number, number, number]> = [
-    [7, 22, 31],
-    [8, 20, 33],
-    [9, 19, 34],
-    [10, 18, 35],
-    [11, 18, 36],
-    [12, 18, 37],
-    [13, 18, 38],
-    [14, 18, 39],
-    [15, 19, 40],
-    [16, 19, 40],
-    [17, 20, 39],
-    [18, 21, 37],
-    [19, 22, 35],
-    [20, 23, 34],
-    [21, 24, 33],
-    [22, 25, 32],
-  ];
-  for (const [y, x0, x1] of spans) {
-    fillRect(g, x0, y, x1 - x0 + 1, 1, skin.base);
-  }
-  fillRect(g, 18, 14, 4, 7, skin.shadow);
-  fillRect(g, 19, 12, 3, 5, skin.base);
-  plot(g, 19, 14, skin.shadow);
-  plot(g, 20, 15, skin.shadow);
-  plot(g, 39, 16, skin.shadow);
-  plot(g, 38, 17, skin.blush);
-  fillRect(g, 24, 20, 8, 3, skin.shadow);
-  if (hash % 5 === 0) {
-    plot(g, 32, 18, skin.blush);
-    plot(g, 33, 19, skin.blush);
-  }
-}
-
-function paintNeck(g: Grid, skin: (typeof SKINS)[number]): void {
-  fillRect(g, 25, 21, 8, 5, skin.base);
-  fillRect(g, 25, 22, 3, 4, skin.shadow);
-}
-
-function paintFace(
-  g: Grid,
-  skin: (typeof SKINS)[number],
-  hair: (typeof HAIRS)[number],
-  hash: number,
-  isFemale: boolean,
-): void {
-  fillRect(g, 31, 12, 7, 6, WHITE);
-  fillRect(g, 32, 13, 5, 4, "#4eb6d4");
-  fillRect(g, 33, 14, 3, 3, "#1a5f7a");
-  plot(g, 34, 15, INK);
-  plot(g, 35, 13, WHITE);
-  const browY = hash % 2 === 0 ? 10 : 11;
-  fillRect(g, 30, browY, 8, 1, hair.dark);
-  plot(g, 38, 19, skin.shadow);
-  plot(g, 32, 20, PINK_DARK);
-  plot(g, 33, 20, INK);
-  if (isFemale && hash % 3 === 0) {
-    plot(g, 18, 17, PINK);
-    plot(g, 18, 18, PINK_DARK);
-  }
-}
-
-function paintHair(
-  g: Grid,
-  hair: (typeof HAIRS)[number],
-  style: number,
-  isFemale: boolean,
-  older: boolean,
-  layer: "back" | "front",
-): void {
-  if (older && !isFemale) {
-    if (layer === "back") {
-      return;
-    }
-    fillRect(g, 18, 6, 16, 4, hair.base);
-    fillRect(g, 16, 8, 6, 12, hair.base);
-    fillRect(g, 20, 6, 8, 2, hair.light);
-    plot(g, 24, 5, WHITE);
-    return;
-  }
-
-  if (layer === "back") {
-    if (!isFemale) {
-      fillRect(g, 14, 10, 8, 12, hair.base);
-      return;
-    }
-    fillRect(g, 10, 12, 12, 22, hair.base);
-    fillRect(g, 8, 18, 8, 20, hair.dark);
-    fillDisc(g, 16, 14, 6, hair.base);
-    if (style === 0) {
-      fillRect(g, 8, 32, 10, 16, hair.base);
-    }
-    return;
-  }
-
-  const top: Array<[number, number, number]> = [
-    [4, 22, 30],
-    [5, 20, 32],
-    [6, 18, 34],
-    [7, 17, 35],
-    [8, 16, 34],
-    [9, 16, 28],
-    [10, 16, 26],
-    [11, 16, 24],
-    [12, 16, 22],
-  ];
-  for (const [y, x0, x1] of top) {
-    fillRect(g, x0, y, x1 - x0 + 1, 1, hair.base);
-  }
-  plot(g, 24, 4, hair.light);
-  plot(g, 25, 5, hair.light);
-  plot(g, 26, 4, WHITE);
-
-  if (style === 1) {
-    fillRect(g, 16, 3, 18, 4, hair.base);
-    fillRect(g, 14, 8, 5, 8, hair.base);
-  }
-  if (style === 2 && isFemale) {
-    fillDisc(g, 16, 6, 5, hair.base);
-    fillDisc(g, 16, 6, 2, hair.light);
-  }
-  if (style === 4) {
-    fillRect(g, 22, 11, 12, 2, hair.base);
-  }
+function paintNeck(g: Grid, skin: Skin): void {
+  fillRect(g, 23, 30, 9, 12, skin.base);
+  fillRect(g, 23, 31, 3, 11, skin.shadow);
+  fillRect(g, 26, 37, 6, 5, skin.shadow);
 }
 
 function paintJersey(g: Grid, kit: KitPalette, hash: number): void {
-  for (let y = 24; y < H; y += 1) {
-    const t = (y - 24) / (H - 24);
-    const left = 7 + Math.floor(t * 2);
-    const right = 41 - Math.floor(t * 1);
+  for (let y = 39; y < H; y += 1) {
+    const t = Math.min(1, (y - 39) / 5);
+    const left = Math.round(16 - 8 * t);
+    const right = Math.round(36 + 5 * t);
     for (let x = left; x <= right; x += 1) {
-      const shaded = x <= left + 3 || x >= right - 2;
-      plot(g, x, y, shaded ? kit.shade : kit.shirt);
+      const edge = x <= left + 1 || x >= right - 1;
+      plot(g, x, y, edge ? kit.shade : kit.shirt);
     }
   }
 
-  fillRect(g, 3, 26, 9, 12, kit.shirt);
-  fillRect(g, 3, 28, 5, 10, kit.shade);
-  fillRect(g, 3, 37, 9, 2, kit.cuff);
-  fillRect(g, 37, 26, 8, 11, kit.shirt);
-  fillRect(g, 39, 28, 6, 9, kit.shade);
-  fillRect(g, 37, 36, 8, 2, kit.cuff);
+  for (let y = 46; y < H; y += 1) {
+    plot(g, 13, y, kit.seam);
+    plot(g, 38, y, kit.seam);
+  }
 
-  fillRect(g, 21, 23, 12, 4, kit.shirt);
-  fillRect(g, 23, 24, 8, 2, PINK);
-  plot(g, 22, 25, PINK_DARK);
-  plot(g, 31, 25, PINK_DARK);
+  fillRect(g, 22, 38, 10, 2, PINK);
+  plot(g, 21, 39, PINK_DARK);
+  plot(g, 32, 39, PINK_DARK);
+  fillRect(g, 24, 40, 6, 1, kit.shade);
 
   paintClaws(g, hash);
-  paintBadge(g, 17, 34, "agesci");
-  paintBadge(g, 31, 34, "sacchos");
+  paintBadge(g, 18, 46, "agesci");
+  paintBadge(g, 33, 46, "sacchos");
 }
 
 function paintClaws(g: Grid, hash: number): void {
   const marks: Array<[number, number, number, number]> = [
-    [11, 60, 24, 46],
-    [15, 62, 30, 44],
-    [20, 63, 36, 48],
+    [12, 63, 26, 54],
+    [18, 63, 32, 53],
+    [24, 63, 37, 56],
   ];
   for (let i = 0; i < marks.length; i += 1) {
     const [x0, y0, x1, y1] = marks[i] ?? [0, 0, 0, 0];
-    thickLine(g, x0, y0, x1, y1, 2, PINK, hash + i * 13);
-    thickLine(g, x0, y0 + 1, x1 - 1, y1 + 1, 1, PINK_DARK, hash + i * 7);
+    thickLine(g, x0, y0, x1, y1, 1, PINK, hash + i * 13);
+    thickLine(g, x0 + 1, y0, x1 + 1, y1, 1, PINK_DARK, hash + i * 7);
   }
 }
 
 function paintBadge(g: Grid, cx: number, cy: number, kind: "agesci" | "sacchos"): void {
-  fillDisc(g, cx, cy, 4, WHITE);
   ring(g, cx, cy, 4, PINK);
+  fillDisc(g, cx, cy, 3, PINK_DARK);
   if (kind === "agesci") {
-    plot(g, cx, cy - 2, PINK);
-    plot(g, cx - 1, cy - 1, PINK);
-    plot(g, cx, cy - 1, PINK);
-    plot(g, cx + 1, cy - 1, PINK);
-    plot(g, cx - 2, cy, PINK);
-    plot(g, cx, cy, PINK);
-    plot(g, cx + 2, cy, PINK);
-    plot(g, cx, cy + 1, PINK);
-    plot(g, cx, cy + 2, PINK);
+    fillRect(g, cx, cy - 2, 1, 5, WHITE);
+    fillRect(g, cx - 1, cy, 3, 1, WHITE);
     return;
   }
-  plot(g, cx + 1, cy - 2, PINK);
-  plot(g, cx, cy - 1, PINK);
-  plot(g, cx + 1, cy - 1, PINK);
-  plot(g, cx - 1, cy, PINK);
-  plot(g, cx, cy, PINK_DARK);
-  plot(g, cx + 1, cy, PINK);
-  plot(g, cx, cy + 1, PINK);
-  plot(g, cx + 1, cy + 2, WHITE);
+  plot(g, cx - 1, cy - 2, WHITE);
+  plot(g, cx, cy - 1, WHITE);
+  plot(g, cx + 1, cy, WHITE);
+  plot(g, cx - 1, cy + 1, WHITE);
+  plot(g, cx, cy + 2, WHITE);
+}
+
+function paintLongHair(g: Grid, hair: Hair): void {
+  fillEllipse(g, 26, 22, 12, 15, hair.base);
+  fillRect(g, 14, 22, 10, 24, hair.base);
+  fillRect(g, 14, 32, 5, 14, hair.dark);
+  fillRect(g, 34, 26, 4, 16, hair.base);
+  fillRect(g, 36, 32, 2, 10, hair.dark);
+}
+
+function paintHair(g: Grid, hair: Hair, style: number): void {
+  fillEllipse(g, 26, 20, 11, 13, hair.base);
+  fillRect(g, 16, 20, 8, 11, hair.base);
+
+  if (style === 1) {
+    fillEllipse(g, 25, 14, 12, 7, hair.base);
+  }
+  if (style === 2) {
+    fillEllipse(g, 22, 12, 7, 6, hair.base);
+  }
+  if (style === 3) {
+    fillRect(g, 20, 8, 12, 4, hair.base);
+  }
+
+  fillRect(g, 23, 11, 6, 2, hair.light);
+  plot(g, 29, 12, WHITE);
+  fillRect(g, 18, 24, 3, 6, hair.dark);
+}
+
+function paintFace(g: Grid, skin: Skin, hair: Hair, hash: number): void {
+  fillEllipse(g, 29, 24, 9, 11, skin.base);
+  fillRect(g, 37, 23, 2, 5, skin.base);
+  plot(g, 38, 27, skin.shadow);
+  plot(g, 36, 28, skin.shadow);
+  fillRect(g, 24, 30, 6, 4, skin.shadow);
+  fillRect(g, 27, 33, 7, 2, skin.shadow);
+
+  fillEllipse(g, 23, 27, 2, 3, skin.base);
+  plot(g, 23, 27, skin.shadow);
+
+  fillRect(g, 31, 22, 5, 4, EYE.white);
+  fillRect(g, 33, 23, 2, 2, EYE.iris);
+  plot(g, 33, 23, INK);
+  plot(g, 34, 24, EYE.irisLight);
+  fillRect(g, 31, 19 + (hash % 2), 6, 1, hair.dark);
+  plot(g, 30, 20 + (hash % 2), hair.dark);
+
+  plot(g, 34, 30, PINK_DARK);
+  plot(g, 35, 30, PINK_DARK);
+  plot(g, 33, 30, skin.shadow);
+
+  if (hash % 4 === 0) {
+    fillRect(g, 32, 28, 2, 1, skin.blush);
+  }
+  if (hash % 5 === 0) {
+    plot(g, 22, 30, PINK);
+  }
+}
+
+function paintBeard(g: Grid, hair: Hair): void {
+  for (let y = 28; y <= 35; y += 1) {
+    for (let x = 24; x <= 37; x += 1) {
+      const nx = (x - 29) / 9;
+      const ny = (y - 24) / 11;
+      if (nx * nx + ny * ny > 1) {
+        continue;
+      }
+      if (y <= 30 && x >= 32) {
+        continue;
+      }
+      plot(g, x, y, hair.dark);
+    }
+  }
+  plot(g, 34, 30, PINK_DARK);
+  plot(g, 35, 30, PINK_DARK);
+}
+
+function paintBackdrop(g: Grid, kit: KitPalette): void {
+  const inner = 17 * 17;
+  const outer = 22 * 22;
+  for (let y = 0; y < g.h; y += 1) {
+    for (let x = 0; x < g.w; x += 1) {
+      if (get(g, x, y)) {
+        continue;
+      }
+      const base = y >= 52 ? kit.bgFloor : kit.bg;
+      const dx = x - 26;
+      const dy = y - 22;
+      const d2 = dx * dx + dy * dy;
+      if (d2 <= inner) {
+        plot(g, x, y, kit.bgGlow);
+        continue;
+      }
+      if (d2 <= outer && (x + y) % 2 === 0) {
+        plot(g, x, y, kit.bgGlow);
+        continue;
+      }
+      plot(g, x, y, base);
+    }
+  }
 }
 
 function createGrid(w: number, h: number): Grid {
   return { w, h, data: Array.from({ length: w * h }, () => null) };
-}
-
-function idx(g: Grid, x: number, y: number): number {
-  return y * g.w + x;
 }
 
 function inBounds(g: Grid, x: number, y: number): boolean {
@@ -319,14 +293,14 @@ function plot(g: Grid, x: number, y: number, color: string): void {
   if (!inBounds(g, x, y)) {
     return;
   }
-  g.data[idx(g, x, y)] = color;
+  g.data[y * g.w + x] = color;
 }
 
 function get(g: Grid, x: number, y: number): string | null {
   if (!inBounds(g, x, y)) {
     return null;
   }
-  return g.data[idx(g, x, y)] ?? null;
+  return g.data[y * g.w + x] ?? null;
 }
 
 function fillRect(g: Grid, x: number, y: number, w: number, h: number, color: string): void {
@@ -338,12 +312,22 @@ function fillRect(g: Grid, x: number, y: number, w: number, h: number, color: st
 }
 
 function fillDisc(g: Grid, cx: number, cy: number, r: number, color: string): void {
-  const r2 = r * r;
-  for (let y = cy - r; y <= cy + r; y += 1) {
-    for (let x = cx - r; x <= cx + r; x += 1) {
-      const dx = x - cx;
-      const dy = y - cy;
-      if (dx * dx + dy * dy <= r2) {
+  fillEllipse(g, cx, cy, r, r, color);
+}
+
+function fillEllipse(
+  g: Grid,
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number,
+  color: string,
+): void {
+  for (let y = cy - ry; y <= cy + ry; y += 1) {
+    for (let x = cx - rx; x <= cx + rx; x += 1) {
+      const nx = (x - cx) / rx;
+      const ny = (y - cy) / ry;
+      if (nx * nx + ny * ny <= 1) {
         plot(g, x, y, color);
       }
     }
@@ -382,10 +366,10 @@ function thickLine(
   let err = dx + dy;
   let i = 0;
   while (true) {
-    const jag = ((seed + i * 17) % 5) === 0 ? 1 : 0;
+    const jag = (seed + i * 17) % 5 === 0 ? 1 : 0;
     stamp(g, x, y + jag, thickness, color);
     if (x === x1 && y === y1) {
-      break;
+      return;
     }
     const e2 = 2 * err;
     if (e2 >= dy) {
@@ -416,17 +400,15 @@ function addOutline(g: Grid, color: string): void {
       if (!get(g, x, y)) {
         continue;
       }
-      if (!get(g, x - 1, y) || !get(g, x + 1, y) || !get(g, x, y - 1) || !get(g, x, y + 1)) {
-        const neighbors: Array<[number, number]> = [
-          [x - 1, y],
-          [x + 1, y],
-          [x, y - 1],
-          [x, y + 1],
-        ];
-        for (const [nx, ny] of neighbors) {
-          if (inBounds(g, nx, ny) && !get(g, nx, ny)) {
-            marks.push([nx, ny]);
-          }
+      const neighbors: Array<[number, number]> = [
+        [x - 1, y],
+        [x + 1, y],
+        [x, y - 1],
+        [x, y + 1],
+      ];
+      for (const [nx, ny] of neighbors) {
+        if (inBounds(g, nx, ny) && !get(g, nx, ny)) {
+          marks.push([nx, ny]);
         }
       }
     }
