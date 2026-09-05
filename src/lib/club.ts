@@ -4,7 +4,7 @@ export const club = {
   group: "AGESCI Pesaro 1",
   sport: "Scoutball",
   format: "7v7",
-    productionUrl: "https://anrighi.github.io/sacchos-team-website",
+  productionUrl: "https://anrighi.github.io/sacchos-team-website",
   colors: {
     navy: "#1a2634",
     pink: "#f867a5",

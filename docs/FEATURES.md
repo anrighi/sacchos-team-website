@@ -40,6 +40,7 @@
 |------|----------|-----------|---------------------|
 | 2026-09-04 | Estendere `anrighi/agent-repo-template` (merge git, non copia file) | Banner GitHub *generated from* solo se il remote GitHub nasce dal template | Copiare i file a mano |
 | 2026-09-04 | TanStack Start statico su GitHub Pages | Niente token Cloudflare ora; SSR/Workers dopo | Deploy Wrangler da F0 |
+| 2026-09-05 | Stage per branch su GitHub Pages (`/preview/<slug>/`) | Vedere il sito fuori casa prima del merge | Solo `main`, preview Cloudflare |
 | 2026-09-04 | TanStack Start + Cloudflare Workers (poi) | SSR e dominio club quando l’account CF è pronto | Next.js / Pages come stack definitivo |
 | 2026-09-04 | Node 26 + pnpm | Current LTS-adjacent del template alzato; lockfile unico | Node 22 del template |
 | 2026-09-04 | Rosa da Google Sheet a build, partite su Sheet in append | I giocatori editano senza DB; niente PII in repo | Postgres / JSON editato a mano |
@@ -51,7 +52,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-04 | Cursor | 0 | Deploy F0 su GitHub Pages (static) | Merge PR #9; F1 ingest Sheet | Pages: source GitHub Actions |
+| 2026-09-05 | Cursor | 0 | Stage per branch su Pages `/preview/<slug>/` | Merge PR #9; F1 ingest Sheet | Pages: source GitHub Actions |
 
 ## Useful commands
 

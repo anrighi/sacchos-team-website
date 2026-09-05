@@ -54,10 +54,12 @@ Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete
 
 `.github/workflows/ci.yml`:
 
-- **pull_request:** `pnpm test` + `pnpm run build:pages`
-- **push `main`:** stesso, poi publish su **GitHub Pages** (`dist/client`)
+- **pull_request:** `pnpm test` + `pnpm run build:pages` (base dello stage del branch)
+- **push su qualsiasi branch** (tranne `gh-pages`): stesso, poi publish su **GitHub Pages**
+  - `main` → https://anrighi.github.io/sacchos-team-website/
+  - altri branch → `https://anrighi.github.io/sacchos-team-website/preview/<branch>/`
 
-URL: `https://anrighi.github.io/sacchos-team-website/`
+Esempio F0: https://anrighi.github.io/sacchos-team-website/preview/cursor-phase-0-f0-bootstrap-91b9/
 
 In Settings → Pages, source **GitHub Actions**. Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
 

@@ -3,7 +3,8 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches-ignore:
+      - gh-pages
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -14,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Set Pages base
+        run: bash scripts/ci-set-pages-env.sh
       - uses: pnpm/action-setup@v6
         with:
           version: 10.12.4
@@ -29,17 +32,22 @@ jobs:
 
   deploy:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
+      pull-requests: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
+      - name: Set Pages base
+        run: bash scripts/ci-set-pages-env.sh
       - uses: pnpm/action-setup@v6
         with:
           version: 10.12.4
@@ -51,8 +59,70 @@ jobs:
       - run: pnpm run build:pages
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
+      - name: Publish production
+        if: env.PAGES_DEST == 'root'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/client
+          keep_files: true
+          user_name: anrighi
+          user_email: anrighi@users.noreply.github.com
+      - name: Publish staging
+        if: env.PAGES_DEST != 'root'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/client
+          destination_dir: ${{ env.PAGES_DEST }}
+          keep_files: true
+          user_name: anrighi
+          user_email: anrighi@users.noreply.github.com
+      - uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          path: published-site
+      - run: rm -rf published-site/.git
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/client
+          path: published-site
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Comment staging URL on PR
+        if: env.PAGES_DEST != 'root'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR="$(gh pr list --head "$GITHUB_REF_NAME" --json number --jq '.[0].number' || true)"
+          if [[ -z "${PR}" || "${PR}" == "null" ]]; then
+            echo "No open PR for $GITHUB_REF_NAME"
+            exit 0
+          fi
+          BODY="$(printf '<!-- staging-url -->\n**Stage di questo branch:** %s\n\nSi aggiorna a ogni push (non aspetta il merge).' "$STAGE_URL")"
+          EXISTING="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments" --jq '.[] | select(.user.login=="github-actions[bot]" and (.body|contains("<!-- staging-url -->"))) | .id' | head -n1 || true)"
+          if [[ -n "${EXISTING}" ]]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING}" -f body="${BODY}"
+          else
+            gh pr comment "${PR}" --body "${BODY}"
+          fi
+
+  preview-comment:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set Pages base
+        run: bash scripts/ci-set-pages-env.sh
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          BODY="$(printf '<!-- staging-url -->\n**Stage di questo branch:** %s\n\nSi aggiorna a ogni push sul branch (non aspetta il merge).' "$STAGE_URL")"
+          EXISTING="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --jq '.[] | select(.user.login=="github-actions[bot]" and (.body|contains("<!-- staging-url -->"))) | .id' | head -n1 || true)"
+          if [[ -n "${EXISTING}" ]]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING}" -f body="${BODY}"
+          else
+            gh pr comment "${PR_NUMBER}" --body "${BODY}"
+          fi
