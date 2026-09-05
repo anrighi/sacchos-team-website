@@ -20,15 +20,17 @@ if (!csv) {
     );
   }
   console.log("No ROSTER_SHEET_CSV_URL — keeping snapshot");
+  await refreshPortraitsFromSnapshot();
   process.exit(0);
 }
 
 const players = parseRosterCsv(csv);
 if (players.length === 0) {
   if (!existsSync(outPath)) {
-    throw new Error("CSV rosa vuoto e snapshot assente");
+    throw new Error("CSV rosa senza righe valide e snapshot assente");
   }
   console.log("CSV rosa senza righe valide — keeping snapshot");
+  await refreshPortraitsFromSnapshot();
   process.exit(0);
 }
 
@@ -78,16 +80,20 @@ function attachPhotos(list: Player[]): Player[] {
   });
 }
 
+async function refreshPortraitsFromSnapshot() {
+  const mod = await import("#/data/players.generated");
+  ensurePortraits(mod.players);
+}
+
 function ensurePortraits(list: Player[]) {
   const dir = resolve(publicDir, "players");
   mkdirSync(dir, { recursive: true });
   for (const player of list) {
     const png = resolve(dir, `${player.slug}.png`);
-    const svg = resolve(dir, `${player.slug}.svg`);
-    if (existsSync(png) || existsSync(svg)) {
+    if (existsSync(png)) {
       continue;
     }
-    writeFileSync(svg, portraitSvg(player));
+    writeFileSync(resolve(dir, `${player.slug}.svg`), portraitSvg(player));
   }
 }
 
