@@ -85,9 +85,7 @@ function PlayerPage() {
                     <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
                       <div
                         className="h-full rounded-full bg-pink"
-                        style={{
-                          width: `${Math.min(100, Math.max(6, ((player.stats[key] - 70) / 30) * 100))}%`,
-                        }}
+                        style={{ width: `${player.stats[key]}%` }}
                       />
                     </div>
                   </div>

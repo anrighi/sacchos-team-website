@@ -8,9 +8,6 @@ import { cn } from "#/lib/utils";
 
 type CardSize = "grid" | "hero";
 
-const STAT_FLOOR = 70;
-const STAT_RANGE = 30;
-
 export function PlayerCard({
   player,
   size = "grid",
@@ -125,7 +122,6 @@ function StatCell({
   value: number;
   hero: boolean;
 }) {
-  const fill = Math.min(100, Math.max(6, ((value - STAT_FLOOR) / STAT_RANGE) * 100));
   return (
     <div>
       <div className="flex items-baseline justify-between gap-1">
@@ -147,7 +143,10 @@ function StatCell({
         </dd>
       </div>
       <div className="mt-1 h-[3px] overflow-hidden rounded-full bg-white/10">
-        <div className="h-full rounded-full bg-pink" style={{ width: `${fill}%` }} />
+        <div
+          className="h-full rounded-full bg-pink"
+          style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+        />
       </div>
     </div>
   );

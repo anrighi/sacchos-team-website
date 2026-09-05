@@ -129,6 +129,9 @@ function EmptyState({ children }: { children: ReactNode }) {
 }
 
 function RosaFilters({ search }: { search: RosterFilters }) {
+  const hits = (patch: Partial<RosterFilters>) =>
+    filterPlayers(players, withFilter(search, patch)).length;
+
   return (
     <div className="sticky top-0 z-30 border-y border-white/10 bg-black/75 backdrop-blur-xl md:top-16">
       <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:gap-6 md:px-8">
@@ -136,12 +139,14 @@ function RosaFilters({ search }: { search: RosterFilters }) {
           <FilterChip
             search={withFilter(search, { team: undefined })}
             active={!search.team}
+            hits={hits({ team: undefined })}
           >
             Tutte
           </FilterChip>
           <FilterChip
             search={withFilter(search, { team: "sacchos" })}
             active={search.team === "sacchos"}
+            hits={hits({ team: "sacchos" })}
           >
             <img
               src={publicUrl("/brand/logo-sacchos.jpg")}
@@ -153,6 +158,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
           <FilterChip
             search={withFilter(search, { team: "saccios" })}
             active={search.team === "saccios"}
+            hits={hits({ team: "saccios" })}
           >
             <img
               src={publicUrl("/brand/logo-saccios-tim.jpg")}
@@ -166,6 +172,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
           <FilterChip
             search={withFilter(search, { role: undefined })}
             active={!search.role}
+            hits={hits({ role: undefined })}
           >
             Tutti
           </FilterChip>
@@ -174,6 +181,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
               key={role}
               search={withFilter(search, { role })}
               active={search.role === role}
+              hits={hits({ role })}
             >
               {role}
             </FilterChip>
@@ -206,18 +214,35 @@ function FilterRow({
 function FilterChip({
   search,
   active,
+  hits,
   children,
 }: {
   search: RosterFilters;
   active: boolean;
+  hits: number;
   children: ReactNode;
 }) {
+  const shape =
+    "inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium tracking-tight transition-colors";
+
+  if (hits === 0 && !active) {
+    return (
+      <span
+        aria-disabled
+        title="Nessun giocatore con questo filtro"
+        className={cn(shape, "cursor-not-allowed bg-white/5 text-white/25 [&_img]:opacity-40")}
+      >
+        {children}
+      </span>
+    );
+  }
+
   return (
     <Link
       to="/rosa"
       search={search}
       className={cn(
-        "inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium tracking-tight transition-colors",
+        shape,
         active
           ? "bg-pink text-navy-deep"
           : "bg-white/8 text-white/70 hover:bg-white/15 hover:text-white",
