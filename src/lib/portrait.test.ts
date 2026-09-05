@@ -36,12 +36,14 @@ describe("kitKind", () => {
 });
 
 describe("portraitSvg", () => {
-  it("draws the white kit with pink claws and both chest badges", () => {
+  it("draws a pixel-art white kit with pink claws", () => {
     const svg = portraitSvg(sample());
+    expect(svg).toContain('viewBox="0 0 48 64"');
+    expect(svg).toContain('shape-rendering="crispEdges"');
     expect(svg).toContain('id="kit-body"');
     expect(svg).toContain('fill="#ffffff"');
-    expect(svg).toContain('id="claw-slashes"');
     expect(svg).toContain("#f867a5");
+    expect(svg).toContain('id="claw-slashes"');
     expect(svg).toContain('id="badge-agesci"');
     expect(svg).toContain('id="badge-sacchos"');
     expect(svg).toContain("Maglia casa bianca");

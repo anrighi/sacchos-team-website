@@ -35,4 +35,4 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: SVG cel-shaded in `public/players/{slug}.svg` (stesso crop, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.
+Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: sprite pixel-art in `public/players/{slug}.svg` (profilo, maglia casa/trasferta, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.

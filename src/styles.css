@@ -79,6 +79,10 @@ body {
     );
 }
 
+.pixel-art {
+  image-rendering: pixelated;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
