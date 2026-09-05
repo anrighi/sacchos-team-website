@@ -14,8 +14,10 @@
   "scripts": {
     "dev": "vite dev --port 43123 --host 127.0.0.1",
     "generate-routes": "tsr generate",
-    "build": "vite build",
-    "build:pages": "vite build && node scripts/prepare-github-pages.mjs",
+    "ingest-roster": "tsx scripts/ingest-roster.ts",
+    "ingest-roster:seed": "tsx scripts/ingest-roster.ts --from src/data/roster.seed.csv",
+    "build": "pnpm ingest-roster && vite build",
+    "build:pages": "pnpm ingest-roster && vite build && node scripts/prepare-github-pages.mjs",
     "preview": "vite preview --port 43123 --host 127.0.0.1",
     "deploy": "pnpm run build:pages",
     "test": "vitest run",

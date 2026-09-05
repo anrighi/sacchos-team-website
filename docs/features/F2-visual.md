@@ -2,9 +2,9 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | in_progress |
 | Phase | 1 |
-| Files | `src/routes/index.tsx`, `src/styles.css`, `public/brand/`, hero components |
+| Files | `src/routes/index.tsx`, `src/components/HomeLanding.tsx`, `src/components/Reveal.tsx`, `src/components/SiteNav.tsx`, `src/styles.css` |
 | Tests | visivo + `prefers-reduced-motion` (fade only) |
 
 ## Goal
@@ -17,11 +17,11 @@ Home cinematografica: logo Saccho's, kit bianca/navy, ventaglio carte, motion al
 
 ## Acceptance criteria
 
-- [ ] Hero home 100dvh, logo, due kit, CTA Rosa / Sfida
-- [ ] MrAlex su titoli, numeri, overall
+- [x] Hero home 100dvh, logo, due kit, CTA Rosa / Sfida
+- [x] MrAlex su titoli, numeri, overall
 - [ ] Loghi ricreati per UI (PNG/SVG) dagli JPG di reference, stesso tratto
-- [ ] Motion: tilt/stagger; `prefers-reduced-motion` = fade
-- [ ] Nav già in F0 resta; skin più editoriale
+- [x] Motion: reveal in fade/slide; `prefers-reduced-motion` = fade
+- [x] Nav già in F0 resta; skin più editoriale
 - [ ] Spec + manifest `done` e PR con `Closes #N`
 
 ## Deliverables
@@ -32,3 +32,4 @@ Home cinematografica: logo Saccho's, kit bianca/navy, ventaglio carte, motion al
 ## Notes
 
 Niente restyling palette. Rosso marker solo sul chip Saccios Tim.
+Reference home: landing prodotto Apple (iPhone 17 Pro) — capitoli a tutto schermo, headline grandi, CTA a pillola, niente copia Apple.

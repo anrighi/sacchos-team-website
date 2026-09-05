@@ -45,7 +45,7 @@ Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali 
 
 Due Google Sheet:
 
-1. **Rosa** — lettura a **build** (`ROSTER_SHEET_CSV_URL`, File → Condividi → Pubblica sul web → CSV). I giocatori editano nickname, ruolo, stats 75–100. `pnpm build` / CI fa ingest; senza URL si usa lo snapshot in repo (da F1).
+1. **Rosa** — lettura a **build** (`ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 75–100. `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; senza URL si usa lo snapshot `src/data/players.generated.ts`.
 2. **Partite** — append a runtime (webhook Apps Script). Senza webhook la sfida resta nel link.
 
 Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete, foto.
@@ -63,7 +63,23 @@ Esempio F0: https://anrighi.github.io/sacchos-team-website/preview/cursor-phase-
 
 In Settings → Pages: **Deploy from a branch** → `gh-pages` / `/(root)`. Non usare source “GitHub Actions”: quell’environment è protetto e accetta solo `main`, quindi lo stage dei branch veniva rifiutato.
 
-Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
+Nessun secret Cloudflare per ora.
+
+## Sheet rosa (`ROSTER_SHEET_CSV_URL`)
+
+Finché l’URL non è configurato, la build tiene lo snapshot dei 24 giocatori 2026.
+
+Quando lo Sheet è pronto:
+
+1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`
+2. File → Condividi → **Pubblica sul web** → formato **CSV**
+3. Copia l’URL del CSV
+4. In locale: mettilo in `.env` come `ROSTER_SHEET_CSV_URL=...` (vedi `.env.example`) e lancia `pnpm ingest-roster`
+5. In CI: secret `ROSTER_SHEET_CSV_URL` (già letto da `.github/workflows/ci.yml`)
+
+Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 sono clampate; vuote = 75. Overall = media arrotonda delle sei stats.
+
+Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
 
 Cloudflare Workers (`wrangler.jsonc`) e il dominio `sacchos.agescipesaro1.it` sono rimandati: niente token, niente DNS in questo slice.
 

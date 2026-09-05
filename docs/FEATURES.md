@@ -9,24 +9,24 @@
 | Phase | Name | Status | Completion |
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
-| 1 | Rosa e UI | in_progress | 0% |
+| 1 | Rosa e UI | in_progress | 50% |
 | 2 | Sfida | pending | 0% |
 | 0+ | Dopo | deferred | — |
 
 ## Active phase — what to do now
 
-- **Current goal:** Phase 1 — rosa da Sheet, carte FUT, poi hero/motion
+- **Current goal:** Phase 1 — F1 rosa è fatta; F2 hero/motion in attesa di reference visive
 - **Remaining tasks:**
-  - [ ] [F1](features/F1-rosa.md) Ingest Sheet, carte, illustrazioni, filtri
-  - [ ] [F2](features/F2-visual.md) Hero, font, loghi, motion
-- **Open blockers:** URL CSV dello Sheet rosa; Pages source = GitHub Actions
+  - [x] [F1](features/F1-rosa.md) Ingest Sheet, carte, illustrazioni, filtri
+  - [ ] [F2](features/F2-visual.md) Hero, font, loghi, motion (non partire senza reference)
+- **Open blockers:** URL CSV dello Sheet rosa (snapshot 24 in repo); Pages source = branch `gh-pages`
 
 ## Feature index
 
 | ID | Feature | Phase | Status | Spec |
 |----|---------|-------|--------|------|
 | F0 | Bootstrap TanStack Start e CI Cloudflare | 0 | done | [F0-bootstrap.md](features/F0-bootstrap.md) |
-| F1 | Ingest Sheet, carte FUT e filtri rosa | 1 | not_started | [F1-rosa.md](features/F1-rosa.md) |
+| F1 | Ingest Sheet, carte FUT e filtri rosa | 1 | done | [F1-rosa.md](features/F1-rosa.md) |
 | F2 | Hero, font, loghi e motion | 1 | not_started | [F2-visual.md](features/F2-visual.md) |
 | F3 | Schieramento 3-2-1 e link sfida | 2 | not_started | [F3-lineup.md](features/F3-lineup.md) |
 | F4 | Simulazione 2×15′ in 90s | 2 | not_started | [F4-sim.md](features/F4-sim.md) |
@@ -52,6 +52,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |
 
 ## Useful commands

@@ -2,14 +2,14 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | done |
 | Phase | 1 |
 | Files | `scripts/ingest-roster.ts`, `src/data/players.generated.ts`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
 | Tests | parse/clamp/default 75–100; overall = media; riga senza number/firstName scartata |
 
 ## Goal
 
-Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illustrate, filtri squadra/ruolo/presenze, scheda `/giocatori/$slug`.
+Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illustrate, filtri squadra/ruolo, scheda `/giocatori/$slug`.
 
 ## Prerequisites
 
@@ -19,14 +19,14 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Acceptance criteria
 
-- [ ] `pnpm ingest-roster` / `pnpm build` genera `src/data/players.generated.ts`
-- [ ] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
-- [ ] Stats clamp 75–100, default 75; overall arrotondato
-- [ ] UI: nickname se c'è, senno firstName; disambiguazione col numero
-- [ ] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo, presenze
-- [ ] Badge carte sempre Saccho's Team
-- [ ] Silhouette se manca il PNG illustrato
-- [ ] Spec + manifest `done` e PR con `Closes #N`
+- [x] `pnpm ingest-roster` / `pnpm build` genera `src/data/players.generated.ts`
+- [x] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
+- [x] Stats clamp 75–100, default 75; overall arrotondato
+- [x] UI: nickname se c'è, senno firstName; disambiguazione col numero
+- [x] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo
+- [x] Badge carte sempre Saccho's Team
+- [x] Silhouette se manca il PNG illustrato
+- [x] Spec + manifest `done` e PR con `Closes #N`
 
 ## Deliverables
 
@@ -35,4 +35,6 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, appearances, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim.
+Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: sprite pixel-art in `public/players/{slug}.svg` (profilo, maglia casa/trasferta, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.
+
+Grafica rosa (rev. 2): carta con ritratto a piena larghezza, overall e ruolo su riquadro sfocato in alto a sinistra, logo in alto a destra, nome e numero su gradiente in basso, sei stat su tre colonne con barra rosa. Pagina `/rosa`: hero centrato, barra filtri sticky, griglia divisa per squadra con logo e conteggio. Lo sprite disegna il proprio fondo (alone dithered) dentro la griglia 48×64.

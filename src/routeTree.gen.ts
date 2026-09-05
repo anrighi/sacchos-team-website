@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RosaRouteImport } from './routes/rosa'
 import { Route as SfidaRouteImport } from './routes/sfida'
 import { Route as SfideRouteImport } from './routes/sfide'
+import { Route as GiocatoriSlugRouteImport } from './routes/giocatori.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const SfideRoute = SfideRouteImport.update({
   path: '/sfide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GiocatoriSlugRoute = GiocatoriSlugRouteImport.update({
+  id: '/giocatori/$slug',
+  path: '/giocatori/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/rosa': typeof RosaRoute
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
+  '/giocatori/$slug': typeof GiocatoriSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/rosa': typeof RosaRoute
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
+  '/giocatori/$slug': typeof GiocatoriSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/rosa': typeof RosaRoute
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
+  '/giocatori/$slug': typeof GiocatoriSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/rosa' | '/sfida' | '/sfide'
+  fullPaths: '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/rosa' | '/sfida' | '/sfide'
-  id: '__root__' | '/' | '/rosa' | '/sfida' | '/sfide'
+  to: '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
+  id: '__root__' | '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   RosaRoute: typeof RosaRoute
   SfidaRoute: typeof SfidaRoute
   SfideRoute: typeof SfideRoute
+  GiocatoriSlugRoute: typeof GiocatoriSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SfideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/giocatori/$slug': {
+      id: '/giocatori/$slug'
+      path: '/giocatori/$slug'
+      fullPath: '/giocatori/$slug'
+      preLoaderRoute: typeof GiocatoriSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   RosaRoute: RosaRoute,
   SfidaRoute: SfidaRoute,
   SfideRoute: SfideRoute,
+  GiocatoriSlugRoute: GiocatoriSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
