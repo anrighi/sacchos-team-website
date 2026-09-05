@@ -61,7 +61,9 @@ Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete
 
 Esempio F0: https://anrighi.github.io/sacchos-team-website/preview/cursor-phase-0-f0-bootstrap-91b9/
 
-In Settings → Pages, source **GitHub Actions**. Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
+In Settings → Pages: **Deploy from a branch** → `gh-pages` / `/(root)`. Non usare source “GitHub Actions”: quell’environment è protetto e accetta solo `main`, quindi lo stage dei branch veniva rifiutato.
+
+Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
 
 Cloudflare Workers (`wrangler.jsonc`) e il dominio `sacchos.agescipesaro1.it` sono rimandati: niente token, niente DNS in questo slice.
 

@@ -35,4 +35,4 @@ App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build,
 
 ## Notes
 
-F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Deploy: GitHub Pages. `main` → https://anrighi.github.io/sacchos-team-website/ ; ogni altro branch → `/preview/<slug>/`. Cloudflare Workers e `sacchos.agescipesaro1.it` arrivano dopo; `wrangler.jsonc` resta come gancio.
+F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Deploy: GitHub Pages dal branch `gh-pages` (`main` in root, gli altri in `/preview/<slug>/`). Non usare l’environment `github-pages` (protetto, solo `main`). Cloudflare Workers e `sacchos.agescipesaro1.it` arrivano dopo.

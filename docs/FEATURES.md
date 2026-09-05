@@ -52,7 +52,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-05 | Cursor | 0 | Stage per branch su Pages `/preview/<slug>/` | Merge PR #9; F1 ingest Sheet | Pages: source GitHub Actions |
+| 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |
 
 ## Useful commands
 
