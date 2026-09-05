@@ -39,7 +39,7 @@
       "id": "F1",
       "title": "Ingest Sheet, carte FUT e filtri rosa",
       "phase": "1",
-      "status": "todo",
+      "status": "done",
       "spec": "docs/features/F1-rosa.md"
     },
     {

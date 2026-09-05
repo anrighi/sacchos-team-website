@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | done |
 | Phase | 1 |
 | Files | `scripts/ingest-roster.ts`, `src/data/players.generated.ts`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
 | Tests | parse/clamp/default 75–100; overall = media; riga senza number/firstName scartata |
@@ -19,14 +19,14 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Acceptance criteria
 
-- [ ] `pnpm ingest-roster` / `pnpm build` genera `src/data/players.generated.ts`
-- [ ] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
-- [ ] Stats clamp 75–100, default 75; overall arrotondato
-- [ ] UI: nickname se c'è, senno firstName; disambiguazione col numero
-- [ ] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo, presenze
-- [ ] Badge carte sempre Saccho's Team
-- [ ] Silhouette se manca il PNG illustrato
-- [ ] Spec + manifest `done` e PR con `Closes #N`
+- [x] `pnpm ingest-roster` / `pnpm build` genera `src/data/players.generated.ts`
+- [x] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
+- [x] Stats clamp 75–100, default 75; overall arrotondato
+- [x] UI: nickname se c'è, senno firstName; disambiguazione col numero
+- [x] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo, presenze
+- [x] Badge carte sempre Saccho's Team
+- [x] Silhouette se manca il PNG illustrato
+- [x] Spec + manifest `done` e PR con `Closes #N`
 
 ## Deliverables
 
@@ -35,4 +35,4 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, appearances, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim.
+Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, appearances, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: SVG cel-shaded in `public/players/{slug}.svg` (stesso crop, non foto); silhouette inline se il file manca.
