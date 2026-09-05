@@ -31,7 +31,7 @@ export function PlayerCard({
         hero && "rounded-[26px]",
       )}
     >
-      <div className={cn("relative overflow-hidden", hero ? "aspect-4/5" : "aspect-4/5")}>
+      <div className="relative aspect-3/4 overflow-hidden">
         <div
           aria-hidden
           className={cn(
