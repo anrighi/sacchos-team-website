@@ -36,3 +36,5 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 ## Notes
 
 Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: sprite pixel-art in `public/players/{slug}.svg` (profilo, maglia casa/trasferta, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.
+
+Grafica rosa (rev. 2): carta con ritratto a piena larghezza, overall e ruolo su riquadro sfocato in alto a sinistra, logo in alto a destra, nome e numero su gradiente in basso, sei stat su tre colonne con barra rosa. Pagina `/rosa`: hero centrato, barra filtri sticky, griglia divisa per squadra con logo e conteggio. Lo sprite disegna il proprio fondo (alone dithered) dentro la griglia 48×64.
