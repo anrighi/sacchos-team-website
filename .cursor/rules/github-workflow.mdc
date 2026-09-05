@@ -18,24 +18,28 @@ Issues are the collaboration tracker. Specs stay in `docs/features/`. Status sou
 
 ## Branch naming
 
-Format: `phase-<n>/<id>-<short-slug>`
+Canonical template form: `phase-<n>/<id>-<short-slug>`.
 
-Phase prefixes come from `scripts/github-tasks.manifest.json` → `phases[]` (and the registry in `docs/FEATURES.md`).
+In this repo (Cursor cloud agents) use:
+
+`cursor/phase-<n>-f<id>-<slug>-91b9`
 
 | Phase id | Branch prefix | Example |
 |----------|---------------|---------|
-| `0` | `phase-0/` | `phase-0/f0-bootstrap` |
-| `1` | `phase-1/` | `phase-1/f1-core` |
-| `0+` (cross-cutting) | `phase-0-plus/` | `phase-0-plus/f13-ci` |
+| `0` | `cursor/phase-0-` | `cursor/phase-0-f0-bootstrap-91b9` |
+| `1` | `cursor/phase-1-` | `cursor/phase-1-f1-rosa-91b9` |
+| `2` | `cursor/phase-2-` | `cursor/phase-2-f3-lineup-91b9` |
+| `0+` (cross-cutting) | `cursor/phase-0-plus-` | `cursor/phase-0-plus-f7-album-91b9` |
 
-- One feature per branch (preferred); multiple issues only if tightly coupled and agreed in issue comments
+- One feature per branch; stack on the previous PR branch if `main` does not have it yet
 - Short slug: lowercase, hyphens, matches feature id (e.g. `f0-bootstrap`)
+- PR title: `[F0] …` (plus conventional body)
 
 ## Pull requests
 
 1. **Target branch:** `main`
 2. **Link issues** — PR body must include `Closes #<number>` (or `Fixes #`) for each completed feature issue
-3. **Title:** conventional commit style, e.g. `feat(scope): short description (F0)`
+3. **Title:** `[F0] short description` (body can use conventional commits)
 4. **Before merge:** run project tests (and build if application code changed)
 5. **On completion:** set `status` → `done` in `docs/features/F*.md` and in `scripts/github-tasks.manifest.json`; merge triggers issue sync on `main`
 

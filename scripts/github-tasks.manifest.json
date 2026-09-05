@@ -1,33 +1,88 @@
 {
-  "repo": "OWNER/REPO",
-  "projectTitle": "My Project Roadmap",
+  "repo": "anrighi/sacchos-team-website",
+  "projectTitle": "Saccho's Team — Scoutball",
   "phases": [
     {
       "id": "0",
       "label": "phase-0",
       "name": "Bootstrap",
-      "color": "0E8A16"
+      "color": "1A2634"
     },
     {
       "id": "1",
       "label": "phase-1",
-      "name": "Core",
+      "name": "Rosa e UI",
+      "color": "F867A5"
+    },
+    {
+      "id": "2",
+      "label": "phase-2",
+      "name": "Sfida",
       "color": "0E8A16"
     },
     {
       "id": "0+",
       "label": "phase-0+",
-      "name": "Cross-cutting",
+      "name": "Dopo",
       "color": "5319E7"
     }
   ],
   "features": [
     {
       "id": "F0",
-      "title": "Bootstrap agent workflow",
+      "title": "Bootstrap TanStack Start e GitHub Pages",
       "phase": "0",
+      "status": "done",
+      "spec": "docs/features/F0-bootstrap.md"
+    },
+    {
+      "id": "F1",
+      "title": "Ingest Sheet, carte FUT e filtri rosa",
+      "phase": "1",
       "status": "todo",
-      "spec": "docs/features/F0-example-bootstrap.md"
+      "spec": "docs/features/F1-rosa.md"
+    },
+    {
+      "id": "F2",
+      "title": "Hero, font, loghi e motion",
+      "phase": "1",
+      "status": "todo",
+      "spec": "docs/features/F2-visual.md"
+    },
+    {
+      "id": "F3",
+      "title": "Schieramento 3-2-1 e link sfida",
+      "phase": "2",
+      "status": "todo",
+      "spec": "docs/features/F3-lineup.md"
+    },
+    {
+      "id": "F4",
+      "title": "Simulazione 2×15′ in 90s",
+      "phase": "2",
+      "status": "todo",
+      "spec": "docs/features/F4-sim.md"
+    },
+    {
+      "id": "F5",
+      "title": "Tabellino social e recap",
+      "phase": "2",
+      "status": "todo",
+      "spec": "docs/features/F5-recap.md"
+    },
+    {
+      "id": "F6",
+      "title": "Archivio partite su Google Sheet",
+      "phase": "2",
+      "status": "todo",
+      "spec": "docs/features/F6-archive.md"
+    },
+    {
+      "id": "F7",
+      "title": "Album fotografico",
+      "phase": "0+",
+      "status": "deferred",
+      "spec": "docs/features/F7-album.md"
     }
   ]
 }

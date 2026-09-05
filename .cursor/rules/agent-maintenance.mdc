@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Agent-first maintenance
 
-Replace `{{PROJECT_NAME}}` with your project name after cloning this template.
+Project: **Saccho's Team** (Scoutball, AGESCI Pesaro 1).
 
 ## Before each session
 
@@ -16,7 +16,7 @@ Replace `{{PROJECT_NAME}}` with your project name after cloning this template.
 
 ## During work
 
-- Work only on the phase/feature indicated in `docs/FEATURES.md`, the linked GitHub issue, and your `phase-<n>/` branch
+- Work only on the phase/feature indicated in `docs/FEATURES.md`, the linked GitHub issue, and your `cursor/phase-<n>-…` branch
 - Prefer small diffs, early returns, and self-explanatory names over comments
 - Do not skip phases defined in `docs/FEATURES.md`
 - Add stack-specific conventions in additional `.cursor/rules/*.mdc` files (language, imports, UI locale, etc.)
@@ -31,12 +31,13 @@ Replace `{{PROJECT_NAME}}` with your project name after cloning this template.
 6. Run tests (and build if application code changed)
 7. Follow `commit-convention.mdc` when marking features complete
 
-## Commands (template)
+## Commands
 
 ```bash
 pnpm install
+pnpm test
+pnpm build
+pnpm dev
 pnpm run sync:github-tasks:dry-run
 pnpm run sync:github-tasks
 ```
-
-Add your app commands (`dev`, `test`, `build`) to `package.json` and document them in `AGENTS.md` / `docs/FEATURES.md`.

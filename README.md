@@ -1,105 +1,76 @@
-# Agent repo template
+# Saccho's Team
 
-Stack-agnostic GitHub **template** for building repositories with AI coding agents (Cursor and similar).
+Sito della squadra di **Scoutball 7 vs 7** dei **Saccho's Team** (AGESCI Pesaro 1, since 2016).
 
-It exports the collaboration loop used in production projects:
+Produzione provvisoria: [https://anrighi.github.io/sacchos-team-website/](https://anrighi.github.io/sacchos-team-website/)  
+Dominio club (più avanti, Cloudflare): [https://sacchos.agescipesaro1.it](https://sacchos.agescipesaro1.it)
 
-1. Spec features in `docs/features/F*.md`
-2. Track them in a JSON manifest
-3. Sync to GitHub Issues (labels, bodies, open/closed)
-4. Implement on `phase-<n>/<id>-slug` branches
-5. Merge PRs with `Closes #N` and write a handoff log
+Repo: [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-website), generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-repo-template).
 
-App code is yours. This kit only provides **agent rules**, **docs skeleton**, and **thin Node tooling** for issue sync.
+## Stack
 
-## Use this template
+- Node **26** (`.nvmrc`) + **pnpm**
+- [TanStack Start](https://tanstack.com/start) (React, Vite, file router)
+- Tailwind v4, shadcn/ui per le primitive
+- Vitest sulla logica (ingest, sfida)
+- Deploy: **GitHub Pages** (static). Cloudflare Workers + `sacchos.agescipesaro1.it` arrivano dopo.
 
-1. On GitHub: **Use this template** → create a new repository
-2. Clone it and open it in Cursor
-3. Follow [TEMPLATE_CHECKLIST.md](TEMPLATE_CHECKLIST.md)
-
-Or with the CLI (after this repo is published as a template):
+## Avvio locale
 
 ```bash
-gh repo create my-project --template anrighi/agent-repo-template --public --clone
-cd my-project
-```
-
-## Bootstrap (summary)
-
-```bash
+nvm use        # o qualsiasi Node 26
 pnpm install
-# Edit scripts/github-tasks.manifest.json → set repo + projectTitle + phases/features
-# Align docs/FEATURES.md with those phases
-gh auth login
-pnpm run sync:github-tasks:dry-run
-pnpm run sync:github-tasks
+pnpm test
+pnpm dev       # http://127.0.0.1:43123
 ```
 
-## Layout
+Copia `.env.example` in `.env` quando hai gli URL degli Sheet.
 
-```text
-.cursor/rules/          # always-on agent rules
-AGENTS.md               # short conventions for agents
-docs/FEATURES.md        # phase registry + ADR + handoff log
-docs/features/          # per-feature specs (+ _TEMPLATE.md)
-scripts/                # manifest + sync + issue body renderer
-.github/                # sync workflow, PR + issue templates
-```
+## Pagine
 
-## Agent loop
+| Path | Contenuto |
+|------|-----------|
+| `/` | Home club |
+| `/rosa` | Carte (F1) |
+| `/giocatori/$slug` | Scheda (F1) |
+| `/sfida` | Schieramento e link (F3–F4) |
+| `/sfida/partita` | Tabellino (F5) |
+| `/sfide` | Archivio Sheet (F6) |
 
-```text
-manifest + specs ──sync──► GitHub Issues
-        ▲                      │
-        │                      ▼
-   handoff / status ◄── agent on phase-n/id-slug branch
-                               │
-                               ▼
-                     PR → main (Closes #N)
-```
+UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa.
 
-## Manifest phases
+Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali nel repo.
 
-Phase labels are **not** hardcoded in the shell script. Define them in `scripts/github-tasks.manifest.json`:
+## Dati
 
-```json
-{
-  "repo": "owner/my-project",
-  "projectTitle": "My Project Roadmap",
-  "phases": [
-    { "id": "0", "label": "phase-0", "name": "Bootstrap", "color": "0E8A16" },
-    { "id": "1", "label": "phase-1", "name": "Core", "color": "0E8A16" },
-    { "id": "0+", "label": "phase-0+", "name": "Cross-cutting", "color": "5319E7" }
-  ],
-  "features": [
-    {
-      "id": "F0",
-      "title": "Bootstrap agent workflow",
-      "phase": "0",
-      "status": "todo",
-      "spec": "docs/features/F0-example-bootstrap.md"
-    }
-  ]
-}
-```
+Due Google Sheet:
 
-Statuses: `todo` | `done` | `deferred`
+1. **Rosa** — lettura a **build** (`ROSTER_SHEET_CSV_URL`, File → Condividi → Pubblica sul web → CSV). I giocatori editano nickname, ruolo, stats 75–100. `pnpm build` / CI fa ingest; senza URL si usa lo snapshot in repo (da F1).
+2. **Partite** — append a runtime (webhook Apps Script). Senza webhook la sfida resta nel link.
 
-## Requirements
+Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete, foto.
 
-- Node 22+
-- [pnpm](https://pnpm.io/)
-- [GitHub CLI](https://cli.github.com/) (`gh`) authenticated
-- [jq](https://jqlang.github.io/jq/)
+## CI e deploy
 
-## Maintainer: publish as a template
+`.github/workflows/ci.yml`:
 
-After pushing this repository to GitHub:
+- **pull_request:** `pnpm test` + `pnpm run build:pages` (base dello stage del branch)
+- **push su qualsiasi branch** (tranne `gh-pages`): stesso, poi publish su **GitHub Pages**
+  - `main` → https://anrighi.github.io/sacchos-team-website/
+  - altri branch → `https://anrighi.github.io/sacchos-team-website/preview/<branch>/`
 
-1. Settings → General → **Template repository** (check)
-2. Smoke-test: **Use this template** into a throwaway repo and run `pnpm run sync:github-tasks`
+Esempio F0: https://anrighi.github.io/sacchos-team-website/preview/cursor-phase-0-f0-bootstrap-91b9/
 
-## License
+In Settings → Pages: **Deploy from a branch** → `gh-pages` / `/(root)`. Non usare source “GitHub Actions”: quell’environment è protetto e accetta solo `main`, quindi lo stage dei branch veniva rifiutato.
 
-MIT — use freely for public or private projects.
+Nessun secret Cloudflare per ora. `ROSTER_SHEET_CSV_URL` resta opzionale (F1).
+
+Cloudflare Workers (`wrangler.jsonc`) e il dominio `sacchos.agescipesaro1.it` sono rimandati: niente token, niente DNS in questo slice.
+
+## Identità git
+
+Commit come **anrighi** (`anrighi@users.noreply.github.com`), non con l’email di lavoro.
+
+## Licenza
+
+MIT.
