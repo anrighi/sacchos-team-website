@@ -58,8 +58,8 @@ function Hero() {
         Saccho&apos;s
         <span className="mt-1 block text-pink">Team</span>
       </h1>
-      <p className="relative z-10 mt-4 text-base font-medium tracking-tight text-white/65 md:text-lg">
-        Scoutball {club.format}
+      <p className="relative z-10 mt-4 max-w-xs text-base font-medium tracking-tight text-white/65 md:max-w-md md:text-lg">
+        La squadra più titolata del centro sud
       </p>
       <div className="relative z-10 mt-7 flex flex-wrap items-center justify-center gap-4">
         <Link
