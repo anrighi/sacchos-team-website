@@ -7,6 +7,7 @@ import {
   lineupIssues,
   normalizeName,
   playerLabel,
+  randomLineup,
   withPlayerAt,
   type Lineup,
 } from "#/lib/challenge/lineup";
@@ -137,3 +138,53 @@ describe("playerLabel", () => {
     expect(playerLabel(andreaTwentyThree, both)).toBe("Andrea 23");
   });
 });
+
+describe("randomLineup", () => {
+  it("fills seven unique slots with keeper and both sexes", () => {
+    const rng = sequence([0.1, 0.9, 0.2, 0.8, 0.3, 0.7, 0.4, 0.6, 0.5]);
+    const next = randomLineup(emptyLineup(), roster, new Set(), rng);
+    expect(lineupIssues({ ...next, name: "Marco" }, roster)).toEqual([]);
+    expect(new Set(next.slots).size).toBe(SQUAD_SIZE);
+  });
+
+  it("keeps the name and skips players already taken by the other side", () => {
+    const rng = sequence([0.2, 0.4, 0.6, 0.8, 0.1, 0.3, 0.5, 0.7, 0.9]);
+    const next = randomLineup(
+      { ...emptyLineup(), name: "Luca" },
+      roster,
+      new Set(["f3"]),
+      rng,
+    );
+    expect(next.name).toBe("Luca");
+    expect(next.slots).not.toContain("f3");
+    expect(lineupIssues(next, roster)).toEqual([]);
+  });
+
+  it("puts a POR in goal when the seven include one", () => {
+    const withKeeper: Player[] = [
+      player("f1", "F"),
+      player("f2", "F"),
+      player("m1", "M"),
+      player("m2", "M"),
+      player("m3", "M"),
+      player("m4", "M"),
+      { ...player("por", "M", "Por", 12), role: "POR" },
+    ];
+    const next = randomLineup(emptyLineup(), withKeeper, new Set(), () => 0.3);
+    expect(next.slots[0]).toBe("por");
+  });
+
+  it("leaves the lineup alone when the pool is too small", () => {
+    const empty = emptyLineup();
+    expect(randomLineup(empty, roster, new Set(roster.map((row) => row.slug)))).toBe(empty);
+  });
+});
+
+function sequence(values: number[]): () => number {
+  let index = 0;
+  return () => {
+    const value = values[index % values.length] ?? 0;
+    index += 1;
+    return value;
+  };
+}

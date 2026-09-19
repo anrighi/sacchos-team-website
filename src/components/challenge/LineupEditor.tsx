@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Check } from "lucide-react";
+import { AlertCircle, Check, Shuffle } from "lucide-react";
 import { Pitch, type PitchKit } from "#/components/challenge/Pitch";
 import { RosterPicker } from "#/components/challenge/RosterPicker";
 import type { Player } from "#/lib/player";
@@ -11,9 +11,11 @@ import {
   KEEPER_SLOT,
   MAX_NAME_LENGTH,
   ISSUE_MESSAGES,
+  canRandomLineup,
   lineOfSlot,
   lineupIssues,
   lineupSlugs,
+  randomLineup,
   withFormation,
   withPlayerAt,
   type Lineup,
@@ -38,6 +40,7 @@ export function LineupEditor({
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   const issues = lineupIssues(lineup, roster);
   const taken = new Set([...blocked, ...lineupSlugs(lineup)]);
+  const canShuffle = canRandomLineup(roster, blocked);
 
   return (
     <div className="space-y-5">
@@ -78,8 +81,22 @@ export function LineupEditor({
             </button>
           ))}
         </div>
-        <p className="mt-2 text-[13px] text-white/40">{FORMATIONS[lineup.formation].hint}</p>
       </div>
+
+      <button
+        type="button"
+        disabled={!canShuffle}
+        onClick={() => onChange(randomLineup(lineup, roster, blocked))}
+        className={cn(
+          "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full text-sm font-medium",
+          canShuffle
+            ? "bg-white/10 text-white hover:bg-white/20"
+            : "cursor-not-allowed bg-white/5 text-white/30",
+        )}
+      >
+        <Shuffle className="size-4" aria-hidden />
+        Rosa casuale
+      </button>
 
       <Pitch lineup={lineup} roster={roster} kit={kit} onSlot={setOpenSlot} />
 

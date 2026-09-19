@@ -72,11 +72,7 @@ function HostFlow() {
 
   return (
     <main className="bg-black text-white">
-      <ChallengeHeader
-        eyebrow="7 vs 7"
-        title="Sfida"
-        lead="Dai un nome alla tua rosa, schiera i sette e manda il link. Chi lo apre schiera i suoi con i giocatori rimasti."
-      />
+      <ChallengeHeader eyebrow="7 vs 7" title="Sfida" />
       <section className="mx-auto max-w-2xl px-5 pb-16 md:px-8">
         <LineupEditor
           lineup={lineup}
@@ -117,19 +113,9 @@ function GuestFlow({
 
   return (
     <main className="bg-black text-white">
-      <ChallengeHeader
-        eyebrow="Ti hanno sfidato"
-        title={lineupLabel(host)}
-        lead="Questa è la rosa che hai di fronte. Schiera i tuoi sette con chi è rimasto."
-      />
+      <ChallengeHeader eyebrow="Ti hanno sfidato" title={lineupLabel(host)} />
 
       <section className="mx-auto max-w-2xl px-5 pb-10 md:px-8">
-        <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-[15px] font-semibold tracking-tight text-white">
-            {lineupLabel(host)}
-          </h2>
-          <span className="text-[13px] text-white/40">{host.formation} · maglia casa</span>
-        </div>
         <div className="mt-3">
           <Pitch lineup={host} roster={players} kit="home" readOnly />
         </div>
@@ -212,7 +198,6 @@ function MatchKickoff({
         <ChallengeHeader
           eyebrow="7 vs 7"
           title={`${lineupLabel(host)} – ${lineupLabel(guest)}`}
-          lead="Si prepara il fischio d’inizio."
         />
       </main>
     );
@@ -223,7 +208,6 @@ function MatchKickoff({
       <ChallengeHeader
         eyebrow="In campo"
         title={`${lineupLabel(host)} – ${lineupLabel(guest)}`}
-        lead="Due tempi da 15′ in circa 90 secondi. L’orologio è da scoutball, non da wall-clock."
       />
       <MatchView
         host={host}
@@ -245,11 +229,9 @@ function MatchKickoff({
 function ChallengeHeader({
   eyebrow,
   title,
-  lead,
 }: {
   eyebrow: string;
   title: string;
-  lead: string;
 }) {
   return (
     <header className="relative isolate overflow-hidden px-5 pb-8 pt-12 text-center md:px-8 md:pb-10 md:pt-20">
@@ -258,9 +240,6 @@ function ChallengeHeader({
       <h1 className="relative mt-3 font-display text-[clamp(2.6rem,9vw,5rem)] leading-[0.9] tracking-tight">
         {title}
       </h1>
-      <p className="relative mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/60">
-        {lead}
-      </p>
       <Link
         to="/rosa"
         className="relative mt-6 inline-flex min-h-11 items-center text-sm font-medium text-pink hover:text-pink/80"

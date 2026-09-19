@@ -36,6 +36,8 @@ Stesso giocatore non in entrambe le rose. Varianti modulo come costanti, UI può
 
 Codifica link: `host=<nome>~<modulo>~<7 slug separati da ~>`, slot vuoto = campo vuoto. Leggibile e tonda, niente base64. Il nome viene normalizzato (spazi compattati, `~` e `|` rimossi, max 24 caratteri) prima di entrare nell'URL.
 
+`Rosa casuale` schiera sette validi (portiere, ≥2 per sesso) tra i giocatori liberi.
+
 Il ritratto in campo segue il lato (host casa, ospite trasferta), non la squadra di appartenenza: l'ingest genera per ogni sprite anche `players/{slug}-alt.svg` con la maglia opposta e `PlayerPortrait` sceglie in base al kit richiesto. Un PNG disegnato a mano ha comunque la precedenza su entrambe le varianti.
 
 La simulazione resta a F4: quando le due rose sono pronte il link `?host=&guest=` tiene lo stato, ma non c'è ancora partita.

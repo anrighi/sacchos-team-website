@@ -131,3 +131,60 @@ export function playerLabel(player: Player, roster: readonly Player[]): string {
   }
   return `${name} ${player.number}`;
 }
+
+export function canRandomLineup(
+  roster: readonly Player[],
+  blocked: ReadonlySet<string> = new Set(),
+): boolean {
+  const pool = roster.filter((player) => !blocked.has(player.slug));
+  if (pool.length < SQUAD_SIZE) {
+    return false;
+  }
+  const bySex = countBySex(pool);
+  return bySex.F >= MIN_PER_SEX && bySex.M >= MIN_PER_SEX;
+}
+
+export function randomLineup(
+  lineup: Lineup,
+  roster: readonly Player[],
+  blocked: ReadonlySet<string> = new Set(),
+  rng: () => number = Math.random,
+): Lineup {
+  if (!canRandomLineup(roster, blocked)) {
+    return lineup;
+  }
+
+  const pool = roster.filter((player) => !blocked.has(player.slug));
+  const picked = takeBalancedSeven(pool, rng);
+  const keeper = picked.find((player) => player.role === "POR") ?? picked[0]!;
+  const outfield = picked.filter((player) => player.slug !== keeper.slug);
+  return { ...lineup, slots: [keeper.slug, ...outfield.map((player) => player.slug)] };
+}
+
+function takeBalancedSeven(pool: readonly Player[], rng: () => number): Player[] {
+  const women = shuffle(
+    pool.filter((player) => player.sex === "F"),
+    rng,
+  );
+  const men = shuffle(
+    pool.filter((player) => player.sex === "M"),
+    rng,
+  );
+  const picked: Player[] = [women[0]!, women[1]!, men[0]!, men[1]!];
+  const rest = shuffle([...women.slice(2), ...men.slice(2)], rng);
+  for (let i = 0; i < rest.length && picked.length < SQUAD_SIZE; i += 1) {
+    picked.push(rest[i]!);
+  }
+  return shuffle(picked, rng);
+}
+
+function shuffle<T>(items: readonly T[], rng: () => number): T[] {
+  const next = [...items];
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    const tmp = next[i]!;
+    next[i] = next[j]!;
+    next[j] = tmp;
+  }
+  return next;
+}
