@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Ga 24 e MORDECAI 6 aggiunti in Saccios Tim (rosa 26) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Nickname = nomi maglia agganciati al numero in rosa | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Maglie senza match in rosa (Pongo 2, Dasyp 15, …) |
 | 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (con PNG e linee guida visuali) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
