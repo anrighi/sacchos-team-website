@@ -31,7 +31,7 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: publicUrl("/favicon.jpg"), type: "image/jpeg" },
-      { rel: "apple-touch-icon", href: publicUrl("/brand/logo-sacchos.jpg") },
+      { rel: "apple-touch-icon", href: publicUrl("/brand/logo-sacchos.png") },
     ],
   }),
   shellComponent: RootDocument,

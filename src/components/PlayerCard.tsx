@@ -57,7 +57,7 @@ export function PlayerCard({
             </p>
           </div>
           <img
-            src={publicUrl("/brand/logo-sacchos.jpg")}
+            src={publicUrl("/brand/logo-sacchos.png")}
             alt="Saccho's Team"
             className={cn(
               "rounded-full object-cover ring-1 ring-white/25",

@@ -14,8 +14,8 @@ export const Route = createFileRoute("/rosa")({
 });
 
 const TEAM_LOGOS: Record<TeamName, string> = {
-  "Saccho's Team": "/brand/logo-sacchos.jpg",
-  "Saccios Tim": "/brand/logo-saccios-tim.jpg",
+  "Saccho's Team": "/brand/logo-sacchos.png",
+  "Saccios Tim": "/brand/logo-saccios-tim.png",
 };
 
 function validateRosaSearch(raw: Record<string, unknown>): RosterFilters {
@@ -97,7 +97,7 @@ function RosaResults({ filtered }: { filtered: typeof players }) {
               <img
                 src={publicUrl(TEAM_LOGOS[team])}
                 alt=""
-                className="size-9 rounded-full object-cover ring-1 ring-white/15"
+                className="h-9 w-auto"
               />
               <h2 className="text-lg font-semibold tracking-tight text-white md:text-xl">
                 {team}
@@ -149,9 +149,9 @@ function RosaFilters({ search }: { search: RosterFilters }) {
             hits={hits({ team: "sacchos" })}
           >
             <img
-              src={publicUrl("/brand/logo-sacchos.jpg")}
+              src={publicUrl("/brand/logo-sacchos.png")}
               alt=""
-              className="size-5 rounded-full object-cover"
+              className="size-5 object-contain"
             />
             Saccho&apos;s
           </FilterChip>
@@ -161,9 +161,9 @@ function RosaFilters({ search }: { search: RosterFilters }) {
             hits={hits({ team: "saccios" })}
           >
             <img
-              src={publicUrl("/brand/logo-saccios-tim.jpg")}
+              src={publicUrl("/brand/logo-saccios-tim.png")}
               alt=""
-              className="size-5 rounded-full object-cover"
+              className="size-5 object-contain"
             />
             Saccios Tim
           </FilterChip>

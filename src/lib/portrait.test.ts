@@ -57,4 +57,11 @@ describe("portraitSvg", () => {
     expect(svg).toContain("Maglia trasferta navy");
     expect(svg).toContain('id="claw-slashes"');
   });
+
+  it("can omit the painted backdrop", () => {
+    const withBackdrop = portraitSvg(sample());
+    const cutout = portraitSvg(sample(), { backdrop: false });
+    expect(withBackdrop).toContain('fill="#182430"');
+    expect(cutout).not.toContain('fill="#182430"');
+  });
 });

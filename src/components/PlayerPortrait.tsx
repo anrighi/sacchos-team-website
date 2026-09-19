@@ -9,12 +9,14 @@ import { cn } from "#/lib/utils";
 export function PlayerPortrait({
   player,
   className,
+  backdrop = true,
 }: {
   player: Player;
   className?: string;
+  backdrop?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
-  if (player.photo && !failed) {
+  if (backdrop && player.photo && !failed) {
     return (
       <img
         src={publicUrl(`/${player.photo}`)}
@@ -28,7 +30,7 @@ export function PlayerPortrait({
     );
   }
 
-  const svg = portraitSvg(player).replace(/^<\?xml[^>]*>\s*/u, "");
+  const svg = portraitSvg(player, { backdrop }).replace(/^<\?xml[^>]*>\s*/u, "");
   return (
     <div
       aria-hidden

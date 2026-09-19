@@ -77,9 +77,12 @@ type Grid = {
 type Skin = (typeof SKINS)[number];
 type Hair = (typeof HAIRS)[number];
 
-export function portraitSvg(player: Player): string {
+export function portraitSvg(
+  player: Player,
+  options: { backdrop?: boolean } = {},
+): string {
   const kind = kitKind(player.team);
-  const grid = paintPortrait(player, kitPalette(kind));
+  const grid = paintPortrait(player, kitPalette(kind), options.backdrop !== false);
   const desc = kind === "home" ? "Maglia casa bianca" : "Maglia trasferta navy";
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -93,7 +96,7 @@ export function portraitSvg(player: Player): string {
 `;
 }
 
-function paintPortrait(player: Player, kit: KitPalette): Grid {
+function paintPortrait(player: Player, kit: KitPalette, backdrop: boolean): Grid {
   const g = createGrid(W, H);
   const hash = hashString(player.slug);
   const skin = SKINS[hash % SKINS.length] ?? SKINS[0];
@@ -113,7 +116,9 @@ function paintPortrait(player: Player, kit: KitPalette): Grid {
     paintBeard(g, hair);
   }
   addOutline(g, INK);
-  paintBackdrop(g, kit);
+  if (backdrop) {
+    paintBackdrop(g, kit);
+  }
 
   if (hash % 2 === 0) {
     return g;

@@ -55,6 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 1 | Home più secca: PNG ritagliati, kit fluttuanti, ventaglio ritratti senza sfondo | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |

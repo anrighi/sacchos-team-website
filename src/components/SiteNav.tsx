@@ -15,9 +15,9 @@ export function SiteNav() {
       <div className="mx-auto flex max-w-5xl items-center justify-around gap-2 px-3 py-1.5 md:justify-between md:px-6 md:py-2">
         <Link to="/" className="hidden items-center gap-2 md:flex">
           <img
-            src={publicUrl("/brand/logo-sacchos.jpg")}
+            src={publicUrl("/brand/logo-sacchos.png")}
             alt={club.name}
-            className="h-8 w-8 rounded-full object-cover"
+            className="h-9 w-auto"
           />
           <span className="text-sm font-semibold tracking-tight text-white">
             Saccho&apos;s
