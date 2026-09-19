@@ -10,7 +10,7 @@
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
-| 2 | Sfida | in_progress | 25% |
+| 2 | Sfida | in_progress | 50% |
 | 0+ | Dopo | deferred | — |
 
 ## Active phase — what to do now
@@ -18,7 +18,7 @@
 - **Current goal:** Phase 2 — sfida: schieramento, link, simulazione, tabellino
 - **Remaining tasks:**
   - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
-  - [ ] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
+  - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Google Sheet
 - **Open blockers:** nel seed rosa `role` e le sei stat sono vuote (tutti 75, nessun ruolo): la sfida gira ma i giocatori si equivalgono; F6 richiede un runtime server, Pages è statico
@@ -31,7 +31,7 @@
 | F1 | Ingest Sheet, carte FUT e filtri rosa | 1 | done | [F1-rosa.md](features/F1-rosa.md) |
 | F2 | Hero, font, loghi e motion | 1 | done | [F2-visual.md](features/F2-visual.md) |
 | F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
-| F4 | Simulazione 2×15′ in 90s | 2 | not_started | [F4-sim.md](features/F4-sim.md) |
+| F4 | Simulazione 2×15′ in 90s | 2 | done | [F4-sim.md](features/F4-sim.md) |
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
 | F6 | Archivio partite su Google Sheet | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
@@ -55,6 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 2 | F4: `sim.ts` deterministico (seed, 2×15′, pause, tre vuoti, meta tecnica) + ticker su `/sfida?host=&guest=&seed=` | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |
 | 2026-09-19 | Cursor | 2 | F3: `src/lib/challenge/` con test, campo 3-2-1 su `/sfida`, link `host=`/`guest=`, maglia per lato | F4: engine `sim.ts` deterministico da seed + ticker | Push su GitHub fermo: manca il token nel VM, staging non si aggiorna |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |

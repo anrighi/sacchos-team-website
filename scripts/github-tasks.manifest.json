@@ -60,7 +60,7 @@
       "id": "F4",
       "title": "Simulazione 2×15′ in 90s",
       "phase": "2",
-      "status": "todo",
+      "status": "done",
       "spec": "docs/features/F4-sim.md"
     },
     {
