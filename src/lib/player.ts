@@ -19,6 +19,17 @@ export type StatKey = (typeof STAT_KEYS)[number];
 
 export type PlayerStats = Record<StatKey, number>;
 
+export type PortraitTraits = {
+  hair?: string;
+  rearHair?: string;
+  hairColor?: string;
+  skinColor?: string;
+  eyes?: string;
+  eyebrows?: string;
+  mouth?: string;
+  beard?: string;
+};
+
 export type Player = {
   slug: string;
   firstName: string;
@@ -29,6 +40,7 @@ export type Player = {
   number: number;
   birthYear: number;
   photo?: string;
+  portrait?: PortraitTraits;
   overall: number;
   stats: PlayerStats;
 };

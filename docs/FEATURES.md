@@ -50,14 +50,18 @@
 | 2026-09-04 | Nickname o nome, mai cognomi/foto | Privacy scout | Foto reali, cognomi |
 | 2026-09-04 | F7 album `deferred` | Fuori slice | Album in F0–F6 |
 | 2026-09-19 | Fasi 0 e 1 unite su `main` (merge con radici non correlate) | `main` era un commit vuoto con root diversa: allineare prima di aprire la fase 2 | Rebase o reset di `main` con force push |
+| 2026-09-19 | Ritratti rosa = DiceBear Toon Head + maglia club, trait in CSV | Niente foto, niente sprite pixel hash; la squadra può collaborare sul look | Asset South Park / generator non licenziabile |
 | 2026-09-19 | Linee guida visuali in `docs/VISUAL.md` + `.cursor/rules/visual.mdc` | Stesse PNG e stessa ricetta pagina su rosa/sfida, non solo home | Restyling ad hoc per route |
 
 ## Handoff log (keep last ~5–10 entries)
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (con PNG e linee guida visuali) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
+| 2026-09-19 | Cursor | 1 polish | Preset colori capelli/carnagione; espressioni vuote = seed runtime | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-19 | Cursor | 1 | Linee guida visuali: `docs/VISUAL.md` + `.cursor/rules/visual.mdc` | F3: schieramento 3-2-1 su `/sfida` con la stessa skin | Loghi SVG originali ancora in 0+ |
 | 2026-09-19 | Cursor | 1 | Home: claim titolata, logo senza disco bianco; polish su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
+| 2026-09-19 | Cursor | 1 polish | Rosa: Toon Head + kit, `portraits.csv` per la squadra | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |

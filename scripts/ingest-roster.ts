@@ -1,40 +1,42 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { portraitSvg } from "#/lib/portrait";
+import { applyPortraits } from "#/lib/portraits";
 import { parseRosterCsv, serializePlayer } from "#/lib/roster";
 import type { Player } from "#/lib/player";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outPath = resolve(root, "src/data/players.generated.ts");
 const seedPath = resolve(root, "src/data/roster.seed.csv");
+const portraitsPath = resolve(root, "src/data/portraits.csv");
 const publicDir = resolve(root, "public");
 
 loadDotEnv(resolve(root, ".env"));
 
 const csv = await loadCsv();
-if (!csv) {
+let players: Player[] = [];
+
+if (csv) {
+  players = parseRosterCsv(csv);
+}
+
+if (players.length === 0) {
   if (!existsSync(outPath)) {
     throw new Error(
       "Manca ROSTER_SHEET_CSV_URL e non c'è lo snapshot src/data/players.generated.ts",
     );
   }
-  console.log("No ROSTER_SHEET_CSV_URL — keeping snapshot");
-  await refreshPortraitsFromSnapshot();
-  process.exit(0);
+  console.log("No roster CSV — keeping player rows from snapshot");
+  const mod = await import("#/data/players.generated");
+  players = mod.players.map((player) => serializePlayer({ ...player, photo: undefined }));
 }
 
-const players = parseRosterCsv(csv);
-if (players.length === 0) {
-  if (!existsSync(outPath)) {
-    throw new Error("CSV rosa senza righe valide e snapshot assente");
-  }
-  console.log("CSV rosa senza righe valide — keeping snapshot");
-  await refreshPortraitsFromSnapshot();
-  process.exit(0);
+const portraitsCsv = loadPortraitsCsv();
+if (portraitsCsv) {
+  players = applyPortraits(players, portraitsCsv);
 }
 
-ensurePortraits(players);
+stripGeneratedSvgs();
 const withPhotos = attachPhotos(players);
 writeFileSync(outPath, renderPlayersModule(withPhotos));
 console.log(`Wrote ${withPhotos.length} players → ${outPath}`);
@@ -46,11 +48,8 @@ async function loadCsv(): Promise<string | null> {
   }
   const url = process.env.ROSTER_SHEET_CSV_URL?.trim();
   if (!url) {
-    if (existsSync(outPath)) {
-      return null;
-    }
     if (existsSync(seedPath)) {
-      console.log("No ROSTER_SHEET_CSV_URL — bootstrapping snapshot from seed CSV");
+      console.log("No ROSTER_SHEET_CSV_URL — using seed CSV");
       return readFileSync(seedPath, "utf8");
     }
     return null;
@@ -66,34 +65,33 @@ async function loadCsv(): Promise<string | null> {
   return readFileSync(filePath, "utf8");
 }
 
+function loadPortraitsCsv(): string | null {
+  if (!existsSync(portraitsPath)) {
+    return null;
+  }
+  return readFileSync(portraitsPath, "utf8");
+}
+
 function attachPhotos(list: Player[]): Player[] {
   return list.map((player) => {
     const png = `players/${player.slug}.png`;
-    const svg = `players/${player.slug}.svg`;
     if (existsSync(resolve(publicDir, png))) {
       return { ...player, photo: png };
-    }
-    if (existsSync(resolve(publicDir, svg))) {
-      return { ...player, photo: svg };
     }
     return serializePlayer({ ...player, photo: undefined });
   });
 }
 
-async function refreshPortraitsFromSnapshot() {
-  const mod = await import("#/data/players.generated");
-  ensurePortraits(mod.players);
-}
-
-function ensurePortraits(list: Player[]) {
+function stripGeneratedSvgs() {
   const dir = resolve(publicDir, "players");
-  mkdirSync(dir, { recursive: true });
-  for (const player of list) {
-    const png = resolve(dir, `${player.slug}.png`);
-    if (existsSync(png)) {
+  if (!existsSync(dir)) {
+    return;
+  }
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith(".svg")) {
       continue;
     }
-    writeFileSync(resolve(dir, `${player.slug}.svg`), portraitSvg(player));
+    unlinkSync(resolve(dir, file));
   }
 }
 

@@ -65,7 +65,7 @@ export function PlayerCard({
             )}
           />
         </div>
-        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/45 to-transparent px-3 pb-2.5 pt-10">
+        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/88 via-black/25 to-transparent px-3 pb-2.5 pt-8">
           <h2
             className={cn(
               "truncate font-display uppercase leading-none tracking-tight text-white",

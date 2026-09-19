@@ -71,13 +71,32 @@ Finché l’URL non è configurato, la build tiene lo snapshot dei 24 giocatori 
 
 Quando lo Sheet è pronto:
 
-1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`
+1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`. Colonne look opzionali: `hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`.
 2. File → Condividi → **Pubblica sul web** → formato **CSV**
 3. Copia l’URL del CSV
 4. In locale: mettilo in `.env` come `ROSTER_SHEET_CSV_URL=...` (vedi `.env.example`) e lancia `pnpm ingest-roster`
 5. In CI: secret `ROSTER_SHEET_CSV_URL` (già letto da `.github/workflows/ci.yml`)
 
 Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 sono clampate; vuote = 75. Overall = media arrotonda delle sei stats.
+
+## Ritratti (`src/data/portraits.csv`)
+
+Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è il kit del club (bianca Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 e Saccho's sul petto e gli artigli rosa.
+
+Il file `src/data/portraits.csv` è il foglio look da condividere con la squadra: una riga per giocatore, trait vuoti = avatar dallo slug. Valori ammessi:
+
+| Colonna | Valori |
+|---------|--------|
+| `hair` | `bun`, `sideComed`, `spiky`, `undercut`, `none` |
+| `rearHair` | `longStraight`, `longWavy`, `neckHigh`, `shoulderHigh`, `none` |
+| `eyes` | `bow`, `happy`, `humble`, `wide`, `wink` |
+| `eyebrows` | `angry`, `happy`, `neutral`, `raised`, `sad` |
+| `mouth` | `agape`, `angry`, `laugh`, `sad`, `smile` |
+| `beard` | `chin`, `chinMoustache`, `fullBeard`, `longBeard`, `moustacheTwirl`, `none` |
+| `hairColor` | preset `black`, `brown`, `auburn`, `blonde`, `gold` (IT: `nero`, `castano`, `ramato`, `biondo`, `miele`) oppure hex |
+| `skinColor` | preset `deep`, `tan`, `medium`, `warm`, `light` (IT: `scura`, `olivastra`, `media`, `calda`, `chiara`) oppure hex |
+
+Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Alias italiani: `capelli`, `capelliDietro`, `coloreCapelli`, `carnagione`, `occhi`, `sopracciglia`, `bocca`, `barba`. Celle `eyes` / `eyebrows` / `mouth` vuote = espressione dal seed dello slug (runtime, stabile per giocatore, non a build). Se lo Sheet rosa ha le stesse colonne, quelle vincono sul file. Poi `pnpm ingest-roster`.
 
 Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
 
