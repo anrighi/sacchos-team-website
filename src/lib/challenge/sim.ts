@@ -119,6 +119,15 @@ export function matchClock(t: number): { half: 1 | 2; secondsInHalf: number; lab
   return { half, secondsInHalf, label: `${half}T ${mm}:${ss}` };
 }
 
+export function analogHands(t: number): { half: 1 | 2; minuteDeg: number; secondDeg: number } {
+  const { half, secondsInHalf } = matchClock(t);
+  return {
+    half,
+    minuteDeg: (secondsInHalf / HALF_SECONDS) * 360,
+    secondDeg: ((secondsInHalf % 60) / 60) * 360,
+  };
+}
+
 export function effectiveStats(player: Player, formation: FormationId, slot: number): PlayerStats {
   const line = lineOfSlot(formation, slot)?.label ?? "";
   const allowed = ROLES_FOR_LINE[line];
@@ -190,13 +199,15 @@ export function simulateMatch(input: SimulateInput): MatchSim {
   const events: SimEvent[] = [];
   let t = 0;
   let possession: Side = rng() < 0.5 ? "host" : "guest";
+  const kickoff = possession;
   let secondHalf = false;
 
   pushEvent(events, {
     kind: "inizio",
     t,
     score,
-    text: "Palla al centro. Si parte.",
+    side: kickoff,
+    text: `Palla a ${kickoff === "host" ? host.name : guest.name}.`,
     pauseMs: 0,
   });
 
@@ -213,14 +224,15 @@ export function simulateMatch(input: SimulateInput): MatchSim {
         text: "Fine primo tempo. Intervallo.",
         pauseMs: INTERVAL_PAUSE_MS,
       });
+      possession = other(kickoff);
       pushEvent(events, {
         kind: "secondo-tempo",
         t,
         score,
-        text: "Secondo tempo.",
+        side: possession,
+        text: `Secondo tempo. Palla a ${possession === "host" ? host.name : guest.name}.`,
         pauseMs: 0,
       });
-      possession = other(possession);
       continue;
     }
 

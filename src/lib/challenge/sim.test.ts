@@ -9,6 +9,7 @@ import {
   MAX_PAUSE_MS,
   MIN_PAUSE_MS,
   WRONG_KEEPER_FACTOR,
+  analogHands,
   applyPieno,
   applyVuoto,
   countOnField,
@@ -87,6 +88,15 @@ describe("matchClock", () => {
     expect(matchClock(MATCH_SECONDS).label).toBe("2T 15:00");
     expect(matchClock(90).label).toBe("1T 01:30");
   });
+
+  it("maps a 15′ half onto analog hands", () => {
+    expect(analogHands(0)).toEqual({ half: 1, minuteDeg: 0, secondDeg: 0 });
+    expect(analogHands(HALF_SECONDS / 2).minuteDeg).toBe(180);
+    expect(analogHands(HALF_SECONDS / 2).secondDeg).toBe(180);
+    expect(analogHands(30).secondDeg).toBe(180);
+    expect(analogHands(HALF_SECONDS).half).toBe(2);
+    expect(analogHands(HALF_SECONDS).minuteDeg).toBe(0);
+  });
 });
 
 describe("effectiveStats", () => {
@@ -160,6 +170,12 @@ describe("simulateMatch", () => {
     const match = simulateMatch({ host, guest, roster, seed: "orologio" });
     const kinds = match.events.map((event) => event.kind);
     expect(kinds[0]).toBe("inizio");
+    expect(match.events[0]?.side).toMatch(/^(host|guest)$/);
+    expect(match.events[0]?.text).toMatch(/^Palla a /);
+    expect(match.events[0]?.text).not.toContain("Palla al centro");
+    const restart = match.events.find((event) => event.kind === "secondo-tempo");
+    expect(restart?.side).toBe(match.events[0]?.side === "host" ? "guest" : "host");
+    expect(restart?.text).toMatch(/Palla a /);
     expect(kinds).toContain("intervallo");
     expect(kinds).toContain("secondo-tempo");
     expect(kinds.at(-1)).toBe("fine");

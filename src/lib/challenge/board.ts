@@ -189,12 +189,11 @@ function stage(frame: BoardFrame, event: SimEvent): BoardFrame {
   const actor = tokens.find((token) => token.slug === event.actor);
   const target = tokens.find((token) => token.slug === event.target);
 
-  if (event.kind === "inizio" || event.kind === "secondo-tempo" || event.kind === "fine") {
-    ball.x = 50;
-    ball.y = 50;
+  if (event.kind === "inizio" || event.kind === "secondo-tempo") {
+    placeKickoff(tokens, ball, event.side);
   }
 
-  if (event.kind === "intervallo") {
+  if (event.kind === "intervallo" || event.kind === "fine") {
     ball.x = 50;
     ball.y = 50;
   }
@@ -229,6 +228,28 @@ function stage(frame: BoardFrame, event: SimEvent): BoardFrame {
   }
 
   return { tokens, ball };
+}
+
+function placeKickoff(tokens: Token[], ball: Point, side?: Side) {
+  if (!side) {
+    ball.x = 50;
+    ball.y = 50;
+    return;
+  }
+
+  const strikers = tokens.filter(
+    (token) => token.side === side && token.onField && token.slot !== KEEPER_SLOT,
+  );
+  const striker = strikers[strikers.length - 1];
+  if (!striker) {
+    ball.x = 50;
+    ball.y = side === "host" ? 54 : 46;
+    return;
+  }
+
+  striker.highlight = true;
+  ball.x = striker.x;
+  ball.y = striker.y + (side === "host" ? -5 : 5);
 }
 
 function placeGoal(tokens: Token[], ball: Point, scoring: Side, actor?: Token) {

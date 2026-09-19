@@ -80,8 +80,11 @@ describe("restPositions", () => {
 });
 
 describe("boardAt", () => {
-  it("kicks off with fourteen tokens on the field and the ball in the centre", () => {
+  it("kicks off with fourteen tokens and the ball at the starting team", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const kickoff = match.events[0];
+    expect(kickoff?.kind).toBe("inizio");
+    expect(kickoff?.side).toBeTruthy();
     const frame = boardAt({
       host,
       guest,
@@ -94,8 +97,14 @@ describe("boardAt", () => {
 
     expect(frame.tokens).toHaveLength(14);
     expect(frame.tokens.every((token) => token.onField)).toBe(true);
-    expect(frame.ball).toEqual({ x: 50, y: 50 });
     expect(frame.tokens.filter((token) => token.side === "host")).toHaveLength(7);
+    const holder = frame.tokens.find((token) => token.highlight);
+    expect(holder?.side).toBe(kickoff?.side);
+    if (kickoff?.side === "host") {
+      expect(frame.ball.y).toBeLessThan(50);
+    } else {
+      expect(frame.ball.y).toBeGreaterThan(50);
+    }
   });
 
   it("is deterministic for the same seed and clock", () => {

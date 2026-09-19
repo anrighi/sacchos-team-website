@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { AnalogClock } from "#/components/challenge/AnalogClock";
 import { MatchBoard } from "#/components/challenge/MatchBoard";
 import { ShareChallenge } from "#/components/challenge/ShareChallenge";
 import { players } from "#/data/players.generated";
@@ -71,7 +72,7 @@ export function MatchView({
 
   return (
     <section className="mx-auto max-w-2xl px-5 pb-16 md:px-8">
-      <Scoreboard match={match} clock={frame.clock} event={frame.event} />
+      <Scoreboard match={match} t={frame.t} event={frame.event} />
       <MatchBoard frame={board} roster={players} />
       <Ticker event={frame.event} paused={frame.paused} />
       <EventLog events={newestFirst} current={frame.event} />
@@ -100,18 +101,18 @@ export function MatchView({
 
 function Scoreboard({
   match,
-  clock,
+  t,
   event,
 }: {
   match: MatchSim;
-  clock: string;
+  t: number;
   event: SimEvent | null;
 }) {
   const score = event?.score ?? match.score;
   return (
     <div className="rounded-[22px] border border-white/10 bg-white/4 px-5 py-6 text-center">
-      <p className="font-display text-5xl tracking-tight text-white md:text-6xl">{clock}</p>
-      <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+      <AnalogClock t={t} />
+      <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         <p className="truncate text-right text-[15px] font-semibold text-white">{match.hostName}</p>
         <p className="font-display text-4xl tracking-tight text-pink md:text-5xl">
           {score.host}–{score.guest}
