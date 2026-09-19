@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import { AnalogClock } from "#/components/challenge/AnalogClock";
 import { MatchBoard } from "#/components/challenge/MatchBoard";
-import { MatchEfficiency } from "#/components/challenge/MatchEfficiency";
 import { ShareChallenge } from "#/components/challenge/ShareChallenge";
 import { Button } from "#/components/ui/button";
 import { players } from "#/data/players.generated";
 import { boardAt } from "#/lib/challenge/board";
+import { recordMatchIn, shotsFrom } from "#/lib/challenge/efficiency";
 import type { Lineup } from "#/lib/challenge/lineup";
 import {
   nextPeriodT,
@@ -52,6 +52,10 @@ export function MatchView({
   const happened = match.events.slice(0, Math.max(frame.index + 1, 1));
   const newestFirst = happened.toReversed();
 
+  useEffect(() => {
+    recordMatchIn(window.localStorage, seed, shotsFrom(match.events));
+  }, [match, seed]);
+
   return (
     <section className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-hidden px-4 md:px-8">
       <div className="shrink-0">
@@ -79,7 +83,6 @@ export function MatchView({
           <EventLog events={newestFirst} current={frame.event} />
           {frame.done ? (
             <div className="mt-6 space-y-4 pb-4">
-              <MatchEfficiency seed={seed} events={match.events} roster={players} />
               <button
                 type="button"
                 onClick={onReplay}
