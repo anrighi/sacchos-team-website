@@ -37,12 +37,16 @@ export function MatchView({
 
   useEffect(() => {
     setWallMs(0);
-    const started = performance.now();
     const duration = totalPlaybackMs(match, reduced);
+    let elapsed = 0;
+    let last = performance.now();
     let frame = 0;
     const tick = (now: number) => {
-      setWallMs(now - started);
-      if (now - started < duration) {
+      const dt = Math.min(now - last, 48);
+      last = now;
+      elapsed = Math.min(duration, elapsed + dt);
+      setWallMs(elapsed);
+      if (elapsed < duration) {
         frame = requestAnimationFrame(tick);
       }
     };
