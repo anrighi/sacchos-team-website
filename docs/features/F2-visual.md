@@ -18,7 +18,7 @@ Home cinematografica: logo Saccho's, kit bianca/navy, ventaglio carte, motion al
 ## Acceptance criteria
 
 - [x] Hero home 100dvh, logo, due kit, CTA Rosa / Sfida
-- [x] MrAlex su titoli, numeri, overall
+- [x] MrAlex su tutta la UI (`font-sans` = `font-display`)
 - [x] JPG ritagliati in PNG per UI (sfondo rimosso)
 - [ ] Loghi ridisegnati in SVG, stesso tratto → rinviato a fase 0+
 - [x] Motion: reveal in fade/slide; `prefers-reduced-motion` = fade

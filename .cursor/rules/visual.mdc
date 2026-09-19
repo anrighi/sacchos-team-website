@@ -25,7 +25,7 @@ Logo: `object-contain`, niente `rounded-full` / `object-cover` (tagliano l’ane
 ## Pagine
 
 - `main` nero, testo bianco. Hero con `landing-hero-glow`
-- Titoli `font-display` (MrAlex), grandi, leading stretto. Una riga di claim, non paragrafi
+- Tutta la UI in MrAlex (`font-sans` = `font-display`). Titoli grandi, leading stretto. Una riga di claim, non paragrafi
 - CTA primaria: pillola `rounded-full bg-pink text-navy-deep min-h-11`
 - CTA secondaria: pillola `rounded-full text-pink ring-1 ring-pink/40 min-h-11`
 - Link testuale: `text-pink min-h-11`

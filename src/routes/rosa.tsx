@@ -33,20 +33,24 @@ function RosaPage() {
     <main className="bg-black text-white">
       <header className="relative isolate overflow-hidden px-5 pb-10 pt-12 text-center md:px-8 md:pb-14 md:pt-20">
         <div aria-hidden className="landing-hero-glow pointer-events-none absolute inset-0" />
-        <p className="relative text-sm font-medium text-pink">Scoutball</p>
-        <h1 className="relative mt-3 font-display text-[clamp(3rem,10vw,6rem)] leading-[0.9] tracking-tight">
-          Rosa
+        <h1 className="relative font-display text-[clamp(3.2rem,11vw,7rem)] leading-[0.86] tracking-tight">
+          La rosa.
         </h1>
-        <p className="relative mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/60">
-          {players.length} carte Toon Head. Nickname se c&apos;è, altrimenti il
-          nome: il numero sulla maglia distingue chi si chiama uguale.
+        <p className="relative mx-auto mt-4 max-w-xs text-base tracking-tight text-white/65 md:text-lg">
+          {players.length} carte.
         </p>
+        <div className="relative mt-7">
+          <Link
+            to="/sfida"
+            className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90"
+          >
+            Lancia una sfida
+          </Link>
+        </div>
       </header>
 
       {players.length === 0 ? (
-        <EmptyState>
-          Nessuna carta ancora. Lo Sheet viene letto a ogni build.
-        </EmptyState>
+        <EmptyState>Nessuna carta ancora.</EmptyState>
       ) : (
         <>
           <RosaFilters search={search} />
@@ -55,27 +59,26 @@ function RosaPage() {
       )}
 
       <section className="border-t border-white/10 px-5 py-16 text-center md:py-24">
-        <h2 className="font-display text-[clamp(2rem,6vw,3.5rem)] leading-none tracking-tight">
-          Sette in campo.
-        </h2>
-        <p className="mx-auto mt-4 max-w-sm text-white/55">
-          Scegli la formazione e manda il link a chi ti sfida.
-        </p>
-        <Link
-          to="/sfida"
-          className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
-        >
-          Lancia una sfida
-        </Link>
-        <p className="mx-auto mt-10 max-w-sm text-[12px] leading-relaxed text-white/35">
-          Ritratti Toon Head di{" "}
+        <Reveal>
+          <h2 className="font-display text-[clamp(2.4rem,7vw,5rem)] leading-[0.92] tracking-tight">
+            Sette in campo.
+          </h2>
+          <Link
+            to="/sfida"
+            className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90"
+          >
+            Lancia una sfida
+          </Link>
+        </Reveal>
+        <p className="mx-auto mt-12 max-w-sm text-sm text-white/35">
+          Toon Head,{" "}
           <a
             href="https://www.johanmelin.com"
             className="text-white/50 underline-offset-2 hover:text-pink hover:underline"
           >
             Johan Melin
           </a>
-          , CC BY 4.0, via DiceBear. Maglia casa/trasferta, stemmi e artigli Saccho&apos;s.
+          , CC BY 4.0
         </p>
       </section>
     </main>
@@ -86,8 +89,8 @@ function RosaResults({ filtered }: { filtered: typeof players }) {
   if (filtered.length === 0) {
     return (
       <EmptyState>
-        Nessun giocatore corrisponde ai filtri.{" "}
-        <Link to="/rosa" className="text-pink hover:text-pink/80">
+        Nessun giocatore.{" "}
+        <Link to="/rosa" className="inline-flex min-h-11 items-center text-pink hover:text-pink/80">
           Azzera
         </Link>
       </EmptyState>
@@ -107,12 +110,12 @@ function RosaResults({ filtered }: { filtered: typeof players }) {
               <img
                 src={publicUrl(TEAM_LOGOS[team])}
                 alt=""
-                className="h-9 w-auto"
+                className="h-9 w-auto object-contain"
               />
-              <h2 className="text-lg font-semibold tracking-tight text-white md:text-xl">
+              <h2 className="font-display text-2xl leading-none tracking-tight text-white md:text-3xl">
                 {team}
               </h2>
-              <span className="text-sm text-white/40">{squad.length}</span>
+              <span className="font-display text-lg text-pink">{squad.length}</span>
             </div>
             <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-5 lg:grid-cols-4 xl:grid-cols-5">
               {squad.map((player) => (
@@ -132,7 +135,7 @@ function RosaResults({ filtered }: { filtered: typeof players }) {
 
 function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <p className="mx-auto max-w-md rounded-[20px] border border-white/10 bg-[#14181f] px-6 py-10 text-center text-[15px] text-white/60">
+    <p className="mx-auto max-w-md px-6 py-16 text-center text-lg tracking-tight text-white/55">
       {children}
     </p>
   );
@@ -161,7 +164,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
             <img
               src={publicUrl("/brand/logo-sacchos.png")}
               alt=""
-              className="size-5 object-contain"
+              className="h-5 w-auto object-contain"
             />
             Saccho&apos;s
           </FilterChip>
@@ -173,7 +176,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
             <img
               src={publicUrl("/brand/logo-saccios-tim.png")}
               alt=""
-              className="size-5 object-contain"
+              className="h-5 w-auto object-contain"
             />
             Saccios Tim
           </FilterChip>
@@ -211,7 +214,7 @@ function FilterRow({
 }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <p className="hidden shrink-0 text-[11px] uppercase tracking-[0.2em] text-white/35 md:block">
+      <p className="hidden shrink-0 font-display text-sm tracking-tight text-white/35 md:block">
         {label}
       </p>
       <div className="flex gap-2 overflow-x-auto py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -233,7 +236,7 @@ function FilterChip({
   children: ReactNode;
 }) {
   const shape =
-    "inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium tracking-tight transition-colors";
+    "inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm tracking-tight transition-colors";
 
   if (hits === 0 && !active) {
     return (
@@ -255,7 +258,7 @@ function FilterChip({
         shape,
         active
           ? "bg-pink text-navy-deep"
-          : "bg-white/8 text-white/70 hover:bg-white/15 hover:text-white",
+          : "text-white/70 ring-1 ring-pink/40 hover:bg-pink/10 hover:text-white",
       )}
     >
       {children}

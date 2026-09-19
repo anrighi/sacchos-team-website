@@ -3,7 +3,7 @@
 @font-face {
   font-family: "MrAlex";
   src: url("./fonts/MrAlex-Bold.otf") format("opentype");
-  font-weight: 700;
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -27,7 +27,8 @@
   --color-border: rgb(248 103 165 / 0.3);
   --color-input: #1a2634;
   --color-ring: #f867a5;
-  --font-display: "MrAlex", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "MrAlex", sans-serif;
+  --font-display: "MrAlex", sans-serif;
 }
 
 * {
@@ -37,6 +38,7 @@
 html,
 body {
   min-height: 100%;
+  font-family: var(--font-sans);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -49,7 +51,6 @@ body {
   margin: 0;
   background: var(--color-navy-deep);
   color: #f4f1ea;
-  font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
 ::selection {

@@ -43,7 +43,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-navy-deep text-white antialiased">
+      <body className="bg-navy-deep font-sans text-white antialiased">
         <SiteNav />
         <div className="min-h-dvh pb-24 pt-0 md:pb-8 md:pt-16">{children}</div>
         <Scripts />

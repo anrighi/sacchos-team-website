@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 1 polish | Archivio fuori nav; MrAlex su tutta la UI; `/rosa` allineata a `docs/VISUAL.md` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Ruoli/stats vuoti nel seed; F6 resta senza nav fino al runtime server |
 | 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Ga 24 e MORDECAI 6 aggiunti in Saccios Tim (rosa 26) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Nickname = nomi maglia agganciati al numero in rosa | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Maglie senza match in rosa (Pongo 2, Dasyp 15, …) |
