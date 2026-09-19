@@ -39,7 +39,7 @@ export const players: Player[] = [
     "nickname": "Nick"
   },
   {
-    "slug": "michele-baljeet",
+    "slug": "michele-costa",
     "firstName": "Michele",
     "team": "Saccho's Team",
     "sex": "M",
@@ -54,7 +54,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "baljeet"
+    "nickname": "Costa"
   },
   {
     "slug": "miriam-nonmiribecco",
@@ -156,7 +156,7 @@ export const players: Player[] = [
     "nickname": "Mascotte"
   },
   {
-    "slug": "chiara-29",
+    "slug": "chiara-kia",
     "firstName": "Chiara",
     "team": "Saccho's Team",
     "sex": "F",
@@ -170,7 +170,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "KIA"
   },
   {
     "slug": "marco-mt",
@@ -236,7 +237,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "gianluca-jack",
+    "slug": "gianluca-gb",
     "firstName": "Gianluca",
     "team": "Saccios Tim",
     "sex": "M",
@@ -251,10 +252,10 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Jack"
+    "nickname": "GB"
   },
   {
-    "slug": "alex-trabucco-donosor",
+    "slug": "alex-axel",
     "firstName": "Alex",
     "team": "Saccios Tim",
     "sex": "M",
@@ -269,10 +270,10 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Trabucco Donosor"
+    "nickname": "AXEL"
   },
   {
-    "slug": "luca-puffin",
+    "slug": "luca-luc-avelli",
     "firstName": "Luca",
     "team": "Saccios Tim",
     "sex": "M",
@@ -287,7 +288,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Puffin"
+    "nickname": "Luc'Avelli"
   },
   {
     "slug": "rebecca-quechua",
@@ -308,7 +309,7 @@ export const players: Player[] = [
     "nickname": "Quechua"
   },
   {
-    "slug": "giulio-21",
+    "slug": "giulio-j-tata",
     "firstName": "Giulio",
     "team": "Saccios Tim",
     "sex": "M",
@@ -322,7 +323,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "J-TATA"
   },
   {
     "slug": "marialaura-baguette",
@@ -343,7 +345,7 @@ export const players: Player[] = [
     "nickname": "Baguette"
   },
   {
-    "slug": "gabriele-lando",
+    "slug": "gabriele-gabbo",
     "firstName": "Gabriele",
     "team": "Saccios Tim",
     "sex": "M",
@@ -358,10 +360,10 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Lando"
+    "nickname": "Gabbo"
   },
   {
-    "slug": "pietro-30",
+    "slug": "pietro-della",
     "firstName": "Pietro",
     "team": "Saccios Tim",
     "sex": "M",
@@ -375,14 +377,15 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "DELLA"
   },
   {
-    "slug": "veronica-leo-corno",
+    "slug": "veronica-vero",
     "firstName": "Veronica",
     "team": "Saccios Tim",
     "sex": "F",
-    "number": 39,
+    "number": 93,
     "birthYear": 2009,
     "overall": 75,
     "stats": {
@@ -393,10 +396,10 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "leo-corno"
+    "nickname": "Vero"
   },
   {
-    "slug": "tommaso-67",
+    "slug": "tommaso-tommygamer",
     "firstName": "Tommaso",
     "team": "Saccios Tim",
     "sex": "M",
@@ -410,7 +413,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "TommyGamer"
   },
   {
     "slug": "chiara-81",
@@ -430,7 +434,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "guglielmo-0",
+    "slug": "guglielmo-google",
     "firstName": "Guglielmo",
     "team": "Saccios Tim",
     "sex": "M",
@@ -445,6 +449,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
+    "nickname": "GOOGLE",
     "portrait": {
       "hair": "spiky",
       "rearHair": "none",

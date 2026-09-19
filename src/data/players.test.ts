@@ -10,10 +10,12 @@ describe("players snapshot", () => {
   });
 
   it("keeps number 0 and the Saccios override", () => {
-    const guglielmo = players.find((p) => p.slug === "guglielmo-0");
+    const guglielmo = players.find((p) => p.slug === "guglielmo-google");
     const gianluca = players.find((p) => p.number === 9);
     expect(guglielmo?.number).toBe(0);
+    expect(guglielmo?.nickname).toBe("GOOGLE");
     expect(gianluca?.team).toBe("Saccios Tim");
+    expect(gianluca?.nickname).toBe("GB");
   });
 
   it("uses nickname when present", () => {
@@ -24,9 +26,13 @@ describe("players snapshot", () => {
 
   it("uses shirt names as nicknames for matching numbers", () => {
     expect(players.find((p) => p.number === 4)?.nickname).toBe("PAPU");
-    expect(players.find((p) => p.number === 11)?.nickname).toBe("Trabucco Donosor");
+    expect(players.find((p) => p.number === 7)?.nickname).toBe("Costa");
+    expect(players.find((p) => p.number === 11)?.nickname).toBe("AXEL");
+    expect(players.find((p) => p.number === 15)?.nickname).toBe("Luc'Avelli");
+    expect(players.find((p) => p.number === 28)?.nickname).toBe("Gabbo");
+    expect(players.find((p) => p.number === 93)?.nickname).toBe("Vero");
     expect(players.find((p) => p.number === 99)?.nickname).toBe("Ragno");
-    expect(players.find((p) => p.number === 0)?.nickname).toBeUndefined();
+    expect(players.find((p) => p.number === 0)?.nickname).toBe("GOOGLE");
   });
 
   it("defaults overall to 75", () => {

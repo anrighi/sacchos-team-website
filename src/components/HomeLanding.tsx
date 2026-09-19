@@ -8,7 +8,7 @@ import { displayName } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
-const featured = ["giorgia-pappagiorgia", "stefano-ragno", "guglielmo-0"]
+const featured = ["giorgia-pappagiorgia", "stefano-ragno", "guglielmo-google"]
   .map((slug) => players.find((player) => player.slug === slug))
   .filter((player): player is Player => player != null);
 
