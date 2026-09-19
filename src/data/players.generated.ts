@@ -94,7 +94,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "bomberona",
+    "nickname": "Bomberona",
     "photo": "players/giorgia-bomberona.svg",
     "photoAlt": "players/giorgia-bomberona-alt.svg"
   },

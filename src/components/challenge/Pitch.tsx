@@ -22,18 +22,17 @@ export function Pitch({
   onSlot?: (slot: number) => void;
   readOnly?: boolean;
 }) {
-  const rows = rowsOf(lineup.formation).slice().reverse();
-
   return (
     <div className="pitch relative overflow-hidden rounded-[22px] border border-white/10 p-3 md:p-5">
       <PitchMarkings />
       <div className="relative flex flex-col-reverse gap-3 md:gap-5">
-        {rows.map((row) => (
+        {rowsOf(lineup.formation).map((row) => (
           <div key={row.label} className="flex items-start justify-center gap-2 md:gap-4">
             {row.slots.map((slot) => (
               <PitchSlot
                 key={slot}
                 slot={slot}
+                rowLabel={row.label}
                 player={playerAt(lineup, roster, slot)}
                 roster={roster}
                 kit={kit}
@@ -50,6 +49,7 @@ export function Pitch({
 
 function PitchSlot({
   slot,
+  rowLabel,
   player,
   roster,
   kit,
@@ -57,6 +57,7 @@ function PitchSlot({
   onSelect,
 }: {
   slot: number;
+  rowLabel: string;
   player: Player | null;
   roster: readonly Player[];
   kit: PitchKit;
@@ -65,7 +66,7 @@ function PitchSlot({
 }) {
   const keeper = slot === KEEPER_SLOT;
   const ring = kit === "home" ? "ring-white/85" : "ring-pink/75";
-  const label = player ? playerLabel(player, roster) : keeper ? "Portiere" : "Libero";
+  const label = player ? playerLabel(player, roster) : rowLabel;
 
   const face = (
     <>

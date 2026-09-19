@@ -18,8 +18,8 @@ describe("players snapshot", () => {
 
   it("uses nickname when present", () => {
     const giorgia = players.find((p) => p.number === 10 && p.team === "Saccho's Team");
-    expect(giorgia?.nickname).toBe("bomberona");
-    expect(displayName(giorgia!)).toBe("bomberona");
+    expect(giorgia?.nickname).toBe("Bomberona");
+    expect(displayName(giorgia!)).toBe("Bomberona");
   });
 
   it("defaults overall to 75", () => {
