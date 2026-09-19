@@ -42,7 +42,7 @@ export function MatchView({
     let last = performance.now();
     let frame = 0;
     const tick = (now: number) => {
-      const dt = Math.min(now - last, 48);
+      const dt = Math.min(now - last, 120);
       last = now;
       elapsed = Math.min(duration, elapsed + dt);
       setWallMs(elapsed);
