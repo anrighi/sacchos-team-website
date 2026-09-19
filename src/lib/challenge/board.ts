@@ -196,6 +196,10 @@ function calloutFor(slug: string, event: SimEvent | null, flash: BoardFlash): st
   return flash.label;
 }
 
+function isGoldenClock(event: SimEvent): boolean {
+  return event.clock.startsWith("GO");
+}
+
 function flashFor(event: SimEvent | null): BoardFlash {
   if (!event) {
     return null;
@@ -203,11 +207,25 @@ function flashFor(event: SimEvent | null): BoardFlash {
   if (event.kind === "inizio" || event.kind === "secondo-tempo") {
     return { kind: event.kind, label: "Palla", side: event.side };
   }
+  if (event.kind === "supplementari") {
+    return { kind: event.kind, label: "Meta d'argento", side: event.side };
+  }
+  if (event.kind === "golden") {
+    return { kind: event.kind, label: "Meta d'oro", side: event.side };
+  }
   if (event.kind === "meta") {
-    return { kind: event.kind, label: "Meta", side: event.side };
+    return {
+      kind: event.kind,
+      label: isGoldenClock(event) ? "Meta d'oro" : "Meta",
+      side: event.side,
+    };
   }
   if (event.kind === "meta-tecnica") {
-    return { kind: event.kind, label: "Meta tecnica", side: event.side };
+    return {
+      kind: event.kind,
+      label: isGoldenClock(event) ? "Meta d'oro tecnica" : "Meta tecnica",
+      side: event.side,
+    };
   }
   if (event.kind === "parata") {
     return { kind: event.kind, label: "Impedisce la meta", side: event.side };

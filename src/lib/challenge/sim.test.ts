@@ -3,11 +3,14 @@ import type { Player, Role, Sex } from "#/lib/player";
 import { emptyLineup, type Lineup } from "#/lib/challenge/lineup";
 import {
   EMPTY_SCALPS_TO_EXIT,
+  EXTRA_SECONDS,
+  GOLDEN_END,
   HALF_SECONDS,
   INTERVAL_PAUSE_MS,
   MATCH_SECONDS,
   MAX_PAUSE_MS,
   MIN_PAUSE_MS,
+  SILVER_END,
   WRONG_KEEPER_FACTOR,
   analogHands,
   applyPieno,
@@ -19,6 +22,7 @@ import {
   playbackAt,
   simulateMatch,
   totalPlaybackMs,
+  type MatchSim,
 } from "#/lib/challenge/sim";
 
 function player(
@@ -78,15 +82,40 @@ const guest: Lineup = {
 
 describe("matchClock", () => {
   it("shows two halves of 15 minutes, not wall-clock seconds", () => {
-    expect(matchClock(0)).toEqual({ half: 1, secondsInHalf: 0, label: "1T 00:00" });
+    expect(matchClock(0)).toEqual({
+      half: 1,
+      period: "1T",
+      secondsInHalf: 0,
+      periodLength: HALF_SECONDS,
+      label: "1T 00:00",
+    });
     expect(matchClock(899).label).toBe("1T 14:59");
     expect(matchClock(HALF_SECONDS)).toEqual({
       half: 2,
+      period: "2T",
       secondsInHalf: 0,
+      periodLength: HALF_SECONDS,
       label: "2T 00:00",
     });
     expect(matchClock(MATCH_SECONDS).label).toBe("2T 15:00");
     expect(matchClock(90).label).toBe("1T 01:30");
+  });
+
+  it("maps extras onto a 5′ silver then golden face", () => {
+    expect(matchClock(MATCH_SECONDS + 1)).toEqual({
+      half: 2,
+      period: "SA",
+      secondsInHalf: 1,
+      periodLength: EXTRA_SECONDS,
+      label: "SA 00:01",
+    });
+    expect(matchClock(SILVER_END).label).toBe("SA 05:00");
+    expect(matchClock(SILVER_END + 1).period).toBe("GO");
+    expect(matchClock(SILVER_END + 1).label).toBe("GO 00:01");
+    expect(matchClock(GOLDEN_END).label).toBe("GO 05:00");
+    expect(analogHands(MATCH_SECONDS + EXTRA_SECONDS / 2).minuteDeg).toBe(180);
+    expect(analogHands(SILVER_END).minuteDeg).toBe(360);
+    expect(analogHands(SILVER_END + EXTRA_SECONDS / 2).minuteDeg).toBe(180);
   });
 
   it("maps a 15′ half onto analog hands", () => {
@@ -186,8 +215,15 @@ describe("simulateMatch", () => {
     expect(kinds).toContain("intervallo");
     expect(kinds).toContain("secondo-tempo");
     expect(kinds.at(-1)).toBe("fine");
-    expect(match.events.at(-1)?.t).toBe(MATCH_SECONDS);
-    expect(match.events.at(-1)?.clock).toBe("2T 15:00");
+    expect(match.winner).toMatch(/^(host|guest)$/);
+    expect(match.events.at(-1)?.side).toBe(match.winner);
+    if (kinds.includes("supplementari")) {
+      expect(match.events.at(-1)?.t).toBeGreaterThan(MATCH_SECONDS);
+    } else {
+      expect(match.events.at(-1)?.t).toBe(MATCH_SECONDS);
+      expect(match.events.at(-1)?.clock).toBe("2T 15:00");
+      expect(match.score.host).not.toBe(match.score.guest);
+    }
 
     const interval = match.events.find((event) => event.kind === "intervallo");
     expect(interval?.t).toBe(HALF_SECONDS);
@@ -235,7 +271,92 @@ describe("playbackAt", () => {
 
     const end = playbackAt(match, total + 1_000);
     expect(end.done).toBe(true);
-    expect(end.clock).toBe("2T 15:00");
+    expect(end.clock).toBe(match.events.at(-1)?.clock);
     expect(end.event?.kind).toBe("fine");
   });
 });
+
+describe("extra time", () => {
+  it("always names a winner, even after a draw at 2T 15:00", () => {
+    for (const seed of ["orologio", "tabellino", "k7p2qm1a", "aaaaaaaa", "bbbbbbbb"]) {
+      const match = simulateMatch({ host, guest, roster, seed });
+      expect(match.winner).toMatch(/^(host|guest)$/);
+      expect(match.events.at(-1)?.kind).toBe("fine");
+      expect(match.events.at(-1)?.side).toBe(match.winner);
+      if (match.score.host !== match.score.guest) {
+        expect(match.winner).toBe(match.score.host > match.score.guest ? "host" : "guest");
+      }
+    }
+  });
+
+  it("plays the full silver 5′ and only then awards meta d'argento", () => {
+    const match = findMatch((item) => {
+      if (!item.events.some((event) => event.kind === "supplementari")) {
+        return false;
+      }
+      if (item.events.some((event) => event.kind === "golden")) {
+        return false;
+      }
+      return item.score.host !== item.score.guest;
+    });
+    const extras = match.events.find((event) => event.kind === "supplementari");
+    expect(extras?.t).toBe(MATCH_SECONDS);
+    expect(extras?.text).toMatch(/Meta d'argento/);
+    const silverMeta = match.events.find(
+      (event) =>
+        (event.kind === "meta" || event.kind === "meta-tecnica") && event.clock.startsWith("SA"),
+    );
+    expect(silverMeta).toBeTruthy();
+    expect(silverMeta!.t).toBeLessThan(SILVER_END);
+    expect(match.events.at(-1)?.t).toBe(SILVER_END);
+    expect(match.events.at(-1)?.text).toMatch(/Meta d'argento/);
+    expect(match.events.some((event) => event.kind === "golden")).toBe(false);
+  });
+
+  it("stops golden extra time on the first meta", () => {
+    const match = findMatch((item) => {
+      const goldenAt = item.events.findIndex((event) => event.kind === "golden");
+      if (goldenAt < 0) {
+        return false;
+      }
+      return item.events
+        .slice(goldenAt + 1)
+        .some((event) => event.kind === "meta" || event.kind === "meta-tecnica");
+    });
+    const goldenAt = match.events.findIndex((event) => event.kind === "golden");
+    const scoredAt = match.events.findIndex(
+      (event, index) =>
+        index > goldenAt && (event.kind === "meta" || event.kind === "meta-tecnica"),
+    );
+    expect(scoredAt).toBeGreaterThan(goldenAt);
+    expect(match.events[scoredAt]?.clock.startsWith("GO")).toBe(true);
+    expect(match.events[scoredAt]?.text).toMatch(/d'oro/);
+    expect(match.events[scoredAt + 1]?.kind).toBe("fine");
+    expect(match.events.at(-1)?.t).toBeLessThan(GOLDEN_END);
+    expect(match.events.at(-1)?.text).toMatch(/Meta d'oro/);
+    expect(match.score.host).not.toBe(match.score.guest);
+  });
+
+  it("breaks a 0-0 golden with scalpi, then vuoti, then a draw of lots", () => {
+    const match = findMatch((item) => {
+      if (!item.events.some((event) => event.kind === "golden")) {
+        return false;
+      }
+      return item.score.host === item.score.guest;
+    });
+    expect(match.events.at(-1)?.t).toBe(GOLDEN_END);
+    expect(match.events.at(-1)?.kind).toBe("fine");
+    expect(match.events.at(-1)?.text).toMatch(/scalpi|Sorteggio/);
+    expect(match.winner).toMatch(/^(host|guest)$/);
+  });
+});
+
+function findMatch(predicate: (match: MatchSim) => boolean, limit = 4000): MatchSim {
+  for (let i = 0; i < limit; i += 1) {
+    const match = simulateMatch({ host, guest, roster, seed: `x${i}` });
+    if (predicate(match)) {
+      return match;
+    }
+  }
+  throw new Error("Nessun seed con gli extra richiesti");
+}

@@ -12,6 +12,9 @@ import type { Player, PlayerStats, Role } from "#/lib/player";
 export const HALF_SECONDS = 15 * 60;
 export const HALF_COUNT = 2;
 export const MATCH_SECONDS = HALF_SECONDS * HALF_COUNT;
+export const EXTRA_SECONDS = 5 * 60;
+export const SILVER_END = MATCH_SECONDS + EXTRA_SECONDS;
+export const GOLDEN_END = SILVER_END + EXTRA_SECONDS;
 export const PLAYBACK_SCALE = 20;
 export const MS_PER_GAME_SECOND = 1000 / PLAYBACK_SCALE;
 export const MIN_PAUSE_MS = 1000;
@@ -28,6 +31,8 @@ export type SimKind =
   | "inizio"
   | "intervallo"
   | "secondo-tempo"
+  | "supplementari"
+  | "golden"
   | "fine"
   | "meta"
   | "meta-tecnica"
@@ -57,11 +62,14 @@ export type MatchSim = {
   guestName: string;
   events: SimEvent[];
   score: MatchScore;
+  winner: Side;
   scalpi: {
     host: { pieni: number; vuoti: number };
     guest: { pieni: number; vuoti: number };
   };
 };
+
+export type PeriodId = "1T" | "2T" | "SA" | "GO";
 
 export type SimulateInput = {
   host: Lineup;
@@ -110,20 +118,54 @@ export function createMatchSeed(): string {
     .slice(0, 8);
 }
 
-export function matchClock(t: number): { half: 1 | 2; secondsInHalf: number; label: string } {
-  const whole = Math.floor(Math.min(MATCH_SECONDS, Math.max(0, t)));
-  const half: 1 | 2 = whole < HALF_SECONDS ? 1 : 2;
-  const secondsInHalf = half === 1 ? whole : Math.min(whole - HALF_SECONDS, HALF_SECONDS);
+export function matchClock(t: number): {
+  half: 1 | 2;
+  period: PeriodId;
+  secondsInHalf: number;
+  periodLength: number;
+  label: string;
+} {
+  const whole = Math.max(0, t);
+  if (whole < HALF_SECONDS) {
+    return clockOf("1T", 1, whole, HALF_SECONDS);
+  }
+  if (whole <= MATCH_SECONDS) {
+    return clockOf("2T", 2, Math.min(whole - HALF_SECONDS, HALF_SECONDS), HALF_SECONDS);
+  }
+  if (whole <= SILVER_END) {
+    return clockOf("SA", 2, Math.min(whole - MATCH_SECONDS, EXTRA_SECONDS), EXTRA_SECONDS);
+  }
+  return clockOf("GO", 2, Math.min(Math.max(0, whole - SILVER_END), EXTRA_SECONDS), EXTRA_SECONDS);
+}
+
+function clockOf(
+  period: PeriodId,
+  half: 1 | 2,
+  secondsInHalf: number,
+  periodLength: number,
+): {
+  half: 1 | 2;
+  period: PeriodId;
+  secondsInHalf: number;
+  periodLength: number;
+  label: string;
+} {
   const mm = String(Math.floor(secondsInHalf / 60)).padStart(2, "0");
   const ss = String(secondsInHalf % 60).padStart(2, "0");
-  return { half, secondsInHalf, label: `${half}T ${mm}:${ss}` };
+  return {
+    half,
+    period,
+    secondsInHalf,
+    periodLength,
+    label: `${period} ${mm}:${ss}`,
+  };
 }
 
 export function analogHands(t: number): { half: 1 | 2; minuteDeg: number; secondDeg: number } {
-  const { half, secondsInHalf } = matchClock(t);
+  const { half, secondsInHalf, periodLength } = matchClock(t);
   return {
     half,
-    minuteDeg: (secondsInHalf / HALF_SECONDS) * 360,
+    minuteDeg: (secondsInHalf / periodLength) * 360,
     secondDeg: ((secondsInHalf % 60) / 60) * 360,
   };
 }
@@ -180,6 +222,223 @@ export function applyVuoto(squad: SquadState, slot: number): { exited: boolean; 
   return { exited, technical: isTechnicalMeta(squad) };
 }
 
+type PlayCtx = {
+  t: number;
+  possession: Side;
+  host: SquadState;
+  guest: SquadState;
+  score: MatchScore;
+  scalpi: MatchSim["scalpi"];
+  events: SimEvent[];
+  rng: Rng;
+  roster: readonly Player[];
+};
+
+function playOpenPlay(ctx: PlayCtx, endAt: number, stopOnScore: boolean): boolean {
+  const golden = stopOnScore;
+  for (let step = 0; step < 250 && ctx.t < endAt; step += 1) {
+    const remaining = endAt - ctx.t;
+    if (remaining < 8) {
+      ctx.t = endAt;
+      return false;
+    }
+
+    const dt = Math.round(lerp(ctx.rng(), 12, 28));
+    ctx.t = Math.min(ctx.t + dt, endAt);
+    if (ctx.t >= endAt) {
+      return false;
+    }
+
+    const att = ctx.possession === "host" ? ctx.host : ctx.guest;
+    const def = ctx.possession === "host" ? ctx.guest : ctx.host;
+    const roll = ctx.rng();
+
+    if (roll < 0.14) {
+      const scalp = tryScalp(att, def, ctx.rng, ctx.roster);
+      if (!scalp) {
+        continue;
+      }
+      if (scalp.kind === "scalpo-pieno") {
+        ctx.scalpi[def.side].pieni += 1;
+      }
+      if (scalp.kind === "scalpo-vuoto") {
+        ctx.scalpi[def.side].vuoti += 1;
+      }
+      pushEvent(ctx.events, {
+        kind: scalp.kind,
+        t: ctx.t,
+        score: ctx.score,
+        side: def.side,
+        actor: scalp.actor,
+        target: scalp.target,
+        text: scalp.text,
+        pauseMs: pauseMs(ctx.rng, scalp.kind),
+      });
+      if (scalp.exited) {
+        pushEvent(ctx.events, {
+          kind: "uscita",
+          t: ctx.t,
+          score: ctx.score,
+          side: def.side,
+          actor: scalp.actor,
+          text: `${labelOf(def.slots[scalp.actorSlot]!.player, ctx.roster)} esce: tre vuoti`,
+          pauseMs: 0,
+        });
+      }
+      if (isTechnicalMeta(att)) {
+        ctx.score[def.side] += 1;
+        restoreAll(ctx.host);
+        restoreAll(ctx.guest);
+        ctx.possession = att.side;
+        pushEvent(ctx.events, {
+          kind: "meta-tecnica",
+          t: ctx.t,
+          score: ctx.score,
+          side: def.side,
+          text: golden
+            ? `Meta d'oro tecnica: ${att.name} restano in tre`
+            : `Meta tecnica: ${att.name} restano in tre`,
+          pauseMs: pauseMs(ctx.rng, "meta-tecnica"),
+        });
+        if (stopOnScore) {
+          return true;
+        }
+        continue;
+      }
+      if (scalp.exited && isTechnicalMeta(def)) {
+        ctx.score[att.side] += 1;
+        restoreAll(ctx.host);
+        restoreAll(ctx.guest);
+        ctx.possession = def.side;
+        pushEvent(ctx.events, {
+          kind: "meta-tecnica",
+          t: ctx.t,
+          score: ctx.score,
+          side: att.side,
+          text: golden
+            ? `Meta d'oro tecnica: ${def.name} restano in tre`
+            : `Meta tecnica: ${def.name} restano in tre`,
+          pauseMs: pauseMs(ctx.rng, "meta-tecnica"),
+        });
+        if (stopOnScore) {
+          return true;
+        }
+      }
+      continue;
+    }
+
+    if (roll < 0.36) {
+      const shot = tryShot(att, def, ctx.rng, ctx.roster);
+      if (shot.kind === "turnover") {
+        ctx.possession = def.side;
+        continue;
+      }
+      if (shot.kind === "meta") {
+        ctx.score[att.side] += 1;
+        restoreAll(ctx.host);
+        restoreAll(ctx.guest);
+        ctx.possession = def.side;
+        if (golden) {
+          shot.text = shot.text.replace("appoggia la meta", "appoggia la meta d'oro");
+        }
+      }
+      if (shot.kind === "parata") {
+        ctx.possession = def.side;
+      }
+      pushEvent(ctx.events, {
+        kind: shot.kind,
+        t: ctx.t,
+        score: ctx.score,
+        side: shot.kind === "parata" ? def.side : att.side,
+        actor: shot.actor,
+        target: shot.target,
+        text: shot.text,
+        pauseMs: pauseMs(ctx.rng, shot.kind),
+      });
+      if (stopOnScore && shot.kind === "meta") {
+        return true;
+      }
+      continue;
+    }
+
+    if (roll < 0.46) {
+      ctx.possession = def.side;
+    }
+  }
+
+  ctx.t = endAt;
+  return false;
+}
+
+function leaderOf(score: MatchScore): Side | null {
+  if (score.host === score.guest) {
+    return null;
+  }
+  return score.host > score.guest ? "host" : "guest";
+}
+
+function extraTiebreak(
+  scalpi: MatchSim["scalpi"],
+  rng: Rng,
+): { side: Side; text: string } {
+  if (scalpi.host.pieni !== scalpi.guest.pieni) {
+    const hostLeads = scalpi.host.pieni > scalpi.guest.pieni;
+    return {
+      side: hostLeads ? "host" : "guest",
+      text: hostLeads
+        ? "Più scalpi pieni in casa."
+        : "Più scalpi pieni per gli ospiti.",
+    };
+  }
+  if (scalpi.host.vuoti !== scalpi.guest.vuoti) {
+    const hostFewer = scalpi.host.vuoti < scalpi.guest.vuoti;
+    return {
+      side: hostFewer ? "host" : "guest",
+      text: hostFewer
+        ? "Meno scalpi a vuoto in casa."
+        : "Meno scalpi a vuoto per gli ospiti.",
+    };
+  }
+  const side: Side = rng() < 0.5 ? "host" : "guest";
+  return {
+    side,
+    text: side === "host" ? "Sorteggio: vincono i padroni di casa." : "Sorteggio: vincono gli ospiti.",
+  };
+}
+
+function extraFinalText(t: number, goldenMeta: boolean, winnerName: string): string {
+  if (goldenMeta || t > SILVER_END) {
+    return `Fine partita. Meta d'oro. Vince ${winnerName}.`;
+  }
+  if (t > MATCH_SECONDS) {
+    return `Fine partita. Meta d'argento. Vince ${winnerName}.`;
+  }
+  return "Fine partita.";
+}
+
+function goldenDecidedByMeta(events: readonly SimEvent[]): boolean {
+  let start = -1;
+  for (let i = 0; i < events.length; i += 1) {
+    if (events[i]?.kind === "golden") {
+      start = i;
+    }
+  }
+  if (start < 0) {
+    return false;
+  }
+  for (let i = start + 1; i < events.length; i += 1) {
+    const kind = events[i]?.kind;
+    if (kind === "meta" || kind === "meta-tecnica") {
+      return true;
+    }
+  }
+  return false;
+}
+
+function squadName(side: Side, hostName: string, guestName: string): string {
+  return side === "host" ? hostName : guestName;
+}
+
 export function simulateMatch(input: SimulateInput): MatchSim {
   if (!isLineupReady(input.host, input.roster) || !isLineupReady(input.guest, input.roster)) {
     throw new Error("Formazioni non valide");
@@ -197,171 +456,101 @@ export function simulateMatch(input: SimulateInput): MatchSim {
     guest: { pieni: 0, vuoti: 0 },
   };
   const events: SimEvent[] = [];
-  let t = 0;
-  let possession: Side = rng() < 0.5 ? "host" : "guest";
-  const kickoff = possession;
-  let secondHalf = false;
+  const kickoff: Side = rng() < 0.5 ? "host" : "guest";
+  const ctx: PlayCtx = {
+    t: 0,
+    possession: kickoff,
+    host,
+    guest,
+    score,
+    scalpi,
+    events,
+    rng,
+    roster: input.roster,
+  };
 
   pushEvent(events, {
     kind: "inizio",
-    t,
+    t: ctx.t,
     score,
     side: kickoff,
     text: `Palla a ${kickoff === "host" ? host.name : guest.name}.`,
     pauseMs: 0,
   });
 
-  for (let step = 0; step < 400 && t < MATCH_SECONDS; step += 1) {
-    if (!secondHalf && t >= HALF_SECONDS) {
-      t = HALF_SECONDS;
-      secondHalf = true;
-      resetHalf(host);
-      resetHalf(guest);
-      pushEvent(events, {
-        kind: "intervallo",
-        t,
-        score,
-        text: "Fine primo tempo. Intervallo.",
-        pauseMs: INTERVAL_PAUSE_MS,
-      });
-      possession = other(kickoff);
-      pushEvent(events, {
-        kind: "secondo-tempo",
-        t,
-        score,
-        side: possession,
-        text: `Secondo tempo. Palla a ${possession === "host" ? host.name : guest.name}.`,
-        pauseMs: 0,
-      });
-      continue;
-    }
-
-    const endOfHalf = secondHalf ? MATCH_SECONDS : HALF_SECONDS;
-    const remaining = endOfHalf - t;
-
-    if (remaining <= 0) {
-      break;
-    }
-
-    if (remaining < 8) {
-      t = endOfHalf;
-      continue;
-    }
-
-    const dt = Math.round(lerp(rng(), 12, 28));
-    t = Math.min(t + dt, endOfHalf);
-    if (t >= endOfHalf) {
-      continue;
-    }
-
-    const att = possession === "host" ? host : guest;
-    const def = possession === "host" ? guest : host;
-    const roll = rng();
-
-    if (roll < 0.14) {
-      const scalp = tryScalp(att, def, rng, input.roster);
-      if (scalp) {
-        if (scalp.kind === "scalpo-pieno") {
-          scalpi[def.side].pieni += 1;
-        }
-        if (scalp.kind === "scalpo-vuoto") {
-          scalpi[def.side].vuoti += 1;
-        }
-        pushEvent(events, {
-          kind: scalp.kind,
-          t,
-          score,
-          side: def.side,
-          actor: scalp.actor,
-          target: scalp.target,
-          text: scalp.text,
-          pauseMs: pauseMs(rng, scalp.kind),
-        });
-        if (scalp.exited) {
-          pushEvent(events, {
-            kind: "uscita",
-            t,
-            score,
-            side: def.side,
-            actor: scalp.actor,
-            text: `${labelOf(def.slots[scalp.actorSlot]!.player, input.roster)} esce: tre vuoti`,
-            pauseMs: 0,
-          });
-        }
-        if (isTechnicalMeta(att)) {
-          score[def.side] += 1;
-          restoreAll(host);
-          restoreAll(guest);
-          pushEvent(events, {
-            kind: "meta-tecnica",
-            t,
-            score,
-            side: def.side,
-            text: `Meta tecnica: ${att.name} restano in tre`,
-            pauseMs: pauseMs(rng, "meta-tecnica"),
-          });
-          possession = att.side;
-          continue;
-        }
-        if (scalp.exited && isTechnicalMeta(def)) {
-          score[att.side] += 1;
-          restoreAll(host);
-          restoreAll(guest);
-          pushEvent(events, {
-            kind: "meta-tecnica",
-            t,
-            score,
-            side: att.side,
-            text: `Meta tecnica: ${def.name} restano in tre`,
-            pauseMs: pauseMs(rng, "meta-tecnica"),
-          });
-          possession = def.side;
-        }
-      }
-      continue;
-    }
-
-    if (roll < 0.36) {
-      const shot = tryShot(att, def, rng, input.roster);
-      if (shot.kind === "meta") {
-        score[att.side] += 1;
-        restoreAll(host);
-        restoreAll(guest);
-        possession = def.side;
-      }
-      if (shot.kind === "parata") {
-        possession = def.side;
-      }
-      if (shot.kind === "turnover") {
-        possession = def.side;
-        continue;
-      }
-      pushEvent(events, {
-        kind: shot.kind,
-        t,
-        score,
-        side: shot.kind === "parata" ? def.side : att.side,
-        actor: shot.actor,
-        target: shot.target,
-        text: shot.text,
-        pauseMs: pauseMs(rng, shot.kind),
-      });
-      continue;
-    }
-
-    if (roll < 0.46) {
-      possession = def.side;
-    }
-  }
-
-  t = MATCH_SECONDS;
+  playOpenPlay(ctx, HALF_SECONDS, false);
+  ctx.t = HALF_SECONDS;
+  resetHalf(host);
+  resetHalf(guest);
   pushEvent(events, {
-    kind: "fine",
-    t,
+    kind: "intervallo",
+    t: ctx.t,
     score,
-    text: "Fine partita.",
+    text: "Fine primo tempo. Intervallo.",
+    pauseMs: INTERVAL_PAUSE_MS,
+  });
+  ctx.possession = other(kickoff);
+  pushEvent(events, {
+    kind: "secondo-tempo",
+    t: ctx.t,
+    score,
+    side: ctx.possession,
+    text: `Secondo tempo. Palla a ${ctx.possession === "host" ? host.name : guest.name}.`,
     pauseMs: 0,
   });
+  playOpenPlay(ctx, MATCH_SECONDS, false);
+  ctx.t = MATCH_SECONDS;
+  let winner = leaderOf(score);
+
+  if (!winner) {
+    pushEvent(events, {
+      kind: "supplementari",
+      t: ctx.t,
+      score,
+      text: "Tempi supplementari. Meta d'argento.",
+      pauseMs: INTERVAL_PAUSE_MS,
+    });
+    playOpenPlay(ctx, SILVER_END, false);
+    ctx.t = SILVER_END;
+    winner = leaderOf(score);
+  }
+
+  if (!winner) {
+    pushEvent(events, {
+      kind: "golden",
+      t: ctx.t,
+      score,
+      text: "Secondo supplementare. Meta d'oro.",
+      pauseMs: MIN_PAUSE_MS,
+    });
+    const goldenMeta = playOpenPlay(ctx, GOLDEN_END, true);
+    if (!goldenMeta) {
+      ctx.t = GOLDEN_END;
+    }
+    winner = leaderOf(score);
+  }
+
+  if (!winner) {
+    const decided = extraTiebreak(scalpi, ctx.rng);
+    winner = decided.side;
+    pushEvent(events, {
+      kind: "fine",
+      t: ctx.t,
+      score,
+      side: winner,
+      text: `Fine partita. ${decided.text}`,
+      pauseMs: 0,
+    });
+  } else {
+    pushEvent(events, {
+      kind: "fine",
+      t: ctx.t,
+      score,
+      side: winner,
+      text: extraFinalText(ctx.t, goldenDecidedByMeta(events), squadName(winner, host.name, guest.name)),
+      pauseMs: 0,
+    });
+  }
 
   return {
     seed: input.seed,
@@ -369,6 +558,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
     guestName: guest.name,
     events,
     score: { ...score },
+    winner,
     scalpi,
   };
 }

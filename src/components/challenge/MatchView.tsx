@@ -89,7 +89,11 @@ export function MatchView({
                 search={{ host: hostParam, guest: guestParam, seed }}
                 title={`${match.hostName} ${match.score.host}–${match.score.guest} ${match.guestName}`}
                 cta="Copia il link della partita"
-                hint="Stesso seed, stesso tabellino. Mandalo a chi si è perso i due tempi."
+                hint={
+                  match.events.some((item) => item.kind === "supplementari")
+                    ? "Stesso seed, stesso tabellino. Mandalo a chi si è perso i supplementari."
+                    : "Stesso seed, stesso tabellino. Mandalo a chi si è perso i due tempi."
+                }
                 waiting=""
               />
             </div>
@@ -119,6 +123,7 @@ function Scoreboard({
 }) {
   const score = event?.score ?? match.score;
   const scored = event?.kind === "meta" || event?.kind === "meta-tecnica";
+  const winnerName = match.winner === "host" ? match.hostName : match.guestName;
   return (
     <div className="rounded-[18px] border border-white/10 bg-white/4 px-3 py-2 sm:px-5">
       <div className="flex items-center gap-2 sm:gap-4">
@@ -160,6 +165,11 @@ function Scoreboard({
           </Button>
         </div>
       </div>
+      {event?.kind === "fine" ? (
+        <p className="mt-1 text-center text-[11px] font-semibold tracking-[0.18em] text-pink">
+          Vince {winnerName}
+        </p>
+      ) : null}
     </div>
   );
 }

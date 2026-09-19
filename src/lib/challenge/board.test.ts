@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { boardAt, poseAt } from "#/lib/challenge/board";
 import { emptyLineup, type Lineup } from "#/lib/challenge/lineup";
-import { EMPTY_SCALPS_TO_EXIT, simulateMatch } from "#/lib/challenge/sim";
+import { EMPTY_SCALPS_TO_EXIT, MATCH_SECONDS, simulateMatch, type SimEvent } from "#/lib/challenge/sim";
 import type { Player, Sex } from "#/lib/player";
 
 function player(slug: string, sex: Sex, number: number): Player {
@@ -168,4 +168,54 @@ describe("boardAt", () => {
     expect(shooter?.callout).toBe("Meta tentata");
     expect(stop?.text).toMatch(/impedisce la meta di /);
   });
+
+  it("keeps 2T vuoti and scalpato players into extra time until a meta", () => {
+    const events: SimEvent[] = [
+      stamp("inizio", 0, "1T 00:00"),
+      stamp("intervallo", 900, "2T 00:00"),
+      stamp("secondo-tempo", 900, "2T 00:00"),
+      {
+        ...stamp("scalpo-pieno", 1000, "2T 01:40"),
+        actor: "hm1",
+        target: "gm1",
+      },
+      {
+        ...stamp("scalpo-vuoto", 1100, "2T 03:20"),
+        actor: "hf1",
+      },
+      stamp("supplementari", MATCH_SECONDS, "2T 15:00"),
+    ];
+    const extras = poseAt(host, guest, events, events.length - 1);
+    expect(extras.flash?.label).toBe("Meta d'argento");
+    expect(extras.tokens.find((token) => token.slug === "gm1")?.onField).toBe(false);
+    expect(extras.tokens.find((token) => token.slug === "hf1")?.vuoti).toBe(1);
+    expect(extras.tokens.filter((token) => token.onField)).toHaveLength(13);
+  });
+
+  it("labels a golden meta as Meta d'oro", () => {
+    const events: SimEvent[] = [
+      stamp("inizio", 0, "1T 00:00"),
+      stamp("golden", 2100, "SA 05:00"),
+      {
+        ...stamp("meta", 2180, "GO 01:20"),
+        actor: "hm5",
+        side: "host",
+      },
+    ];
+    const frame = poseAt(host, guest, events, events.length - 1);
+    expect(frame.flash?.label).toBe("Meta d'oro");
+    expect(frame.tokens.find((token) => token.slug === "hm5")?.callout).toBe("Meta d'oro");
+  });
 });
+
+function stamp(kind: SimEvent["kind"], t: number, clock: string): SimEvent {
+  return {
+    kind,
+    t,
+    half: 2,
+    clock,
+    pauseMs: 0,
+    score: { host: 0, guest: 0 },
+    text: kind,
+  };
+}

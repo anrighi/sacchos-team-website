@@ -1,20 +1,20 @@
 import { analogHands, matchClock } from "#/lib/challenge/sim";
 import { cn } from "#/lib/utils";
 
-const TICKS = Array.from({ length: 15 }, (_, i) => i);
-const LABELS = [5, 10, 15] as const;
-
 export function AnalogClock({ t, className }: { t: number; className?: string }) {
-  const { half, label } = matchClock(t);
+  const { period, periodLength, label } = matchClock(t);
   const { minuteDeg, secondDeg } = analogHands(t);
+  const minuteCount = Math.max(1, Math.round(periodLength / 60));
+  const ticks = Array.from({ length: minuteCount }, (_, i) => i);
+  const labels = minuteCount >= 15 ? [5, 10, 15] : [minuteCount];
 
   return (
     <div className={cn("mx-auto flex w-28 flex-col items-center md:w-32", className)}>
       <svg viewBox="0 0 100 100" role="img" aria-label={label} className="size-full">
         <circle cx="50" cy="50" r="47" fill="#15202b" stroke="rgba(255,255,255,0.35)" strokeWidth="1.6" />
         <circle cx="50" cy="50" r="42.5" fill="none" stroke="rgba(248,103,165,0.28)" strokeWidth="0.8" />
-        {TICKS.map((tick) => {
-          const major = tick % 5 === 0;
+        {ticks.map((tick) => {
+          const major = minuteCount >= 15 ? tick % 5 === 0 : true;
           return (
             <line
               key={tick}
@@ -24,13 +24,13 @@ export function AnalogClock({ t, className }: { t: number; className?: string })
               y2={major ? 17 : 14}
               stroke={major ? "#f867a5" : "rgba(255,255,255,0.45)"}
               strokeWidth={major ? 1.8 : 1}
-              transform={`rotate(${(tick / 15) * 360} 50 50)`}
+              transform={`rotate(${(tick / minuteCount) * 360} 50 50)`}
             />
           );
         })}
-        {LABELS.map((value) => {
-          const minute = value === 15 ? 0 : value;
-          const angle = ((minute / 15) * 360 - 90) * (Math.PI / 180);
+        {labels.map((value) => {
+          const minute = value === minuteCount ? 0 : value;
+          const angle = ((minute / minuteCount) * 360 - 90) * (Math.PI / 180);
           const x = 50 + Math.cos(angle) * 26;
           const y = 50 + Math.sin(angle) * 26;
           return (
@@ -56,7 +56,7 @@ export function AnalogClock({ t, className }: { t: number; className?: string })
         </g>
         <circle cx="50" cy="50" r="3.4" fill="#f867a5" />
       </svg>
-      <p className="mt-1 text-[11px] font-semibold tracking-[0.22em] text-white/70">{half}T</p>
+      <p className="mt-1 text-[11px] font-semibold tracking-[0.22em] text-white/70">{period}</p>
     </div>
   );
 }
