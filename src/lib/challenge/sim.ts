@@ -592,7 +592,7 @@ function tryShot(att: SquadState, def: SquadState, rng: Rng, roster: readonly Pl
     return {
       kind: "parata" as const,
       actor: keeper.player.slug,
-      text: `${labelOf(keeper.player, roster)} para`,
+      text: `${labelOf(keeper.player, roster)} impedisce la meta`,
     };
   }
   return { kind: "turnover" as const, actor: shooter.player.slug, text: "" };

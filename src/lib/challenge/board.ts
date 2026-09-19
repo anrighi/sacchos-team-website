@@ -212,7 +212,7 @@ function flashFor(event: SimEvent | null): BoardFlash {
     return { kind: event.kind, label: "Meta tecnica", side: event.side };
   }
   if (event.kind === "parata") {
-    return { kind: event.kind, label: "Parata", side: event.side };
+    return { kind: event.kind, label: "Impedisce la meta", side: event.side };
   }
   if (event.kind === "scalpo-pieno") {
     return { kind: event.kind, label: "Scalpo pieno", side: event.side };

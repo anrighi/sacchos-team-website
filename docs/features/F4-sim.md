@@ -18,7 +18,7 @@ Sim deterministica: cronometro da scoutball due tempi da 15′, wall-clock ~90s 
 ## Acceptance criteria
 
 - [x] Orologio analogico 15′ × 2 (non digitale 0–90s)
-- [x] Tra eventi scorre accelerato; meta/scalpo/parata pausano 1–3s
+- [x] Tra eventi scorre accelerato; meta/scalpo/impedisce-la-meta pausano 1–3s
 - [x] Intervallo breve a 15′
 - [x] Eventi da stats (velocità, salto, intercetto, scalpo, finalizzazione, gk)
 - [x] Ticker: nickname o nome + numero se collisione
@@ -36,8 +36,8 @@ Sim deterministica: cronometro da scoutball due tempi da 15′, wall-clock ~90s 
 
 Regolamento: https://www.scoutballitalia.it/regolamento — portiere obbligatorio, ≥2 per sesso (già validato in F3).
 
-La partita parte da `/sfida?host=&guest=&seed=`. Senza `seed` ne viene creato uno e messo in query (stesso seed, stesse rose → stessa sequenza). Playback 20× (`50ms` per secondo di gioco) con pausa 1–3s su meta/scalpo/parata e 2s di intervallo; con `prefers-reduced-motion` l’orologio e il tavolo saltano di evento in evento. Il tabellino elenca gli eventi dal più recente.
+La partita parte da `/sfida?host=&guest=&seed=`. Senza `seed` ne viene creato uno e messo in query (stesso seed, stesse rose → stessa sequenza). Playback 20× (`50ms` per secondo di gioco) con pausa 1–3s su meta/scalpo/impedisce la meta e 2s di intervallo; con `prefers-reduced-motion` l’orologio e il tavolo saltano di evento in evento. Il tabellino elenca gli eventi dal più recente.
 
-Tra cronometro analogico (15′ a giro, badge 1T/2T) e ticker c’è il campo scoutball (30×18 m, porte 4 m sui lati corti, aree a tutta larghezza profonde 4 m, metà campo; niente area di rigore da calcio). Le carte restano ferme nel modulo: si evidenziano sull’evento. Tre cuori = vuoti rimasti (si azzerano all’intervallo); scalpo pieno spegne il ritratto fino alla meta successiva. Overlay su meta/parata/scalpo; il punteggio pulsa sulla meta. `prefers-reduced-motion`: solo fade. Il fischio d’inizio non è palla al centro: il seed sceglie chi attacca per primo e il secondo tempo inverte; la palla parte a centrocampo come da regolamento.
+Tra cronometro analogico (15′ a giro, badge 1T/2T) e ticker c’è il campo scoutball (30×18 m, porte 4 m sui lati corti, aree a tutta larghezza profonde 4 m, metà campo; niente area di rigore da calcio). Le carte restano ferme nel modulo: si evidenziano sull’evento. Tre cuori = vuoti rimasti (si azzerano all’intervallo); scalpo pieno spegne il ritratto fino alla meta successiva. Overlay su meta, scalpo e «impedisce la meta»; il punteggio pulsa sulla meta. `prefers-reduced-motion`: solo fade. Il fischio d’inizio non è palla al centro: il seed sceglie chi attacca per primo e il secondo tempo inverte; la palla parte a centrocampo come da regolamento.
 
 Fuori ruolo: malus sulle stat se `role` è valorizzato e non coincide con la linea (portiere non-POR: `gk × 0.7`). Il portiere non esce per scalpo pieno: senza di lui non si gioca. Chi prende tre vuoti nello stesso tempo esce; a quattro scalpi pieni (restano in tre, portiere compreso) scatta la meta tecnica e tutti rientrano.

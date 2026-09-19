@@ -176,6 +176,11 @@ describe("simulateMatch", () => {
     const restart = match.events.find((event) => event.kind === "secondo-tempo");
     expect(restart?.side).toBe(match.events[0]?.side === "host" ? "guest" : "host");
     expect(restart?.text).toMatch(/Palla a /);
+    const stop = match.events.find((event) => event.kind === "parata");
+    if (stop) {
+      expect(stop.text).toMatch(/impedisce la meta$/);
+      expect(stop.text).not.toMatch(/\bpara\b/i);
+    }
     expect(kinds).toContain("intervallo");
     expect(kinds).toContain("secondo-tempo");
     expect(kinds.at(-1)).toBe("fine");

@@ -132,4 +132,13 @@ describe("boardAt", () => {
     expect(frame.tokens.every((token) => token.vuoti === 0)).toBe(true);
     expect(frame.tokens.every((token) => token.onField)).toBe(true);
   });
+
+  it("labels a stopped meta as impedisce la meta, not parata", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const stop = match.events.find((event) => event.kind === "parata");
+    expect(stop).toBeTruthy();
+    const frame = poseAt(host, guest, match.events, match.events.indexOf(stop!));
+    expect(frame.flash?.label).toBe("Impedisce la meta");
+    expect(stop?.text).toMatch(/impedisce la meta$/);
+  });
 });
