@@ -17,14 +17,14 @@ const kitFan = [
     src: "/brand/kit-home-front.png",
     alt: "Maglia casa bianca",
     className:
-      "left-[2%] top-[8%] w-[58%] -rotate-8 sm:left-[8%] sm:w-[46%] md:left-[12%]",
+      "left-[-4%] top-[4%] w-[72%] -rotate-8 sm:left-[8%] sm:top-[8%] sm:w-[46%] md:left-[12%]",
     delay: "0s",
   },
   {
     src: "/brand/kit-away-front.png",
     alt: "Maglia trasferta navy",
     className:
-      "right-[2%] bottom-[2%] w-[58%] rotate-8 sm:right-[8%] sm:w-[46%] md:right-[12%]",
+      "right-[-6%] top-[18%] w-[72%] rotate-8 sm:right-[8%] sm:top-auto sm:bottom-[2%] sm:w-[46%] md:right-[12%]",
     delay: "-2.4s",
   },
 ] as const;
