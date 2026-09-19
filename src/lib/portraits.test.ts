@@ -16,6 +16,13 @@ describe("parsePortraitTraits", () => {
     });
   });
 
+  it("accepts named hair and skin presets", () => {
+    expect(parsePortraitTraits({ coloreCapelli: "biondo", carnagione: "chiara" })).toEqual({
+      hairColor: "d6b370",
+      skinColor: "f1c3a5",
+    });
+  });
+
   it("ignores unknown variants", () => {
     expect(parsePortraitTraits({ hair: "mohawk", eyes: "laser" })).toBeUndefined();
   });

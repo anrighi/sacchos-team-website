@@ -39,6 +39,40 @@ export const BEARD_VARIANTS = [
   "moustacheTwirl",
 ] as const;
 
+export const HAIR_COLOR_PRESETS = {
+  black: "2c1b18",
+  brown: "724133",
+  auburn: "a55728",
+  blonde: "d6b370",
+  gold: "b58143",
+} as const;
+
+export const SKIN_COLOR_PRESETS = {
+  deep: "5c3829",
+  tan: "a36b4f",
+  medium: "c68e7a",
+  warm: "b98e6a",
+  light: "f1c3a5",
+} as const;
+
+const HAIR_COLOR_ALIASES: Record<string, keyof typeof HAIR_COLOR_PRESETS> = {
+  nero: "black",
+  castano: "brown",
+  ramato: "auburn",
+  biondo: "blonde",
+  miele: "gold",
+  lightbrown: "gold",
+};
+
+const SKIN_COLOR_ALIASES: Record<string, keyof typeof SKIN_COLOR_PRESETS> = {
+  scura: "deep",
+  scuro: "deep",
+  olivastra: "tan",
+  media: "medium",
+  calda: "warm",
+  chiara: "light",
+};
+
 export type HairVariant = (typeof HAIR_VARIANTS)[number];
 export type RearHairVariant = (typeof REAR_HAIR_VARIANTS)[number];
 export type EyesVariant = (typeof EYES_VARIANTS)[number];
@@ -99,8 +133,8 @@ export function portraitOptions(
     ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
     ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
     ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
-    ...colorOption("hair", traits.hairColor),
-    ...colorOption("skin", traits.skinColor),
+    ...colorOption("hair", traits.hairColor, Object.values(HAIR_COLOR_PRESETS)),
+    ...colorOption("skin", traits.skinColor, Object.values(SKIN_COLOR_PRESETS)),
   };
 }
 
@@ -146,15 +180,43 @@ function variantOption(
   return { [`${name}Probability`]: fallbackProbability };
 }
 
-function colorOption(name: string, value: string | undefined): Record<string, unknown> {
-  const hex = normalizeHex(value);
-  if (!hex) {
-    return {};
-  }
+function colorOption(
+  name: "hair" | "skin",
+  value: string | undefined,
+  fallback: readonly string[],
+): Record<string, unknown> {
+  const hex = name === "hair" ? resolveHairColor(value) : resolveSkinColor(value);
   return {
-    [`${name}Color`]: [hex],
+    [`${name}Color`]: hex ? [hex] : [...fallback],
     [`${name}ColorFill`]: ["solid"],
   };
+}
+
+export function resolveHairColor(value: string | undefined): string | undefined {
+  return resolvePresetColor(value, HAIR_COLOR_PRESETS, HAIR_COLOR_ALIASES);
+}
+
+export function resolveSkinColor(value: string | undefined): string | undefined {
+  return resolvePresetColor(value, SKIN_COLOR_PRESETS, SKIN_COLOR_ALIASES);
+}
+
+function resolvePresetColor<T extends Record<string, string>>(
+  value: string | undefined,
+  presets: T,
+  aliases: Record<string, keyof T>,
+): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const key = value.trim().toLowerCase().replace(/^#/, "").replace(/[\s_-]/g, "");
+  const alias = aliases[key];
+  if (alias) {
+    return presets[alias];
+  }
+  if (key in presets) {
+    return presets[key as keyof T];
+  }
+  return normalizeHex(value);
 }
 
 export function normalizeHex(value: string | undefined): string | undefined {

@@ -7,7 +7,8 @@ import {
   HAIR_VARIANTS,
   MOUTH_VARIANTS,
   REAR_HAIR_VARIANTS,
-  normalizeHex,
+  resolveHairColor,
+  resolveSkinColor,
 } from "#/lib/portrait";
 
 const HEADERS = {
@@ -30,11 +31,11 @@ export function parsePortraitTraits(row: Record<string, string>): PortraitTraits
   assignVariant(traits, "mouth", csvCell(row, ...HEADERS.mouth), MOUTH_VARIANTS);
   assignVariant(traits, "beard", csvCell(row, ...HEADERS.beard), BEARD_VARIANTS);
 
-  const hairColor = normalizeHex(csvCell(row, ...HEADERS.hairColor));
+  const hairColor = resolveHairColor(csvCell(row, ...HEADERS.hairColor));
   if (hairColor) {
     traits.hairColor = hairColor;
   }
-  const skinColor = normalizeHex(csvCell(row, ...HEADERS.skinColor));
+  const skinColor = resolveSkinColor(csvCell(row, ...HEADERS.skinColor));
   if (skinColor) {
     traits.skinColor = skinColor;
   }

@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { KIT_LAYOUT, kitKind, portraitOptions, portraitSvg } from "#/lib/portrait";
+import {
+  HAIR_COLOR_PRESETS,
+  KIT_LAYOUT,
+  SKIN_COLOR_PRESETS,
+  kitKind,
+  portraitOptions,
+  portraitSvg,
+  resolveHairColor,
+  resolveSkinColor,
+} from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
 const stats = {
@@ -79,6 +88,22 @@ describe("portraitSvg", () => {
     expect(options.mouthVariant).toEqual(["laugh"]);
     expect(options.hairColor).toEqual(["2c1b18"]);
     expect(options.clothesVariant).toEqual(["tShirt"]);
+  });
+
+  it("picks hair and skin from the 5 presets when the CSV leaves them empty", () => {
+    const options = portraitOptions(sample());
+    expect(options.hairColor).toEqual(Object.values(HAIR_COLOR_PRESETS));
+    expect(options.skinColor).toEqual(Object.values(SKIN_COLOR_PRESETS));
+    expect(options.eyesVariant).toBeUndefined();
+    expect(options.eyebrowsVariant).toBeUndefined();
+    expect(options.mouthVariant).toBeUndefined();
+  });
+
+  it("resolves named color presets and custom hex", () => {
+    expect(resolveHairColor("biondo")).toBe("d6b370");
+    expect(resolveHairColor("black")).toBe("2c1b18");
+    expect(resolveSkinColor("chiara")).toBe("f1c3a5");
+    expect(resolveSkinColor("#f5d0b0")).toBe("f5d0b0");
   });
 
   it("keeps the claws below the AGESCI crest", () => {
