@@ -55,6 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 2 | F4: cronaca MrAlex, solo quella scrolla; pausa e rewind | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: scalpato esce dal campo (carta tolta, non grigia) | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: vuoti come fazzoletto/scalpo, non cuori | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: `sim.ts` deterministico (seed, 2×15′, pause, tre vuoti, meta tecnica) + ticker su `/sfida?host=&guest=&seed=` | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |

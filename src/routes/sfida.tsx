@@ -204,7 +204,7 @@ function MatchKickoff({
   }
 
   return (
-    <main className="bg-black pt-6 text-white md:pt-20">
+    <main className="overflow-hidden bg-black text-white">
       <MatchView
         host={host}
         guest={guest}
