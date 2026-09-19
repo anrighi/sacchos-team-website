@@ -246,7 +246,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
     const def = possession === "host" ? guest : host;
     const roll = rng();
 
-    if (roll < 0.1) {
+    if (roll < 0.14) {
       const scalp = tryScalp(att, def, rng, input.roster);
       if (scalp) {
         if (scalp.kind === "scalpo-pieno") {
@@ -309,7 +309,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
       continue;
     }
 
-    if (roll < 0.22) {
+    if (roll < 0.36) {
       const shot = tryShot(att, def, rng, input.roster);
       if (shot.kind === "meta") {
         score[att.side] += 1;
@@ -336,7 +336,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
       continue;
     }
 
-    if (roll < 0.32) {
+    if (roll < 0.46) {
       possession = def.side;
     }
   }
@@ -523,9 +523,9 @@ function tryScalp(att: SquadState, def: SquadState, rng: Rng, roster: readonly P
 
   if (onCarrier) {
     const p =
-      0.22 +
-      (actor.stats.scalpo - target.stats.velocita * 0.55 - target.stats.salto * 0.25) / 280;
-    if (rng() > clamp(p, 0.08, 0.42)) {
+      0.28 +
+      (actor.stats.scalpo - target.stats.velocita * 0.55 - target.stats.salto * 0.25) / 260;
+    if (rng() > clamp(p, 0.12, 0.5)) {
       return null;
     }
     target.onField = false;
@@ -565,8 +565,8 @@ function tryShot(att: SquadState, def: SquadState, rng: Rng, roster: readonly Pl
 
   const attack = shooter.stats.finalizzazione * 0.62 + shooter.stats.velocita * 0.2 + shooter.stats.salto * 0.18;
   const defense = keeper.stats.gk * 0.72 + cover * 0.28;
-  const pMeta = clamp(0.1 + (attack - defense) / 360, 0.05, 0.38);
-  const pSave = clamp(0.28 + keeper.stats.gk / 400, 0.22, 0.48);
+  const pMeta = clamp(0.22 + (attack - defense) / 280, 0.14, 0.48);
+  const pSave = clamp(0.2 + keeper.stats.gk / 520, 0.16, 0.36);
 
   const roll = rng();
   if (roll < pMeta) {
