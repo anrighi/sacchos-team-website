@@ -194,7 +194,7 @@ function MatchKickoff({
 
   if (!seed) {
     return (
-      <main className="bg-black text-white">
+      <main className="bg-black pt-6 text-white md:pt-20">
         <ChallengeHeader
           eyebrow="7 vs 7"
           title={`${lineupLabel(host)} – ${lineupLabel(guest)}`}
@@ -204,11 +204,7 @@ function MatchKickoff({
   }
 
   return (
-    <main className="bg-black text-white">
-      <ChallengeHeader
-        eyebrow="In campo"
-        title={`${lineupLabel(host)} – ${lineupLabel(guest)}`}
-      />
+    <main className="bg-black pt-6 text-white md:pt-20">
       <MatchView
         host={host}
         guest={guest}
