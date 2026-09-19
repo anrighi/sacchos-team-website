@@ -2,8 +2,6 @@ import { SQUAD_SIZE } from "#/lib/challenge/formation";
 import type { Lineup } from "#/lib/challenge/lineup";
 import { EMPTY_SCALPS_TO_EXIT, type MatchSim, type Side, type SimEvent, type SimKind } from "#/lib/challenge/sim";
 
-export type Point = { x: number; y: number };
-
 export type Token = {
   slug: string;
   side: Side;
@@ -11,6 +9,7 @@ export type Token = {
   onField: boolean;
   highlight: boolean;
   vuoti: number;
+  callout?: string;
 };
 
 export type BoardFlash = {
@@ -21,7 +20,6 @@ export type BoardFlash = {
 
 export type BoardFrame = {
   tokens: Token[];
-  ball: Point;
   flash: BoardFlash;
 };
 
@@ -31,12 +29,6 @@ export type BoardInput = {
   match: MatchSim;
   index: number;
 };
-
-const CENTER: Point = { x: 50, y: 50 };
-const HOST_GOAL: Point = { x: 50, y: 6 };
-const GUEST_GOAL: Point = { x: 50, y: 94 };
-const HOST_AREA: Point = { x: 50, y: 10 };
-const GUEST_AREA: Point = { x: 50, y: 90 };
 
 export function boardAt(input: BoardInput): BoardFrame {
   return poseAt(input.host, input.guest, input.match.events, input.index);
@@ -51,16 +43,13 @@ export function poseAt(
   const event = index >= 0 ? events[Math.min(index, events.length - 1)] ?? null : null;
   const live = occupancyAfter(host, guest, events, index);
   const vuoti = vuotiAfter(host, guest, events, index);
+  const flash = flashFor(event);
   const tokens = [
-    ...sideTokens(host, "host", live, vuoti, event),
-    ...sideTokens(guest, "guest", live, vuoti, event),
+    ...sideTokens(host, "host", live, vuoti, event, flash),
+    ...sideTokens(guest, "guest", live, vuoti, event, flash),
   ];
 
-  return {
-    tokens,
-    ball: ballFor(event),
-    flash: flashFor(event),
-  };
+  return { tokens, flash };
 }
 
 function occupancyAfter(
@@ -149,6 +138,7 @@ function sideTokens(
   live: Map<string, boolean>,
   vuoti: Map<string, number>,
   event: SimEvent | null,
+  flash: BoardFlash,
 ): Token[] {
   const tokens: Token[] = [];
 
@@ -158,13 +148,15 @@ function sideTokens(
       continue;
     }
 
+    const highlight = isHighlighted(slug, slot, side, event);
     tokens.push({
       slug,
       side,
       slot,
       onField: live.get(slug) !== false,
-      highlight: isHighlighted(slug, slot, side, event),
+      highlight,
       vuoti: vuoti.get(slug) ?? 0,
+      callout: highlight ? calloutFor(slug, event, flash) : undefined,
     });
   }
 
@@ -188,22 +180,22 @@ function isHighlighted(slug: string, slot: number, side: Side, event: SimEvent |
   return false;
 }
 
-function ballFor(event: SimEvent | null): Point {
-  if (!event) {
-    return CENTER;
+function calloutFor(slug: string, event: SimEvent | null, flash: BoardFlash): string | undefined {
+  if (!event || !flash) {
+    return undefined;
   }
-  if (event.kind === "meta" || event.kind === "meta-tecnica") {
-    return event.side === "host" ? HOST_GOAL : GUEST_GOAL;
+  if (event.target === slug && event.actor !== slug) {
+    return event.kind === "scalpo-pieno" ? "Scalpato" : undefined;
   }
-  if (event.kind === "parata") {
-    return event.side === "host" ? HOST_AREA : GUEST_AREA;
-  }
-  return CENTER;
+  return flash.label;
 }
 
 function flashFor(event: SimEvent | null): BoardFlash {
   if (!event) {
     return null;
+  }
+  if (event.kind === "inizio" || event.kind === "secondo-tempo") {
+    return { kind: event.kind, label: "Palla", side: event.side };
   }
   if (event.kind === "meta") {
     return { kind: event.kind, label: "Meta", side: event.side };

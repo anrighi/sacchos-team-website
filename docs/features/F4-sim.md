@@ -5,7 +5,7 @@
 | Status | done |
 | Phase | 2 |
 | Files | `src/lib/challenge/sim.ts`, `src/lib/challenge/board.ts`, `src/components/challenge/MatchView.tsx`, `src/components/challenge/MatchBoard.tsx`, `src/components/challenge/AnalogClock.tsx`, `src/routes/sfida.tsx` |
-| Tests | stesso seed → stessa sequenza e punteggio; orologio 2×15′; pause ≥ 0; tre vuoti → uscita; 4 pieni → meta tecnica; campo 30×18 con aree 4 m; carte fisse, vuoti a cuori, pieno spegne il ritratto |
+| Tests | stesso seed → stessa sequenza e punteggio; orologio 2×15′; pause ≥ 0; tre vuoti → uscita; 4 pieni → meta tecnica; campo 30×18 orizzontale semplificato; carte fisse, vuoti a cuori, pieno spegne il ritratto; overlay sulla carta in focus, niente palla |
 
 ## Goal
 
@@ -24,13 +24,13 @@ Sim deterministica: cronometro da scoutball due tempi da 15′, wall-clock ~90s 
 - [x] Ticker: nickname o nome + numero se collisione
 - [x] Tre vuoti → uscita; 3 in campo → meta tecnica
 - [x] Spec + manifest `done`
-- [x] Campo 2D scoutball in match view (30×18, aree 4 m, carte fisse)
+- [x] Campo 2D scoutball in match view (30×18 orizzontale, aree 4 m, carte fisse, overlay sulla carta)
 
 ## Deliverables
 
 - Engine puro + test seed
 - UI ticker (motion pesante solo se non `prefers-reduced-motion`)
-- Tavolo 2D scoutball: carte in modulo, highlight, cuori vuoti, ritratto spento sul pieno
+- Tavolo 2D scoutball orizzontale semplificato: carte in modulo, overlay sulla carta in focus, cuori vuoti, ritratto spento sul pieno, niente palla
 
 ## Notes
 
@@ -38,6 +38,6 @@ Regolamento: https://www.scoutballitalia.it/regolamento — portiere obbligatori
 
 La partita parte da `/sfida?host=&guest=&seed=`. Senza `seed` ne viene creato uno e messo in query (stesso seed, stesse rose → stessa sequenza). Playback 20× (`50ms` per secondo di gioco) con pausa 1–3s su meta/scalpo/impedisce la meta e 2s di intervallo; con `prefers-reduced-motion` l’orologio e il tavolo saltano di evento in evento. Il tabellino elenca gli eventi dal più recente.
 
-Tra cronometro analogico (15′ a giro, badge 1T/2T) e ticker c’è il campo scoutball (30×18 m, porte 4 m sui lati corti, aree a tutta larghezza profonde 4 m, metà campo; niente area di rigore da calcio). Le carte restano ferme nel modulo: si evidenziano sull’evento. Tre cuori = vuoti rimasti (si azzerano all’intervallo); scalpo pieno spegne il ritratto fino alla meta successiva. Overlay su meta, scalpo e «impedisce la meta»; il punteggio pulsa sulla meta. `prefers-reduced-motion`: solo fade. Il fischio d’inizio non è palla al centro: il seed sceglie chi attacca per primo e il secondo tempo inverte; la palla parte a centrocampo come da regolamento.
+Tra cronometro analogico (15′ a giro, badge 1T/2T) e ticker c’è il campo scoutball semplificato in orizzontale (30×18 m, host a sinistra / ospite a destra, porte 4 m sui lati corti, aree a tutta larghezza profonde 4 m, metà campo; niente area di rigore da calcio). Orologio, campo e ticker stanno in un viewport. Le carte restano ferme nel modulo: sull’evento si evidenzia il giocatore e un overlay rosa sulla sua carta (Palla, Meta, Scalpo, Impedisce la meta); le altre si smorzano. Niente palla disegnata. Tre cuori = vuoti rimasti (si azzerano all’intervallo); scalpo pieno spegne il ritratto fino alla meta successiva. Il punteggio pulsa sulla meta. `prefers-reduced-motion`: solo fade. Il fischio d’inizio non è palla al centro: il seed sceglie chi attacca per primo e il secondo tempo inverte.
 
 Fuori ruolo: malus sulle stat se `role` è valorizzato e non coincide con la linea (portiere non-POR: `gk × 0.7`). Il portiere non esce per scalpo pieno: senza di lui non si gioca. Chi prende tre vuoti nello stesso tempo esce; a quattro scalpi pieni (restano in tre, portiere compreso) scatta la meta tecnica e tutti rientrano.

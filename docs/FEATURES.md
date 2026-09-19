@@ -55,7 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-19 | Cursor | 2 | F4: campo scoutball 30×18, carte fisse, cuori vuoti, pieno spegne il ritratto, overlay meta | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |
+| 2026-09-19 | Cursor | 2 | F4: campo orizzontale semplificato, overlay sulla carta in focus, niente palla | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |
 | 2026-09-19 | Cursor | 2 | F4: `sim.ts` deterministico (seed, 2×15′, pause, tre vuoti, meta tecnica) + ticker su `/sfida?host=&guest=&seed=` | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |
 | 2026-09-19 | Cursor | 2 | F3: `src/lib/challenge/` con test, campo 3-2-1 su `/sfida`, link `host=`/`guest=`, maglia per lato | F4: engine `sim.ts` deterministico da seed + ticker | Push su GitHub fermo: manca il token nel VM, staging non si aggiorna |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |

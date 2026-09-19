@@ -54,7 +54,7 @@ const guest: Lineup = {
 };
 
 describe("boardAt", () => {
-  it("keeps fourteen cards in formation at kickoff with the ball in the centre", () => {
+  it("keeps fourteen cards in formation at kickoff without a ball token", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
     const kickoff = match.events[0]!;
     const frame = boardAt({ host, guest, match, index: 0 });
@@ -63,10 +63,11 @@ describe("boardAt", () => {
     expect(frame.tokens).toHaveLength(14);
     expect(frame.tokens.every((token) => token.onField)).toBe(true);
     expect(frame.tokens.every((token) => token.vuoti === 0)).toBe(true);
-    expect(frame.ball).toEqual({ x: 50, y: 50 });
+    expect(frame).not.toHaveProperty("ball");
     const highlighted = frame.tokens.filter((token) => token.highlight);
     expect(highlighted).toHaveLength(1);
     expect(highlighted[0]?.side).toBe(kickoff.side);
+    expect(highlighted[0]?.callout).toBe("Palla");
   });
 
   it("is deterministic for the same index", () => {
@@ -94,6 +95,8 @@ describe("boardAt", () => {
     expect(victim?.onField).toBe(false);
     expect(actor?.highlight).toBe(true);
     expect(victim?.highlight).toBe(true);
+    expect(actor?.callout).toBe("Scalpo pieno");
+    expect(victim?.callout).toBe("Scalpato");
     expect(frame.flash?.kind).toBe("scalpo-pieno");
   });
 
@@ -106,9 +109,10 @@ describe("boardAt", () => {
     expect(actor?.vuoti).toBeGreaterThanOrEqual(1);
     expect(actor?.vuoti).toBeLessThanOrEqual(EMPTY_SCALPS_TO_EXIT);
     expect(actor?.highlight).toBe(true);
+    expect(actor?.callout).toBe("Scalpo a vuoto");
   });
 
-  it("puts the ball on the scoring goal line for a meta", () => {
+  it("puts a Meta callout on the scorer", () => {
     const match = simulateMatch({ host, guest, roster, seed: "k7p2qm1a" });
     const meta = match.events.find((event) => event.kind === "meta");
     expect(meta).toBeTruthy();
@@ -117,11 +121,7 @@ describe("boardAt", () => {
     const actor = frame.tokens.find((token) => token.slug === meta!.actor);
     expect(actor?.highlight).toBe(true);
     expect(actor?.onField).toBe(true);
-    if (meta!.side === "host") {
-      expect(frame.ball.y).toBeLessThan(12);
-    } else {
-      expect(frame.ball.y).toBeGreaterThan(88);
-    }
+    expect(actor?.callout).toBe("Meta");
   });
 
   it("resets vuoti at half time", () => {
@@ -139,6 +139,8 @@ describe("boardAt", () => {
     expect(stop).toBeTruthy();
     const frame = poseAt(host, guest, match.events, match.events.indexOf(stop!));
     expect(frame.flash?.label).toBe("Impedisce la meta");
+    const keeper = frame.tokens.find((token) => token.slug === stop!.actor);
+    expect(keeper?.callout).toBe("Impedisce la meta");
     expect(stop?.text).toMatch(/impedisce la meta$/);
   });
 });

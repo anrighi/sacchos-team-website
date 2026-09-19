@@ -68,7 +68,7 @@ export function MatchView({
   const newestFirst = happened.toReversed();
 
   return (
-    <section className="mx-auto max-w-2xl px-5 pb-16 md:px-8">
+    <section className="mx-auto max-w-3xl px-4 pb-24 md:px-8">
       <Scoreboard match={match} t={frame.t} event={frame.event} reducedMotion={reduced} />
       <MatchBoard
         frame={board}
@@ -116,21 +116,21 @@ function Scoreboard({
   const score = event?.score ?? match.score;
   const scored = event?.kind === "meta" || event?.kind === "meta-tecnica";
   return (
-    <div className="rounded-[22px] border border-white/10 bg-white/4 px-5 py-5">
-      <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
-        <AnalogClock t={t} />
-        <div className="grid w-full max-w-sm grid-cols-[1fr_auto_1fr] items-center gap-3">
-          <p className="truncate text-right text-[15px] font-semibold text-white">{match.hostName}</p>
+    <div className="rounded-[18px] border border-white/10 bg-white/4 px-3 py-2 sm:px-5">
+      <div className="flex items-center gap-3 sm:gap-6">
+        <AnalogClock t={t} className="mx-0 w-16 shrink-0 md:w-[4.75rem]" />
+        <div className="grid min-w-0 flex-1 grid-cols-[1fr_auto_1fr] items-center gap-2">
+          <p className="truncate text-right text-[14px] font-semibold text-white sm:text-[15px]">{match.hostName}</p>
           <p
             key={`${score.host}-${score.guest}`}
             className={cn(
-              "font-display text-4xl tracking-tight text-pink md:text-5xl",
+              "font-display text-3xl tracking-tight text-pink sm:text-4xl",
               scored && !reducedMotion && "score-pop",
             )}
           >
             {score.host}–{score.guest}
           </p>
-          <p className="truncate text-left text-[15px] font-semibold text-white">{match.guestName}</p>
+          <p className="truncate text-left text-[14px] font-semibold text-white sm:text-[15px]">{match.guestName}</p>
         </div>
       </div>
     </div>
@@ -146,21 +146,21 @@ function Ticker({
 }) {
   if (!event) {
     return (
-      <p className="mt-6 text-center text-[15px] text-white/45">Si va al fischio d’inizio.</p>
+      <p className="mt-3 text-center text-[14px] text-white/45">Si va al fischio d’inizio.</p>
     );
   }
 
   return (
     <div
       className={cn(
-        "mt-6 rounded-[20px] border px-5 py-5 text-center",
+        "mt-3 rounded-[16px] border px-4 py-3 text-center",
         paused ? "border-pink/40 bg-pink/10" : "border-white/10 bg-white/4",
       )}
     >
       <p
         key={`${event.kind}-${event.t}-${event.text}`}
         className={cn(
-          "font-display text-3xl leading-tight tracking-tight text-white",
+          "font-display text-xl leading-tight tracking-tight text-white sm:text-2xl",
           paused && "ticker-pop",
         )}
       >
@@ -172,7 +172,7 @@ function Ticker({
 
 function EventLog({ events, current }: { events: SimEvent[]; current: SimEvent | null }) {
   return (
-    <ol className="mt-8 space-y-2">
+    <ol className="mt-6 space-y-2">
       {events.map((event, index) => (
         <li
           key={`${event.kind}-${event.t}-${index}`}
