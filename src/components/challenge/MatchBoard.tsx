@@ -23,7 +23,7 @@ export function MatchBoard({
   reducedMotion: boolean;
 }) {
   const bySlug = new Map(frame.tokens.map((token) => [token.slug, token]));
-  const focused = frame.tokens.some((token) => token.highlight);
+  const focused = frame.tokens.some((token) => token.highlight && token.onField);
 
   return (
     <div
@@ -84,7 +84,7 @@ function TeamColumns({
           {row.slots.map((slot) => {
             const slug = lineup.slots[slot];
             const token = slug ? bySlug.get(slug) : undefined;
-            if (!token) {
+            if (!token?.onField) {
               return null;
             }
             const player = roster.find((entry) => entry.slug === token.slug);
@@ -126,11 +126,7 @@ function Card({
 
   return (
     <div
-      className={cn(
-        "scoutball-card",
-        token.highlight && "scoutball-card-hot",
-        !token.onField && "scoutball-card-out",
-      )}
+      className={cn("scoutball-card", token.highlight && "scoutball-card-hot")}
     >
       <span className={cn("scoutball-face", away && "scoutball-face-away")}>
         <span className="scoutball-mug">

@@ -85,7 +85,7 @@ describe("boardAt", () => {
     );
   });
 
-  it("disables the target on a scalpo pieno", () => {
+  it("takes the scalpato player off the pitch on a scalpo pieno", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
     const scalp = match.events.find((event) => event.kind === "scalpo-pieno");
     expect(scalp?.target).toBeTruthy();
@@ -93,11 +93,32 @@ describe("boardAt", () => {
     const victim = frame.tokens.find((token) => token.slug === scalp!.target);
     const actor = frame.tokens.find((token) => token.slug === scalp!.actor);
     expect(victim?.onField).toBe(false);
+    expect(frame.tokens.filter((token) => token.onField)).toHaveLength(13);
+    expect(actor?.onField).toBe(true);
     expect(actor?.highlight).toBe(true);
     expect(victim?.highlight).toBe(true);
     expect(actor?.callout).toBe("Scalpo pieno");
     expect(victim?.callout).toBe("Scalpato");
     expect(frame.flash?.kind).toBe("scalpo-pieno");
+  });
+
+  it("puts the scalpato player back after a meta", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const scalpIndex = match.events.findIndex((event) => event.kind === "scalpo-pieno");
+    const scalp = match.events[scalpIndex];
+    expect(scalp?.target).toBeTruthy();
+    const restoreIndex = match.events.findIndex(
+      (event, index) =>
+        index > scalpIndex &&
+        (event.kind === "meta" ||
+          event.kind === "meta-tecnica" ||
+          event.kind === "intervallo" ||
+          event.kind === "secondo-tempo"),
+    );
+    expect(restoreIndex).toBeGreaterThan(scalpIndex);
+    const restored = poseAt(host, guest, match.events, restoreIndex);
+    expect(restored.tokens.find((token) => token.slug === scalp!.target)?.onField).toBe(true);
+    expect(restored.tokens.every((token) => token.onField)).toBe(true);
   });
 
   it("counts vuoti as scalpi on the player who missed", () => {

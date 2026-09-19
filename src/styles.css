@@ -159,11 +159,6 @@ body {
     0 0 12px rgba(248, 103, 165, 0.55);
 }
 
-.scoutball-card-out .scoutball-face {
-  filter: grayscale(1) brightness(0.55);
-  opacity: 0.45;
-}
-
 .scoutball-focus .scoutball-card:not(.scoutball-card-hot) {
   opacity: 0.38;
   filter: saturate(0.55);
