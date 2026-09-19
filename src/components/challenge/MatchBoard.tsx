@@ -151,8 +151,8 @@ function Card({
           <Heart
             key={i}
             className={cn(
-              "size-2.5",
-              i < remaining ? "fill-pink text-pink" : "text-white/25",
+              "size-3.5",
+              i < remaining ? "fill-pink text-pink" : "fill-none text-white/40",
             )}
             aria-hidden
           />
