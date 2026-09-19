@@ -110,14 +110,16 @@ function Scoreboard({
 }) {
   const score = event?.score ?? match.score;
   return (
-    <div className="rounded-[22px] border border-white/10 bg-white/4 px-5 py-6 text-center">
-      <AnalogClock t={t} />
-      <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <p className="truncate text-right text-[15px] font-semibold text-white">{match.hostName}</p>
-        <p className="font-display text-4xl tracking-tight text-pink md:text-5xl">
-          {score.host}–{score.guest}
-        </p>
-        <p className="truncate text-left text-[15px] font-semibold text-white">{match.guestName}</p>
+    <div className="rounded-[22px] border border-white/10 bg-white/4 px-5 py-5">
+      <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
+        <AnalogClock t={t} />
+        <div className="grid w-full max-w-sm grid-cols-[1fr_auto_1fr] items-center gap-3">
+          <p className="truncate text-right text-[15px] font-semibold text-white">{match.hostName}</p>
+          <p className="font-display text-4xl tracking-tight text-pink md:text-5xl">
+            {score.host}–{score.guest}
+          </p>
+          <p className="truncate text-left text-[15px] font-semibold text-white">{match.guestName}</p>
+        </div>
       </div>
     </div>
   );

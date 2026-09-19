@@ -9,7 +9,7 @@ export function AnalogClock({ t, className }: { t: number; className?: string })
   const { minuteDeg, secondDeg } = analogHands(t);
 
   return (
-    <div className={cn("mx-auto flex w-44 flex-col items-center md:w-52", className)}>
+    <div className={cn("mx-auto flex w-28 flex-col items-center md:w-32", className)}>
       <svg viewBox="0 0 100 100" role="img" aria-label={label} className="size-full">
         <circle cx="50" cy="50" r="47" fill="#15202b" stroke="rgba(255,255,255,0.35)" strokeWidth="1.6" />
         <circle cx="50" cy="50" r="42.5" fill="none" stroke="rgba(248,103,165,0.28)" strokeWidth="0.8" />
@@ -56,7 +56,7 @@ export function AnalogClock({ t, className }: { t: number; className?: string })
         </g>
         <circle cx="50" cy="50" r="3.4" fill="#f867a5" />
       </svg>
-      <p className="mt-1 font-display text-lg tracking-tight text-white">{half}T</p>
+      <p className="mt-1 text-[11px] font-semibold tracking-[0.22em] text-white/70">{half}T</p>
     </div>
   );
 }

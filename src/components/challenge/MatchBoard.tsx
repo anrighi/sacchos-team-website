@@ -17,7 +17,7 @@ export function MatchBoard({
 
   return (
     <div
-      className="subbuteo relative mx-auto mt-6 aspect-[3/4] w-full max-w-md overflow-hidden rounded-[22px]"
+      className="subbuteo relative mx-auto mt-6 aspect-[3/4] w-full max-w-md max-h-[min(62vh,32rem)] overflow-hidden rounded-[22px]"
       role="img"
       aria-label="Campo Subbuteo con le due formazioni"
     >
