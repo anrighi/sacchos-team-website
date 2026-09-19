@@ -38,7 +38,7 @@ function RosaPage() {
           Rosa
         </h1>
         <p className="relative mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/60">
-          {players.length} carte illustrate. Nickname se c&apos;è, altrimenti il
+          {players.length} carte Toon Head. Nickname se c&apos;è, altrimenti il
           nome: il numero sulla maglia distingue chi si chiama uguale.
         </p>
       </header>
@@ -67,6 +67,16 @@ function RosaPage() {
         >
           Lancia una sfida
         </Link>
+        <p className="mx-auto mt-10 max-w-sm text-[12px] leading-relaxed text-white/35">
+          Ritratti Toon Head di{" "}
+          <a
+            href="https://www.johanmelin.com"
+            className="text-white/50 underline-offset-2 hover:text-pink hover:underline"
+          >
+            Johan Melin
+          </a>
+          , CC BY 4.0, via DiceBear. Maglia casa/trasferta e artigli Saccho&apos;s.
+        </p>
       </section>
     </main>
   );

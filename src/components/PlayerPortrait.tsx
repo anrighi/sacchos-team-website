@@ -19,10 +19,7 @@ export function PlayerPortrait({
       <img
         src={publicUrl(`/${player.photo}`)}
         alt=""
-        className={cn(
-          "h-full w-full object-cover object-center pixel-art [image-rendering:pixelated]",
-          className,
-        )}
+        className={cn("h-full w-full object-cover object-center", className)}
         onError={() => setFailed(true)}
       />
     );
@@ -32,10 +29,7 @@ export function PlayerPortrait({
   return (
     <div
       aria-hidden
-      className={cn(
-        "h-full w-full pixel-art [image-rendering:pixelated] [&_svg]:h-full [&_svg]:w-full",
-        className,
-      )}
+      className={cn("h-full w-full [&_svg]:h-full [&_svg]:w-full", className)}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

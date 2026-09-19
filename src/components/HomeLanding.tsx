@@ -150,8 +150,9 @@ function CardsChapter() {
           <span className="block">una carta.</span>
         </h2>
         <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-white/60">
-          Ritratti pixel, overall e ruolo. Nickname se c&apos;è, altrimenti il
-          nome — il numero sulla maglia distingue chi si chiama uguale.
+          Ritratti Toon Head, maglia del club, overall e ruolo. Nickname se
+          c&apos;è, altrimenti il nome — il numero sulla maglia distingue chi si
+          chiama uguale.
         </p>
       </Reveal>
       <ul className="mx-auto mt-16 flex max-w-5xl snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
@@ -238,8 +239,8 @@ const highlights = [
   },
   {
     title: "Carte",
-    body: "Sprite pixel, stats da 75 a 100, overall in evidenza. Mai una foto reale.",
-    image: "/players/giorgia-bomberona.svg",
+    body: "Toon Head, maglia casa o trasferta, stats da 75 a 100. Mai una foto reale.",
+    image: "/brand/logo-sacchos.jpg",
   },
   {
     title: "Sfida",

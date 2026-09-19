@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { kitKind, portraitSvg } from "#/lib/portrait";
+import { kitKind, portraitOptions, portraitSvg } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
 const stats = {
@@ -36,25 +36,45 @@ describe("kitKind", () => {
 });
 
 describe("portraitSvg", () => {
-  it("draws a pixel-art white kit with pink claws", () => {
+  it("renders Toon Head with the white home kit and pink claws", () => {
     const svg = portraitSvg(sample());
-    expect(svg).toContain('viewBox="0 0 48 64"');
-    expect(svg).toContain('shape-rendering="crispEdges"');
-    expect(svg).toContain('id="kit-body"');
-    expect(svg).toContain('fill="#ffffff"');
+    expect(svg).toContain('viewBox="0 0 768 768"');
+    expect(svg).toContain("ToonHead");
+    expect(svg).toContain("Johan Melin");
+    expect(svg).toContain("id=\"kit-marks\"");
     expect(svg).toContain("#f867a5");
-    expect(svg).toContain('id="claw-slashes"');
-    expect(svg).toContain('id="badge-agesci"');
-    expect(svg).toContain('id="badge-sacchos"');
-    expect(svg).toContain("Maglia casa bianca");
+    expect(svg).toContain("#ffffff");
+    expect(svg).toContain("tShirt");
   });
 
-  it("draws the navy away kit for Saccios Tim", () => {
+  it("renders the navy away kit for Saccios Tim", () => {
     const svg = portraitSvg(
       sample({ slug: "nico-11", team: "Saccios Tim", sex: "M" }),
     );
-    expect(svg).toContain('fill="#1a2634"');
-    expect(svg).toContain("Maglia trasferta navy");
-    expect(svg).toContain('id="claw-slashes"');
+    expect(svg).toContain("#1a2634");
+    expect(svg).toContain("id=\"kit-marks\"");
+    expect(svg).toContain("#f867a5");
+  });
+
+  it("pins CSV traits on the DiceBear options", () => {
+    const options = portraitOptions(
+      sample({
+        portrait: {
+          hair: "spiky",
+          rearHair: "none",
+          beard: "none",
+          eyes: "wink",
+          mouth: "laugh",
+          hairColor: "2c1b18",
+        },
+      }),
+    );
+    expect(options.hairVariant).toEqual(["spiky"]);
+    expect(options.rearHairProbability).toBe(0);
+    expect(options.beardProbability).toBe(0);
+    expect(options.eyesVariant).toEqual(["wink"]);
+    expect(options.mouthVariant).toEqual(["laugh"]);
+    expect(options.hairColor).toEqual(["2c1b18"]);
+    expect(options.clothesVariant).toEqual(["tShirt"]);
   });
 });

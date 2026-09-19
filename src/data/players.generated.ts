@@ -17,8 +17,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/andrea-4.svg"
+    }
   },
   {
     "slug": "nicolo-5",
@@ -35,8 +34,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/nicolo-5.svg"
+    }
   },
   {
     "slug": "michele-7",
@@ -53,8 +51,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/michele-7.svg"
+    }
   },
   {
     "slug": "miriam-8",
@@ -71,8 +68,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/miriam-8.svg"
+    }
   },
   {
     "slug": "giorgia-bomberona",
@@ -91,7 +87,15 @@ export const players: Player[] = [
       "gk": 75
     },
     "nickname": "bomberona",
-    "photo": "players/giorgia-bomberona.svg"
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "eyes": "happy",
+      "eyebrows": "happy",
+      "mouth": "smile",
+      "beard": "none",
+      "skinColor": "f5d0b0"
+    }
   },
   {
     "slug": "federico-13",
@@ -108,8 +112,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/federico-13.svg"
+    }
   },
   {
     "slug": "alice-14",
@@ -126,8 +129,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/alice-14.svg"
+    }
   },
   {
     "slug": "andrea-23",
@@ -144,8 +146,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/andrea-23.svg"
+    }
   },
   {
     "slug": "chiara-29",
@@ -162,8 +163,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/chiara-29.svg"
+    }
   },
   {
     "slug": "marco-33",
@@ -180,8 +180,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/marco-33.svg"
+    }
   },
   {
     "slug": "guia-42",
@@ -198,8 +197,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/guia-42.svg"
+    }
   },
   {
     "slug": "stefano-99",
@@ -217,7 +215,15 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/stefano-99.svg"
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "eyes": "humble",
+      "eyebrows": "neutral",
+      "mouth": "smile",
+      "beard": "fullBeard",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "gianluca-9",
@@ -234,8 +240,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/gianluca-9.svg"
+    }
   },
   {
     "slug": "alex-11",
@@ -252,8 +257,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/alex-11.svg"
+    }
   },
   {
     "slug": "luca-15",
@@ -270,8 +274,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/luca-15.svg"
+    }
   },
   {
     "slug": "rebecca-18",
@@ -288,8 +291,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/rebecca-18.svg"
+    }
   },
   {
     "slug": "giulio-21",
@@ -306,8 +308,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/giulio-21.svg"
+    }
   },
   {
     "slug": "marialaura-22",
@@ -324,8 +325,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/marialaura-22.svg"
+    }
   },
   {
     "slug": "gabriele-28",
@@ -342,8 +342,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/gabriele-28.svg"
+    }
   },
   {
     "slug": "pietro-30",
@@ -360,8 +359,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/pietro-30.svg"
+    }
   },
   {
     "slug": "veronica-39",
@@ -378,8 +376,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/veronica-39.svg"
+    }
   },
   {
     "slug": "tommaso-67",
@@ -396,8 +393,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/tommaso-67.svg"
+    }
   },
   {
     "slug": "chiara-81",
@@ -414,8 +410,7 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    },
-    "photo": "players/chiara-81.svg"
+    }
   },
   {
     "slug": "guglielmo-0",
@@ -433,6 +428,13 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/guglielmo-0.svg"
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "eyes": "wink",
+      "eyebrows": "raised",
+      "mouth": "laugh",
+      "beard": "none"
+    }
   }
 ];

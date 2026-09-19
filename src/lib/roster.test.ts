@@ -72,6 +72,17 @@ Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
     expect(player?.slug).toBe("giorgia-bomberona");
     expect(displayName(player!)).toBe("bomberona");
   });
+
+  it("reads optional Toon Head traits from extra columns", () => {
+    const [player] = parseRosterCsv(
+      "firstName,number,sex,hair,beard,mouth\nAda,1,F,spiky,none,smile",
+    );
+    expect(player?.portrait).toEqual({
+      hair: "spiky",
+      beard: "none",
+      mouth: "smile",
+    });
+  });
 });
 
 describe("filterPlayers", () => {

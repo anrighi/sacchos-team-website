@@ -4,8 +4,8 @@
 |-------|-------|
 | Status | done |
 | Phase | 1 |
-| Files | `scripts/ingest-roster.ts`, `src/data/players.generated.ts`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
-| Tests | parse/clamp/default 75–100; overall = media; riga senza number/firstName scartata |
+| Files | `scripts/ingest-roster.ts`, `src/lib/portrait.ts`, `src/lib/portraits.ts`, `src/data/players.generated.ts`, `src/data/portraits.csv`, `src/components/PlayerPortrait.tsx`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
+| Tests | parse/clamp/default 75–100; overall = media; riga senza number/firstName scartata; trait Toon Head da CSV |
 
 ## Goal
 
@@ -15,7 +15,7 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 - F0 mergiato
 - Seed 24 nello Sheet (stats default 75)
-- Illustrazioni in `public/players/{slug}.png` (mai foto reali)
+- Illustrazioni PNG opzionali in `public/players/{slug}.png` (mai foto reali); default Toon Head
 
 ## Acceptance criteria
 
@@ -35,6 +35,6 @@ Rosa 24 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: sprite pixel-art in `public/players/{slug}.svg` (profilo, maglia casa/trasferta, non foto); silhouette inline se il file manca. Niente filtro né campo presenze.
+Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Giorgia F; Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim. Ritratti: DiceBear **Toon Head** (Johan Melin, CC BY 4.0) con maglia casa/trasferta e artigli rosa; PNG in `public/players/{slug}.png` resta un override opzionale. Niente filtro né campo presenze.
 
-Grafica rosa (rev. 2): carta con ritratto a piena larghezza, overall e ruolo su riquadro sfocato in alto a sinistra, logo in alto a destra, nome e numero su gradiente in basso, sei stat su tre colonne con barra rosa. Pagina `/rosa`: hero centrato, barra filtri sticky, griglia divisa per squadra con logo e conteggio. Lo sprite disegna il proprio fondo (alone dithered) dentro la griglia 48×64.
+Grafica rosa (rev. 3): stesso chrome FUT, ritratto Toon Head a piena larghezza. Kit forzato (bianco Saccho's, navy Saccios Tim) più artigli rosa. Personalizzazione viso in `src/data/portraits.csv` (condivisibile con la squadra) e/o colonne opzionali sullo Sheet (`hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`; alias IT: capelli, capelliDietro, coloreCapelli, carnagione, occhi, sopracciglia, bocca, barba). Celle vuote = seed dallo slug + sesso. `none` nasconde barba/capelli dietro. Lo Sheet vince sul file se entrambi settano lo stesso tratto.

@@ -25,4 +25,11 @@ describe("players snapshot", () => {
   it("defaults overall to 75", () => {
     expect(players.every((p) => p.overall === 75)).toBe(true);
   });
+
+  it("stores Toon Head traits from portraits.csv", () => {
+    const giorgia = players.find((p) => p.slug === "giorgia-bomberona");
+    expect(giorgia?.photo).toBeUndefined();
+    expect(giorgia?.portrait?.mouth).toBe("smile");
+    expect(giorgia?.portrait?.rearHair).toBe("longWavy");
+  });
 });

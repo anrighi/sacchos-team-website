@@ -1,4 +1,8 @@
+import { csvCell, parseCsv, slugify } from "#/lib/csv";
+import { parsePortraitTraits } from "#/lib/portraits";
 import { STAT_KEYS, TEAMS, type Player, type PlayerStats, type Role, type Sex, type TeamName } from "#/lib/player";
+
+export { slugify } from "#/lib/csv";
 
 const STAT_MIN = 75;
 const STAT_MAX = 100;
@@ -30,15 +34,6 @@ export function clampStat(value: unknown): number {
 export function overallFromStats(stats: PlayerStats): number {
   const sum = STAT_KEYS.reduce((acc, key) => acc + stats[key], 0);
   return Math.round(sum / STAT_KEYS.length);
-}
-
-export function slugify(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 export function playerSlug(
@@ -74,8 +69,8 @@ export function parseRosterCsv(csv: string): Player[] {
   const players: Player[] = [];
 
   for (const row of rows) {
-    const firstName = cell(row, "firstName", "nome");
-    const numberRaw = cell(row, "number", "numero");
+    const firstName = csvCell(row, "firstName", "nome");
+    const numberRaw = csvCell(row, "number", "numero");
     if (!firstName || numberRaw === "") {
       continue;
     }
@@ -84,28 +79,33 @@ export function parseRosterCsv(csv: string): Player[] {
       continue;
     }
 
-    const sex = parseSex(cell(row, "sex", "sesso"));
+    const sex = parseSex(csvCell(row, "sex", "sesso"));
     if (!sex) {
       continue;
     }
 
-    const nicknameRaw = cell(row, "nickname", "soprannome");
+    const nicknameRaw = csvCell(row, "nickname", "soprannome");
     const nickname = nicknameRaw || undefined;
     const stats = parseStats(row);
-    const birthYearRaw = Number(cell(row, "birthYear", "anno"));
+    const birthYearRaw = Number(csvCell(row, "birthYear", "anno"));
+    const portrait = parsePortraitTraits(row);
 
-    players.push({
+    const player: Player = {
       slug: playerSlug(firstName, nickname, number, used),
       firstName,
       nickname,
-      team: parseTeam(cell(row, "team", "squadra")),
-      role: parseRole(cell(row, "role", "ruolo")),
+      team: parseTeam(csvCell(row, "team", "squadra")),
+      role: parseRole(csvCell(row, "role", "ruolo")),
       sex,
       number,
       birthYear: Number.isFinite(birthYearRaw) ? birthYearRaw : 0,
       overall: overallFromStats(stats),
       stats,
-    });
+    };
+    if (portrait) {
+      player.portrait = portrait;
+    }
+    players.push(player);
   }
 
   return players;
@@ -146,6 +146,9 @@ export function serializePlayer(player: Player): Player {
   if (player.photo) {
     row.photo = player.photo;
   }
+  if (player.portrait && Object.keys(player.portrait).length > 0) {
+    row.portrait = player.portrait;
+  }
   return row;
 }
 
@@ -179,76 +182,4 @@ function parseSex(raw: string): Sex | undefined {
     return value;
   }
   return undefined;
-}
-
-function cell(row: Record<string, string>, ...keys: string[]): string {
-  for (const key of keys) {
-    const value = row[key] ?? row[key.toLowerCase()];
-    if (value != null && value !== "") {
-      return value.trim();
-    }
-  }
-  return "";
-}
-
-function parseCsv(text: string): Record<string, string>[] {
-  const lines = text
-    .replace(/^\uFEFF/, "")
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-  if (lines.length < 2) {
-    return [];
-  }
-  const headers = splitCsvRow(lines[0] ?? "").map((h) => h.trim());
-  const rows: Record<string, string>[] = [];
-  for (const line of lines.slice(1)) {
-    const fields = splitCsvRow(line);
-    const row: Record<string, string> = {};
-    for (let i = 0; i < headers.length; i += 1) {
-      const header = headers[i];
-      if (!header) {
-        continue;
-      }
-      row[header] = fields[i] ?? "";
-    }
-    rows.push(row);
-  }
-  return rows;
-}
-
-function splitCsvRow(row: string): string[] {
-  const fields: string[] = [];
-  let current = "";
-  let inQuotes = false;
-  for (let i = 0; i < row.length; i += 1) {
-    const ch = row[i];
-    if (inQuotes) {
-      if (ch === '"') {
-        if (row[i + 1] === '"') {
-          current += '"';
-          i += 1;
-          continue;
-        }
-        inQuotes = false;
-        continue;
-      }
-      current += ch;
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = true;
-      continue;
-    }
-    if (ch === ",") {
-      fields.push(current.trim());
-      current = "";
-      continue;
-    }
-    current += ch;
-  }
-  fields.push(current.trim());
-  return fields;
 }
