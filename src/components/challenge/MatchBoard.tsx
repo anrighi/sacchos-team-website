@@ -158,7 +158,7 @@ function Card({
             key={i}
             spent={i >= remaining}
             className={cn(
-              "size-2.5 md:size-3",
+              "size-3 md:size-3.5",
               i < remaining ? "text-pink" : "text-white/40",
             )}
           />

@@ -9,16 +9,16 @@ export function ScalpoMark({
 }) {
   return (
     <svg
-      viewBox="0 0 12 12"
+      viewBox="0 0 10 12"
       className={cn("overflow-visible", className)}
       fill={spent ? "none" : "currentColor"}
       stroke="currentColor"
-      strokeWidth="0.95"
+      strokeWidth="1"
       strokeLinejoin="round"
       aria-hidden
     >
-      <rect x="4.15" y="1.05" width="3.7" height="2.15" rx="0.7" />
-      <path d="M6 3.35 1.65 10.85 6 8.4 10.35 10.85Z" />
+      <circle cx="5" cy="2.15" r="1.45" />
+      <path d="M1.4 4.05h7.2L5 11.05Z" />
     </svg>
   );
 }
