@@ -37,7 +37,7 @@ export function MatchBoard({
       <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px]">
         <FieldMarkings />
       </div>
-      <div className="relative z-10 flex h-full items-stretch">
+      <div className="relative z-10 flex h-full items-stretch px-2 pt-4 pb-1 md:px-4">
         <TeamColumns
           lineup={host}
           roster={roster}
@@ -78,7 +78,7 @@ function TeamColumns({
   const ordered = fromGoal === "left" ? rows : [...rows].toReversed();
 
   return (
-    <div className="flex flex-1 items-center justify-evenly px-0.5 md:px-1.5">
+    <div className="flex flex-1 items-center justify-evenly">
       {ordered.map((row) => (
         <div key={row.label} className="flex flex-col items-center justify-center gap-0.5 md:gap-1">
           {row.slots.map((slot) => {
