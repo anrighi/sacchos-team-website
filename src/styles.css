@@ -89,6 +89,23 @@ body {
   image-rendering: pixelated;
 }
 
+.pitch {
+  background:
+    radial-gradient(
+      ellipse 70% 40% at 50% 0%,
+      rgba(248, 103, 165, 0.12),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 22px,
+      transparent 22px,
+      transparent 44px
+    ),
+    linear-gradient(180deg, #16222e 0%, #0c1218 100%);
+}
+
 .landing-hero-glow {
   background:
     radial-gradient(

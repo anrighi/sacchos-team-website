@@ -61,6 +61,20 @@ export function formationOf(id: FormationId): Formation {
   return FORMATIONS[id];
 }
 
+export type FormationRow = {
+  label: string;
+  slots: number[];
+};
+
+export function rowsOf(id: FormationId): FormationRow[] {
+  let cursor = 0;
+  return FORMATIONS[id].lines.map((line) => {
+    const slots = Array.from({ length: line.slots }, (_, i) => cursor + i);
+    cursor += line.slots;
+    return { label: line.label, slots };
+  });
+}
+
 export function lineOfSlot(id: FormationId, slot: number): FormationLine | undefined {
   let cursor = 0;
   for (const line of FORMATIONS[id].lines) {
