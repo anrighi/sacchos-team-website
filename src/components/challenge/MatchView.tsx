@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { MatchBoard } from "#/components/challenge/MatchBoard";
 import { ShareChallenge } from "#/components/challenge/ShareChallenge";
 import { players } from "#/data/players.generated";
+import { boardAt } from "#/lib/challenge/board";
 import type { Lineup } from "#/lib/challenge/lineup";
 import {
   playbackAt,
@@ -55,12 +57,22 @@ export function MatchView({
   }, [match, reduced]);
 
   const frame = playbackAt(match, wallMs, reduced);
+  const board = boardAt({
+    host,
+    guest,
+    match,
+    t: frame.t,
+    index: frame.index,
+    paused: frame.paused,
+    reducedMotion: reduced,
+  });
   const happened = match.events.slice(0, Math.max(frame.index + 1, 1));
   const newestFirst = happened.toReversed();
 
   return (
     <section className="mx-auto max-w-2xl px-5 pb-16 md:px-8">
       <Scoreboard match={match} clock={frame.clock} event={frame.event} />
+      <MatchBoard frame={board} roster={players} />
       <Ticker event={frame.event} paused={frame.paused} />
       <EventLog events={newestFirst} current={frame.event} />
       {frame.done ? (
