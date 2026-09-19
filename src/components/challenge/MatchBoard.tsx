@@ -1,7 +1,7 @@
 "use client";
 
-import { Heart } from "lucide-react";
 import { PlayerPortrait } from "#/components/PlayerPortrait";
+import { ScalpoMark } from "#/components/challenge/ScalpoMark";
 import type { BoardFrame, Token } from "#/lib/challenge/board";
 import { rowsOf } from "#/lib/challenge/formation";
 import { EMPTY_SCALPS_TO_EXIT } from "#/lib/challenge/sim";
@@ -152,15 +152,15 @@ function Card({
         ) : null}
       </span>
       <span className="scoutball-name">{label}</span>
-      <span className="scoutball-hearts" aria-label={`${remaining} vuoti rimasti`}>
+      <span className="scoutball-scalpi" aria-label={`${remaining} scalpi rimasti`}>
         {Array.from({ length: EMPTY_SCALPS_TO_EXIT }, (_, i) => (
-          <Heart
+          <ScalpoMark
             key={i}
+            spent={i >= remaining}
             className={cn(
               "size-2.5 md:size-3",
-              i < remaining ? "fill-pink text-pink" : "fill-none text-white/40",
+              i < remaining ? "text-pink" : "text-white/40",
             )}
-            aria-hidden
           />
         ))}
       </span>

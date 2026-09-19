@@ -100,7 +100,7 @@ describe("boardAt", () => {
     expect(frame.flash?.kind).toBe("scalpo-pieno");
   });
 
-  it("counts vuoti as hearts on the player who missed", () => {
+  it("counts vuoti as scalpi on the player who missed", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
     const vuoto = match.events.find((event) => event.kind === "scalpo-vuoto");
     expect(vuoto?.actor).toBeTruthy();
