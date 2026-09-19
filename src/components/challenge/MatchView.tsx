@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import { AnalogClock } from "#/components/challenge/AnalogClock";
 import { MatchBoard } from "#/components/challenge/MatchBoard";
 import { MatchEfficiency } from "#/components/challenge/MatchEfficiency";
@@ -11,9 +11,11 @@ import { players } from "#/data/players.generated";
 import { boardAt } from "#/lib/challenge/board";
 import type { Lineup } from "#/lib/challenge/lineup";
 import {
+  nextPeriodT,
   playbackAt,
   simulateMatch,
   totalPlaybackMs,
+  wallMsAt,
   type MatchSim,
   type SimEvent,
 } from "#/lib/challenge/sim";
@@ -61,6 +63,7 @@ export function MatchView({
           held={playback.held}
           onToggleHold={playback.toggleHold}
           onRewind={playback.rewind}
+          onSkipPeriod={playback.skipPeriod}
         />
         <MatchBoard
           frame={board}
@@ -112,6 +115,7 @@ function Scoreboard({
   held,
   onToggleHold,
   onRewind,
+  onSkipPeriod,
 }: {
   match: MatchSim;
   t: number;
@@ -120,6 +124,7 @@ function Scoreboard({
   held: boolean;
   onToggleHold: () => void;
   onRewind: () => void;
+  onSkipPeriod: () => void;
 }) {
   const score = event?.score ?? match.score;
   const scored = event?.kind === "meta" || event?.kind === "meta-tecnica";
@@ -162,6 +167,16 @@ function Scoreboard({
             className="rounded-full"
           >
             <RotateCcw className="size-5" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Salta al periodo successivo"
+            onClick={onSkipPeriod}
+            className="rounded-full"
+          >
+            <SkipForward className="size-5" />
           </Button>
         </div>
       </div>
@@ -275,6 +290,12 @@ function usePlayback(match: MatchSim, reduced: boolean) {
     rewind: () => {
       wallRef.current = 0;
       setWallMs(0);
+    },
+    skipPeriod: () => {
+      const frame = playbackAt(match, wallRef.current, reduced);
+      const next = Math.min(wallMsAt(match, nextPeriodT(frame.t), reduced), totalPlaybackMs(match, reduced));
+      wallRef.current = next;
+      setWallMs(next);
     },
   };
 }

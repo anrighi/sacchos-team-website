@@ -572,6 +572,44 @@ export type PlaybackFrame = {
   done: boolean;
 };
 
+export function nextPeriodT(t: number): number {
+  if (t < HALF_SECONDS) {
+    return HALF_SECONDS;
+  }
+  if (t < MATCH_SECONDS) {
+    return MATCH_SECONDS;
+  }
+  if (t < SILVER_END) {
+    return SILVER_END;
+  }
+  return GOLDEN_END;
+}
+
+export function wallMsAt(match: MatchSim, gameT: number, reducedMotion = false): number {
+  const target = Math.max(0, gameT);
+  if (reducedMotion) {
+    let acc = 0;
+    for (const event of match.events) {
+      if (event.t >= target) {
+        return acc;
+      }
+      acc += reducedDwell(event);
+    }
+    return acc;
+  }
+
+  let wall = 0;
+  let prevT = 0;
+  for (const event of match.events) {
+    if (target <= event.t) {
+      return wall + (target - prevT) * MS_PER_GAME_SECOND;
+    }
+    wall += (event.t - prevT) * MS_PER_GAME_SECOND + event.pauseMs;
+    prevT = event.t;
+  }
+  return wall;
+}
+
 export function totalPlaybackMs(match: MatchSim, reducedMotion = false): number {
   if (reducedMotion) {
     return match.events.reduce((sum, event) => sum + reducedDwell(event), 0);

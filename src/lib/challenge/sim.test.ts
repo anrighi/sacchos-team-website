@@ -22,6 +22,7 @@ import {
   playbackAt,
   simulateMatch,
   totalPlaybackMs,
+  wallMsAt,
   type MatchSim,
 } from "#/lib/challenge/sim";
 
@@ -273,6 +274,10 @@ describe("playbackAt", () => {
     expect(end.done).toBe(true);
     expect(end.clock).toBe(match.events.at(-1)?.clock);
     expect(end.event?.kind).toBe("fine");
+
+    const halfWall = wallMsAt(match, HALF_SECONDS);
+    expect(playbackAt(match, halfWall).clock).toBe("2T 00:00");
+    expect(playbackAt(match, wallMsAt(match, MATCH_SECONDS)).t).toBe(MATCH_SECONDS);
   });
 });
 
