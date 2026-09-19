@@ -137,11 +137,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform-origin: 50% 100%;
-}
-
-.subbuteo-figure[data-facing="away"] {
-  transform: rotate(180deg);
 }
 
 .subbuteo-face {
@@ -189,7 +184,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.1;
   color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
@@ -206,12 +201,8 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .subbuteo-figure[data-facing="home"] {
+  .subbuteo-figure {
     animation: subbuteo-idle 2.8s ease-in-out infinite;
-  }
-
-  .subbuteo-figure[data-facing="away"] {
-    animation: subbuteo-idle-away 2.8s ease-in-out infinite;
   }
 }
 
@@ -222,16 +213,6 @@ body {
   }
   50% {
     transform: translateY(-1px);
-  }
-}
-
-@keyframes subbuteo-idle-away {
-  0%,
-  100% {
-    transform: rotate(180deg) translateY(0);
-  }
-  50% {
-    transform: rotate(180deg) translateY(-1px);
   }
 }
 

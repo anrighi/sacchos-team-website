@@ -68,11 +68,7 @@ function Figurine({
         zIndex: Math.round(token.y * 10) + (token.highlight ? 40 : 0),
       }}
     >
-      <div
-        className="subbuteo-figure"
-        data-facing={away ? "away" : "home"}
-        data-highlight={token.highlight ? "true" : "false"}
-      >
+      <div className="subbuteo-figure" data-highlight={token.highlight ? "true" : "false"}>
         <span className={cn("subbuteo-face", away && "subbuteo-face-away")}>
           <PlayerPortrait
             player={player}
