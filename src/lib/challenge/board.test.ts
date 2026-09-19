@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { boardAt, poseAt, restPositions } from "#/lib/challenge/board";
+import { boardAt, poseAt } from "#/lib/challenge/board";
 import { emptyLineup, type Lineup } from "#/lib/challenge/lineup";
-import { playbackAt, simulateMatch, totalPlaybackMs } from "#/lib/challenge/sim";
+import { EMPTY_SCALPS_TO_EXIT, simulateMatch } from "#/lib/challenge/sim";
 import type { Player, Sex } from "#/lib/player";
 
 function player(slug: string, sex: Sex, number: number): Player {
@@ -53,155 +53,83 @@ const guest: Lineup = {
   slots: ["gf1", "gf2", "gm1", "gm2", "gm3", "gm4", "gm5"],
 };
 
-describe("restPositions", () => {
-  it("puts host keeper at the bottom and attack toward midfield", () => {
-    const hostPts = restPositions("3-2-1", "host");
-    expect(hostPts).toHaveLength(7);
-    expect(hostPts[0]!.y).toBeGreaterThan(hostPts[6]!.y);
-    expect(hostPts[6]!.x).toBe(50);
-    expect(hostPts[0]!.y).toBeGreaterThan(80);
-    expect(hostPts[6]!.y).toBeGreaterThan(40);
-    expect(hostPts[6]!.y).toBeLessThan(50);
-  });
-
-  it("mirrors guest toward the top", () => {
-    const guestPts = restPositions("3-2-1", "guest");
-    expect(guestPts[0]!.y).toBeLessThan(guestPts[6]!.y);
-    expect(guestPts[0]!.y).toBeLessThan(20);
-    expect(guestPts[6]!.y).toBeGreaterThan(50);
-    expect(guestPts[6]!.y).toBeLessThan(60);
-  });
-
-  it("spreads a five-line formation on distinct rows", () => {
-    const pts = restPositions("2-1-1-2", "host");
-    const ys = [...new Set(pts.map((point) => point.y))];
-    expect(ys).toHaveLength(5);
-  });
-});
-
 describe("boardAt", () => {
-  it("kicks off with fourteen tokens and the ball at the starting team", () => {
+  it("keeps fourteen cards in formation at kickoff with the ball in the centre", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
-    const kickoff = match.events[0];
-    expect(kickoff?.kind).toBe("inizio");
-    expect(kickoff?.side).toBeTruthy();
-    const frame = boardAt({
-      host,
-      guest,
-      match,
-      t: 0,
-      index: 0,
-      paused: true,
-      reducedMotion: false,
-    });
+    const kickoff = match.events[0]!;
+    const frame = boardAt({ host, guest, match, index: 0 });
 
+    expect(kickoff.kind).toBe("inizio");
     expect(frame.tokens).toHaveLength(14);
     expect(frame.tokens.every((token) => token.onField)).toBe(true);
-    expect(frame.tokens.filter((token) => token.side === "host")).toHaveLength(7);
-    const holder = frame.tokens.find((token) => token.highlight);
-    expect(holder?.side).toBe(kickoff?.side);
-    if (kickoff?.side === "host") {
-      expect(frame.ball.y).toBeLessThan(50);
-    } else {
-      expect(frame.ball.y).toBeGreaterThan(50);
-    }
+    expect(frame.tokens.every((token) => token.vuoti === 0)).toBe(true);
+    expect(frame.ball).toEqual({ x: 50, y: 50 });
+    const highlighted = frame.tokens.filter((token) => token.highlight);
+    expect(highlighted).toHaveLength(1);
+    expect(highlighted[0]?.side).toBe(kickoff.side);
   });
 
-  it("is deterministic for the same seed and clock", () => {
+  it("is deterministic for the same index", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
-    const input = {
-      host,
-      guest,
-      match,
-      t: 120,
-      index: 3,
-      paused: false,
-      reducedMotion: false,
-    };
+    const input = { host, guest, match, index: 3 };
     expect(boardAt(input)).toEqual(boardAt(input));
   });
 
-  it("sends the ball into the scoring goal on a meta", () => {
-    const match = simulateMatch({ host, guest, roster, seed: "k7p2qm1a" });
-    const meta = match.events.find((event) => event.kind === "meta");
-    expect(meta).toBeTruthy();
-    const index = match.events.indexOf(meta!);
-    const frame = poseAt(host, guest, match.events, index);
-    const actor = frame.tokens.find((token) => token.slug === meta!.actor);
-
-    expect(actor?.highlight).toBe(true);
-    if (meta!.side === "host") {
-      expect(frame.ball.y).toBeLessThan(12);
-      expect(actor?.y).toBeLessThan(25);
-    } else {
-      expect(frame.ball.y).toBeGreaterThan(88);
-      expect(actor?.y).toBeGreaterThan(75);
-    }
+  it("does not move cards between events", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const a = poseAt(host, guest, match.events, 0);
+    const b = poseAt(host, guest, match.events, Math.min(4, match.events.length - 1));
+    expect(a.tokens.map((token) => `${token.slug}:${token.slot}`)).toEqual(
+      b.tokens.map((token) => `${token.slug}:${token.slot}`),
+    );
   });
 
-  it("keeps a scalp clash on the pitch, then benches the target", () => {
+  it("disables the target on a scalpo pieno", () => {
     const match = simulateMatch({ host, guest, roster, seed: "board01" });
     const scalp = match.events.find((event) => event.kind === "scalpo-pieno");
     expect(scalp?.target).toBeTruthy();
-    const index = match.events.indexOf(scalp!);
-    const during = poseAt(host, guest, match.events, index);
-    const victim = during.tokens.find((token) => token.slug === scalp!.target);
-    const attacker = during.tokens.find((token) => token.slug === scalp!.actor);
-
+    const frame = poseAt(host, guest, match.events, match.events.indexOf(scalp!));
+    const victim = frame.tokens.find((token) => token.slug === scalp!.target);
+    const actor = frame.tokens.find((token) => token.slug === scalp!.actor);
+    expect(victim?.onField).toBe(false);
+    expect(actor?.highlight).toBe(true);
     expect(victim?.highlight).toBe(true);
-    expect(attacker?.highlight).toBe(true);
-    expect(Math.abs((victim?.x ?? 0) - (attacker?.x ?? 0))).toBeLessThan(12);
-
-    const after = poseAt(host, guest, match.events, index + 1);
-    const benched = after.tokens.find((token) => token.slug === scalp!.target);
-    expect(benched?.onField).toBe(false);
-    expect(benched?.x === 7 || benched?.x === 93).toBe(true);
+    expect(frame.flash?.kind).toBe("scalpo-pieno");
   });
 
-  it("lerps tokens between consecutive event poses", () => {
-    const match = simulateMatch({ host, guest, roster, seed: "ticker" });
-    const paused = match.events.find((event) => event.pauseMs > 0);
-    expect(paused).toBeTruthy();
-    const toIndex = match.events.indexOf(paused!);
-    if (toIndex < 1) {
-      return;
+  it("counts vuoti as hearts on the player who missed", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const vuoto = match.events.find((event) => event.kind === "scalpo-vuoto");
+    expect(vuoto?.actor).toBeTruthy();
+    const frame = poseAt(host, guest, match.events, match.events.indexOf(vuoto!));
+    const actor = frame.tokens.find((token) => token.slug === vuoto!.actor);
+    expect(actor?.vuoti).toBeGreaterThanOrEqual(1);
+    expect(actor?.vuoti).toBeLessThanOrEqual(EMPTY_SCALPS_TO_EXIT);
+    expect(actor?.highlight).toBe(true);
+  });
+
+  it("puts the ball on the scoring goal line for a meta", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "k7p2qm1a" });
+    const meta = match.events.find((event) => event.kind === "meta");
+    expect(meta).toBeTruthy();
+    const frame = poseAt(host, guest, match.events, match.events.indexOf(meta!));
+    expect(frame.flash?.kind).toBe("meta");
+    const actor = frame.tokens.find((token) => token.slug === meta!.actor);
+    expect(actor?.highlight).toBe(true);
+    expect(actor?.onField).toBe(true);
+    if (meta!.side === "host") {
+      expect(frame.ball.y).toBeLessThan(12);
+    } else {
+      expect(frame.ball.y).toBeGreaterThan(88);
     }
-
-    const from = poseAt(host, guest, match.events, toIndex - 1);
-    const to = poseAt(host, guest, match.events, toIndex);
-    const mid = boardAt({
-      host,
-      guest,
-      match,
-      t: (match.events[toIndex - 1]!.t + paused!.t) / 2,
-      index: toIndex - 1,
-      paused: false,
-      reducedMotion: false,
-    });
-
-    const slug = to.tokens.find((token) => token.highlight)?.slug ?? to.tokens[0]!.slug;
-    const a = from.tokens.find((token) => token.slug === slug)!;
-    const b = to.tokens.find((token) => token.slug === slug)!;
-    const c = mid.tokens.find((token) => token.slug === slug)!;
-    const lo = Math.min(a.y, b.y);
-    const hi = Math.max(a.y, b.y);
-    expect(c.y).toBeGreaterThanOrEqual(lo - 0.01);
-    expect(c.y).toBeLessThanOrEqual(hi + 0.01);
   });
 
-  it("snaps to the event pose when motion is reduced", () => {
-    const match = simulateMatch({ host, guest, roster, seed: "ticker" });
-    const total = totalPlaybackMs(match, true);
-    const play = playbackAt(match, total / 2, true);
-    const snapped = boardAt({
-      host,
-      guest,
-      match,
-      t: play.t,
-      index: play.index,
-      paused: play.paused,
-      reducedMotion: true,
-    });
-    expect(snapped).toEqual(poseAt(host, guest, match.events, play.index));
+  it("resets vuoti at half time", () => {
+    const match = simulateMatch({ host, guest, roster, seed: "board01" });
+    const interval = match.events.findIndex((event) => event.kind === "intervallo");
+    expect(interval).toBeGreaterThan(0);
+    const frame = poseAt(host, guest, match.events, interval);
+    expect(frame.tokens.every((token) => token.vuoti === 0)).toBe(true);
+    expect(frame.tokens.every((token) => token.onField)).toBe(true);
   });
 });

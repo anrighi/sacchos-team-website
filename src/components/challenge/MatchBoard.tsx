@@ -1,110 +1,192 @@
 "use client";
 
+import { Heart } from "lucide-react";
 import { PlayerPortrait } from "#/components/PlayerPortrait";
 import type { BoardFrame, Token } from "#/lib/challenge/board";
-import { playerLabel } from "#/lib/challenge/lineup";
+import { rowsOf } from "#/lib/challenge/formation";
+import { EMPTY_SCALPS_TO_EXIT } from "#/lib/challenge/sim";
+import { playerLabel, type Lineup } from "#/lib/challenge/lineup";
 import type { Player } from "#/lib/player";
 import { cn } from "#/lib/utils";
 
 export function MatchBoard({
   frame,
+  host,
+  guest,
   roster,
+  reducedMotion,
 }: {
   frame: BoardFrame;
+  host: Lineup;
+  guest: Lineup;
   roster: readonly Player[];
+  reducedMotion: boolean;
 }) {
-  const tokens = [...frame.tokens].sort((a, b) => a.y - b.y);
+  const bySlug = new Map(frame.tokens.map((token) => [token.slug, token]));
 
   return (
     <div
-      className="subbuteo relative mx-auto mt-6 aspect-[3/4] h-[min(58vh,30rem)] w-auto max-w-full overflow-hidden rounded-[22px]"
+      className="scoutball relative mx-auto mt-6 aspect-[3/5] h-[min(62vh,34rem)] w-auto max-w-full overflow-hidden rounded-[22px]"
       role="img"
-      aria-label="Campo Subbuteo con le due formazioni"
+      aria-label="Campo scoutball 30 per 18 metri"
     >
-      <BoardMarkings />
-      {tokens.map((token) => {
-        const player = roster.find((entry) => entry.slug === token.slug);
-        if (!player) {
-          return null;
-        }
-        return (
-          <Figurine
-            key={token.slug}
-            token={token}
-            player={player}
-            label={playerLabel(player, roster)}
-          />
-        );
-      })}
+      <FieldMarkings />
+      <div className="relative z-10 flex h-full flex-col justify-between px-2 py-[11%] md:px-3">
+        <TeamLines
+          lineup={guest}
+          roster={roster}
+          bySlug={bySlug}
+          kit="away"
+          keeperFirst
+        />
+        <TeamLines
+          lineup={host}
+          roster={roster}
+          bySlug={bySlug}
+          kit="home"
+          keeperFirst={false}
+        />
+      </div>
       <span
-        className="subbuteo-ball"
-        style={{
-          left: `${frame.ball.x}%`,
-          top: `${frame.ball.y}%`,
-          zIndex: Math.round(frame.ball.y * 10) + 20,
-        }}
+        className={cn("scoutball-ball", reducedMotion && "scoutball-ball-static")}
+        style={{ left: `${frame.ball.x}%`, top: `${frame.ball.y}%` }}
       />
+      {frame.flash ? (
+        <p
+          key={`${frame.flash.kind}-${frame.flash.label}`}
+          className={cn(
+            "scoutball-flash",
+            reducedMotion && "scoutball-flash-static",
+          )}
+        >
+          {frame.flash.label}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function Figurine({
+function TeamLines({
+  lineup,
+  roster,
+  bySlug,
+  kit,
+  keeperFirst,
+}: {
+  lineup: Lineup;
+  roster: readonly Player[];
+  bySlug: Map<string, Token>;
+  kit: "home" | "away";
+  keeperFirst: boolean;
+}) {
+  const rows = rowsOf(lineup.formation);
+  const ordered = keeperFirst ? rows : [...rows].toReversed();
+
+  return (
+    <div className="flex flex-col gap-1.5 md:gap-2.5">
+      {ordered.map((row) => (
+        <div key={row.label} className="flex items-start justify-center gap-1.5 md:gap-3">
+          {row.slots.map((slot) => {
+            const slug = lineup.slots[slot];
+            const token = slug ? bySlug.get(slug) : undefined;
+            if (!token) {
+              return null;
+            }
+            const player = roster.find((entry) => entry.slug === token.slug);
+            if (!player) {
+              return null;
+            }
+            return (
+              <Card
+                key={token.slug}
+                token={token}
+                player={player}
+                label={playerLabel(player, roster)}
+                kit={kit}
+              />
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Card({
   token,
   player,
   label,
+  kit,
 }: {
   token: Token;
   player: Player;
   label: string;
+  kit: "home" | "away";
 }) {
-  const away = token.side === "guest";
+  const away = kit === "away";
+  const remaining = EMPTY_SCALPS_TO_EXIT - token.vuoti;
 
   return (
     <div
-      className={cn("subbuteo-token", !token.onField && "opacity-55")}
-      style={{
-        left: `${token.x}%`,
-        top: `${token.y}%`,
-        zIndex: Math.round(token.y * 10) + (token.highlight ? 40 : 0),
-      }}
+      className={cn(
+        "scoutball-card",
+        token.highlight && "scoutball-card-hot",
+        !token.onField && "scoutball-card-out",
+      )}
     >
-      <div className="subbuteo-figure" data-highlight={token.highlight ? "true" : "false"}>
-        <span className={cn("subbuteo-face", away && "subbuteo-face-away")}>
-          <PlayerPortrait
-            player={player}
-            kit={away ? "away" : "home"}
-            className="scale-[1.45] object-top"
+      <span className={cn("scoutball-face", away && "scoutball-face-away")}>
+        <PlayerPortrait
+          player={player}
+          kit={kit}
+          className="scale-[1.45] object-top"
+        />
+      </span>
+      <span className="scoutball-name">{label}</span>
+      <span className="scoutball-hearts" aria-label={`${remaining} vuoti rimasti`}>
+        {Array.from({ length: EMPTY_SCALPS_TO_EXIT }, (_, i) => (
+          <Heart
+            key={i}
+            className={cn(
+              "size-2.5",
+              i < remaining ? "fill-pink text-pink" : "text-white/25",
+            )}
+            aria-hidden
           />
-        </span>
-        <span className="subbuteo-base" data-kit={away ? "away" : "home"} />
-      </div>
-      <span className="subbuteo-name">{label}</span>
+        ))}
+      </span>
     </div>
   );
 }
 
-function BoardMarkings() {
+function FieldMarkings() {
   return (
     <svg
       aria-hidden
-      viewBox="0 0 100 140"
+      viewBox="0 0 180 300"
       preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-0 size-full text-white/35"
+      className="pointer-events-none absolute inset-0 size-full"
     >
-      <rect x="4" y="4" width="92" height="132" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <line x1="4" y1="70" x2="96" y2="70" stroke="currentColor" strokeWidth="0.7" />
-      <circle cx="50" cy="70" r="12" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <circle cx="50" cy="70" r="0.9" fill="currentColor" />
-      <rect x="26" y="4" width="48" height="18" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <rect x="36" y="4" width="28" height="8" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <rect x="26" y="118" width="48" height="18" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <rect x="36" y="128" width="28" height="8" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M4 10 A6 6 0 0 1 10 4" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 4 A6 6 0 0 1 96 10" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M4 130 A6 6 0 0 0 10 136" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <path d="M90 136 A6 6 0 0 0 96 130" fill="none" stroke="currentColor" strokeWidth="0.7" />
-      <rect x="38" y="1.2" width="24" height="2.8" rx="0.4" fill="currentColor" opacity="0.55" />
-      <rect x="38" y="136" width="24" height="2.8" rx="0.4" fill="currentColor" opacity="0.55" />
+      <defs>
+        <pattern id="scoutball-grass" width="18" height="300" patternUnits="userSpaceOnUse">
+          <rect width="9" height="300" fill="#3b8f4c" />
+          <rect x="9" width="9" height="300" fill="#347d44" />
+        </pattern>
+      </defs>
+      <rect width="180" height="300" fill="url(#scoutball-grass)" />
+      <rect x="4" y="4" width="172" height="292" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.2" />
+      <line x1="4" y1="150" x2="176" y2="150" stroke="rgba(255,255,255,0.55)" strokeWidth="1.2" />
+      <rect x="4" y="4" width="172" height="40" fill="rgba(255,255,255,0.08)" />
+      <rect x="4" y="256" width="172" height="40" fill="rgba(255,255,255,0.08)" />
+      <line x1="4" y1="44" x2="176" y2="44" stroke="rgba(255,255,255,0.5)" strokeWidth="1.1" />
+      <line x1="4" y1="256" x2="176" y2="256" stroke="rgba(255,255,255,0.5)" strokeWidth="1.1" />
+      <line x1="70" y1="4" x2="70" y2="14" stroke="rgba(255,255,255,0.9)" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="110" y1="4" x2="110" y2="14" stroke="rgba(255,255,255,0.9)" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="70" y1="286" x2="70" y2="296" stroke="rgba(255,255,255,0.9)" strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="110" y1="286" x2="110" y2="296" stroke="rgba(255,255,255,0.9)" strokeWidth="2.4" strokeLinecap="round" />
+      <circle cx="8" cy="44" r="2.2" fill="#f4f1ea" />
+      <circle cx="172" cy="44" r="2.2" fill="#f4f1ea" />
+      <circle cx="8" cy="256" r="2.2" fill="#f4f1ea" />
+      <circle cx="172" cy="256" r="2.2" fill="#f4f1ea" />
     </svg>
   );
 }

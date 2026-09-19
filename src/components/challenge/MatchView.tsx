@@ -62,18 +62,21 @@ export function MatchView({
     host,
     guest,
     match,
-    t: frame.t,
     index: frame.index,
-    paused: frame.paused,
-    reducedMotion: reduced,
   });
   const happened = match.events.slice(0, Math.max(frame.index + 1, 1));
   const newestFirst = happened.toReversed();
 
   return (
     <section className="mx-auto max-w-2xl px-5 pb-16 md:px-8">
-      <Scoreboard match={match} t={frame.t} event={frame.event} />
-      <MatchBoard frame={board} roster={players} />
+      <Scoreboard match={match} t={frame.t} event={frame.event} reducedMotion={reduced} />
+      <MatchBoard
+        frame={board}
+        host={host}
+        guest={guest}
+        roster={players}
+        reducedMotion={reduced}
+      />
       <Ticker event={frame.event} paused={frame.paused} />
       <EventLog events={newestFirst} current={frame.event} />
       {frame.done ? (
@@ -103,19 +106,28 @@ function Scoreboard({
   match,
   t,
   event,
+  reducedMotion,
 }: {
   match: MatchSim;
   t: number;
   event: SimEvent | null;
+  reducedMotion: boolean;
 }) {
   const score = event?.score ?? match.score;
+  const scored = event?.kind === "meta" || event?.kind === "meta-tecnica";
   return (
     <div className="rounded-[22px] border border-white/10 bg-white/4 px-5 py-5">
       <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
         <AnalogClock t={t} />
         <div className="grid w-full max-w-sm grid-cols-[1fr_auto_1fr] items-center gap-3">
           <p className="truncate text-right text-[15px] font-semibold text-white">{match.hostName}</p>
-          <p className="font-display text-4xl tracking-tight text-pink md:text-5xl">
+          <p
+            key={`${score.host}-${score.guest}`}
+            className={cn(
+              "font-display text-4xl tracking-tight text-pink md:text-5xl",
+              scored && !reducedMotion && "score-pop",
+            )}
+          >
             {score.host}–{score.guest}
           </p>
           <p className="truncate text-left text-[15px] font-semibold text-white">{match.guestName}</p>
@@ -145,7 +157,13 @@ function Ticker({
         paused ? "border-pink/40 bg-pink/10" : "border-white/10 bg-white/4",
       )}
     >
-      <p className="font-display text-3xl leading-tight tracking-tight text-white">
+      <p
+        key={`${event.kind}-${event.t}-${event.text}`}
+        className={cn(
+          "font-display text-3xl leading-tight tracking-tight text-white",
+          paused && "ticker-pop",
+        )}
+      >
         {event.text}
       </p>
     </div>
