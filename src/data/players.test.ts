@@ -3,10 +3,10 @@ import { players } from "#/data/players.generated";
 import { displayName } from "#/lib/roster";
 
 describe("players snapshot", () => {
-  it("has the 2026 seed of 24", () => {
-    expect(players).toHaveLength(24);
+  it("has the 2026 seed of 26", () => {
+    expect(players).toHaveLength(26);
     expect(players.filter((p) => p.team === "Saccho's Team")).toHaveLength(12);
-    expect(players.filter((p) => p.team === "Saccios Tim")).toHaveLength(12);
+    expect(players.filter((p) => p.team === "Saccios Tim")).toHaveLength(14);
   });
 
   it("keeps number 0 and the Saccios override", () => {
@@ -33,6 +33,8 @@ describe("players snapshot", () => {
     expect(players.find((p) => p.number === 93)?.nickname).toBe("Vero");
     expect(players.find((p) => p.number === 99)?.nickname).toBe("Ragno");
     expect(players.find((p) => p.number === 0)?.nickname).toBe("GOOGLE");
+    expect(players.find((p) => p.number === 6 && p.team === "Saccios Tim")?.nickname).toBe("MORDECAI");
+    expect(players.find((p) => p.number === 24 && p.team === "Saccios Tim")?.nickname).toBe("Ga");
   });
 
   it("defaults overall to 75", () => {

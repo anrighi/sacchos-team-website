@@ -67,7 +67,7 @@ Nessun secret Cloudflare per ora.
 
 ## Sheet rosa (`ROSTER_SHEET_CSV_URL`)
 
-Finché l’URL non è configurato, la build tiene lo snapshot dei 24 giocatori 2026.
+Finché l’URL non è configurato, la build tiene lo snapshot dei 26 giocatori 2026.
 
 Quando lo Sheet è pronto:
 

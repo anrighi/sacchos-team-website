@@ -458,5 +458,41 @@ export const players: Player[] = [
       "mouth": "laugh",
       "beard": "none"
     }
+  },
+  {
+    "slug": "ga-ga",
+    "firstName": "Ga",
+    "team": "Saccios Tim",
+    "sex": "M",
+    "number": 24,
+    "birthYear": 0,
+    "overall": 75,
+    "stats": {
+      "velocita": 75,
+      "salto": 75,
+      "intercetto": 75,
+      "scalpo": 75,
+      "finalizzazione": 75,
+      "gk": 75
+    },
+    "nickname": "Ga"
+  },
+  {
+    "slug": "mordecai-mordecai",
+    "firstName": "MORDECAI",
+    "team": "Saccios Tim",
+    "sex": "M",
+    "number": 6,
+    "birthYear": 0,
+    "overall": 75,
+    "stats": {
+      "velocita": 75,
+      "salto": 75,
+      "intercetto": 75,
+      "scalpo": 75,
+      "finalizzazione": 75,
+      "gk": 75
+    },
+    "nickname": "MORDECAI"
   }
 ];
