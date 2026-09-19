@@ -10,14 +10,14 @@
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
-| 2 | Sfida | in_progress | 0% |
+| 2 | Sfida | in_progress | 25% |
 | 0+ | Dopo | deferred | — |
 
 ## Active phase — what to do now
 
 - **Current goal:** Phase 2 — sfida: schieramento, link, simulazione, tabellino
 - **Remaining tasks:**
-  - [ ] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
+  - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
   - [ ] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Google Sheet
@@ -30,7 +30,7 @@
 | F0 | Bootstrap TanStack Start e CI Cloudflare | 0 | done | [F0-bootstrap.md](features/F0-bootstrap.md) |
 | F1 | Ingest Sheet, carte FUT e filtri rosa | 1 | done | [F1-rosa.md](features/F1-rosa.md) |
 | F2 | Hero, font, loghi e motion | 1 | done | [F2-visual.md](features/F2-visual.md) |
-| F3 | Schieramento 3-2-1 e link sfida | 2 | in_progress | [F3-lineup.md](features/F3-lineup.md) |
+| F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
 | F4 | Simulazione 2×15′ in 90s | 2 | not_started | [F4-sim.md](features/F4-sim.md) |
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
 | F6 | Archivio partite su Google Sheet | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
@@ -55,6 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 2 | F3: `src/lib/challenge/` con test, campo 3-2-1 su `/sfida`, link `host=`/`guest=`, maglia per lato | F4: engine `sim.ts` deterministico da seed + ticker | Push su GitHub fermo: manca il token nel VM, staging non si aggiorna |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |
