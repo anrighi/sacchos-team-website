@@ -208,22 +208,22 @@ function flashFor(event: SimEvent | null): BoardFlash {
     return { kind: event.kind, label: "Palla", side: event.side };
   }
   if (event.kind === "supplementari") {
-    return { kind: event.kind, label: "Meta d'argento", side: event.side };
+    return { kind: event.kind, label: "Silver meta", side: event.side };
   }
   if (event.kind === "golden") {
-    return { kind: event.kind, label: "Meta d'oro", side: event.side };
+    return { kind: event.kind, label: "Gold meta", side: event.side };
   }
   if (event.kind === "meta") {
     return {
       kind: event.kind,
-      label: isGoldenClock(event) ? "Meta d'oro" : "Meta",
+      label: isGoldenClock(event) ? "Gold meta" : "Meta",
       side: event.side,
     };
   }
   if (event.kind === "meta-tecnica") {
     return {
       kind: event.kind,
-      label: isGoldenClock(event) ? "Meta d'oro tecnica" : "Meta tecnica",
+      label: isGoldenClock(event) ? "Gold meta tecnica" : "Meta tecnica",
       side: event.side,
     };
   }

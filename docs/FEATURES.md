@@ -55,6 +55,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 2 | F4: extras copy in English — silver meta / gold meta | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: a fine partita niente box score, efficienza solo in `localStorage` | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: niente pareggio — 5′ argento, 5′ oro, spareggio scalpi | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: cronaca MrAlex, solo quella scrolla; pausa e rewind | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |

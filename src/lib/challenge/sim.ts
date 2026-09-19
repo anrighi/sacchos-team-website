@@ -296,7 +296,7 @@ function playOpenPlay(ctx: PlayCtx, endAt: number, stopOnScore: boolean): boolea
           score: ctx.score,
           side: def.side,
           text: golden
-            ? `Meta d'oro tecnica: ${att.name} restano in tre`
+            ? `Gold meta tecnica: ${att.name} restano in tre`
             : `Meta tecnica: ${att.name} restano in tre`,
           pauseMs: pauseMs(ctx.rng, "meta-tecnica"),
         });
@@ -316,7 +316,7 @@ function playOpenPlay(ctx: PlayCtx, endAt: number, stopOnScore: boolean): boolea
           score: ctx.score,
           side: att.side,
           text: golden
-            ? `Meta d'oro tecnica: ${def.name} restano in tre`
+            ? `Gold meta tecnica: ${def.name} restano in tre`
             : `Meta tecnica: ${def.name} restano in tre`,
           pauseMs: pauseMs(ctx.rng, "meta-tecnica"),
         });
@@ -339,7 +339,7 @@ function playOpenPlay(ctx: PlayCtx, endAt: number, stopOnScore: boolean): boolea
         restoreAll(ctx.guest);
         ctx.possession = def.side;
         if (golden) {
-          shot.text = shot.text.replace("appoggia la meta", "appoggia la meta d'oro");
+          shot.text = shot.text.replace("appoggia la meta", "appoggia la gold meta");
         }
       }
       if (shot.kind === "parata") {
@@ -408,10 +408,10 @@ function extraTiebreak(
 
 function extraFinalText(t: number, goldenMeta: boolean, winnerName: string): string {
   if (goldenMeta || t > SILVER_END) {
-    return `Fine partita. Meta d'oro. Vince ${winnerName}.`;
+    return `Fine partita. Gold meta. Vince ${winnerName}.`;
   }
   if (t > MATCH_SECONDS) {
-    return `Fine partita. Meta d'argento. Vince ${winnerName}.`;
+    return `Fine partita. Silver meta. Vince ${winnerName}.`;
   }
   return "Fine partita.";
 }
@@ -507,7 +507,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
       kind: "supplementari",
       t: ctx.t,
       score,
-      text: "Tempi supplementari. Meta d'argento.",
+      text: "Tempi supplementari. Silver meta.",
       pauseMs: INTERVAL_PAUSE_MS,
     });
     playOpenPlay(ctx, SILVER_END, false);
@@ -520,7 +520,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
       kind: "golden",
       t: ctx.t,
       score,
-      text: "Secondo supplementare. Meta d'oro.",
+      text: "Secondo supplementare. Gold meta.",
       pauseMs: MIN_PAUSE_MS,
     });
     const goldenMeta = playOpenPlay(ctx, GOLDEN_END, true);

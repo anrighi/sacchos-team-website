@@ -186,13 +186,13 @@ describe("boardAt", () => {
       stamp("supplementari", MATCH_SECONDS, "2T 15:00"),
     ];
     const extras = poseAt(host, guest, events, events.length - 1);
-    expect(extras.flash?.label).toBe("Meta d'argento");
+    expect(extras.flash?.label).toBe("Silver meta");
     expect(extras.tokens.find((token) => token.slug === "gm1")?.onField).toBe(false);
     expect(extras.tokens.find((token) => token.slug === "hf1")?.vuoti).toBe(1);
     expect(extras.tokens.filter((token) => token.onField)).toHaveLength(13);
   });
 
-  it("labels a golden meta as Meta d'oro", () => {
+  it("labels a golden meta as Gold meta", () => {
     const events: SimEvent[] = [
       stamp("inizio", 0, "1T 00:00"),
       stamp("golden", 2100, "SA 05:00"),
@@ -203,8 +203,8 @@ describe("boardAt", () => {
       },
     ];
     const frame = poseAt(host, guest, events, events.length - 1);
-    expect(frame.flash?.label).toBe("Meta d'oro");
-    expect(frame.tokens.find((token) => token.slug === "hm5")?.callout).toBe("Meta d'oro");
+    expect(frame.flash?.label).toBe("Gold meta");
+    expect(frame.tokens.find((token) => token.slug === "hm5")?.callout).toBe("Gold meta");
   });
 });
 

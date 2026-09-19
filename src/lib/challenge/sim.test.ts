@@ -294,7 +294,7 @@ describe("extra time", () => {
     }
   });
 
-  it("plays the full silver 5′ and only then awards meta d'argento", () => {
+  it("plays the full silver 5′ and only then awards silver meta", () => {
     const match = findMatch((item) => {
       if (!item.events.some((event) => event.kind === "supplementari")) {
         return false;
@@ -306,7 +306,7 @@ describe("extra time", () => {
     });
     const extras = match.events.find((event) => event.kind === "supplementari");
     expect(extras?.t).toBe(MATCH_SECONDS);
-    expect(extras?.text).toMatch(/Meta d'argento/);
+    expect(extras?.text).toMatch(/Silver meta/);
     const silverMeta = match.events.find(
       (event) =>
         (event.kind === "meta" || event.kind === "meta-tecnica") && event.clock.startsWith("SA"),
@@ -314,7 +314,7 @@ describe("extra time", () => {
     expect(silverMeta).toBeTruthy();
     expect(silverMeta!.t).toBeLessThan(SILVER_END);
     expect(match.events.at(-1)?.t).toBe(SILVER_END);
-    expect(match.events.at(-1)?.text).toMatch(/Meta d'argento/);
+    expect(match.events.at(-1)?.text).toMatch(/Silver meta/);
     expect(match.events.some((event) => event.kind === "golden")).toBe(false);
   });
 
@@ -335,10 +335,10 @@ describe("extra time", () => {
     );
     expect(scoredAt).toBeGreaterThan(goldenAt);
     expect(match.events[scoredAt]?.clock.startsWith("GO")).toBe(true);
-    expect(match.events[scoredAt]?.text).toMatch(/d'oro/);
+    expect(match.events[scoredAt]?.text).toMatch(/gold meta/i);
     expect(match.events[scoredAt + 1]?.kind).toBe("fine");
     expect(match.events.at(-1)?.t).toBeLessThan(GOLDEN_END);
-    expect(match.events.at(-1)?.text).toMatch(/Meta d'oro/);
+    expect(match.events.at(-1)?.text).toMatch(/Gold meta/);
     expect(match.score.host).not.toBe(match.score.guest);
   });
 
