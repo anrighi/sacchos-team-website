@@ -83,6 +83,13 @@
       "phase": "0+",
       "status": "deferred",
       "spec": "docs/features/F7-album.md"
+    },
+    {
+      "id": "F8",
+      "title": "Link corti per la sfida",
+      "phase": "0+",
+      "status": "deferred",
+      "spec": "docs/features/F8-shortlink.md"
     }
   ]
 }

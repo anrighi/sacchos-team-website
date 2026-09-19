@@ -16,7 +16,7 @@ Generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-re
 - One feature per branch
 - Early returns, `#/` imports, UI italiana, pochi commenti
 - ADR in `docs/FEATURES.md`
-- Deferred work stays `deferred` in manifest (F7 album)
+- Deferred work stays `deferred` in manifest (F7 album, F8 link corti)
 
 ## End of session
 

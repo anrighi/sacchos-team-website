@@ -35,6 +35,7 @@
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
 | F6 | Archivio partite su Google Sheet | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
+| F8 | Link corti per la sfida | 0+ | deferred | [F8-shortlink.md](features/F8-shortlink.md) |
 
 ## Architecture decisions (light ADR)
 
@@ -49,12 +50,14 @@
 | 2026-09-04 | Solo brand Saccho's Team; Saccios Tim = filtro | Un'identità visiva, due rose | Due loghi in nav |
 | 2026-09-04 | Nickname o nome, mai cognomi/foto | Privacy scout | Foto reali, cognomi |
 | 2026-09-04 | F7 album `deferred` | Fuori slice | Album in F0–F6 |
+| 2026-09-19 | F8 link corti `deferred` | Serve uno store (Pages è statico); F3 resta `?host=` tondo | bit.ly / accorciare in query con hash opaco senza persistenza |
 | 2026-09-19 | Fasi 0 e 1 unite su `main` (merge con radici non correlate) | `main` era un commit vuoto con root diversa: allineare prima di aprire la fase 2 | Rebase o reset di `main` con force push |
 
 ## Handoff log (keep last ~5–10 entries)
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 0+ | F8 spec: link corti `/s/:nome` o `/s/:id` dopo lo schieramento; deferred come F7 | F5 resta il prossimo lavoro di fase 2 (tabellino); non implementare F8 su Pages | Mapping nome/id → lineup richiede Worker o Sheet |
 | 2026-09-19 | Cursor | 2 | F4: `sim.ts` deterministico (seed, 2×15′, pause, tre vuoti, meta tecnica) + ticker su `/sfida?host=&guest=&seed=` | F5: tabellino `/sfida/partita` con OG e share; stack su F4 | Ruoli/stat del seed ancora vuoti (tutti 75) |
 | 2026-09-19 | Cursor | 2 | F3: `src/lib/challenge/` con test, campo 3-2-1 su `/sfida`, link `host=`/`guest=`, maglia per lato | F4: engine `sim.ts` deterministico da seed + ticker | Push su GitHub fermo: manca il token nel VM, staging non si aggiorna |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |

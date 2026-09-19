@@ -34,7 +34,7 @@ Chi crea dà un nome alla rosa, schiera 7 in 3-2-1 (default), copia `/sfida?host
 
 Stesso giocatore non in entrambe le rose. Varianti modulo come costanti, UI può partire dal solo 3-2-1.
 
-Codifica link: `host=<nome>~<modulo>~<7 slug separati da ~>`, slot vuoto = campo vuoto. Leggibile e tonda, niente base64. Il nome viene normalizzato (spazi compattati, `~` e `|` rimossi, max 24 caratteri) prima di entrare nell'URL.
+Codifica link: `host=<nome>~<modulo>~<7 slug separati da ~>`, slot vuoto = campo vuoto. Leggibile e tonda, niente base64. Il nome viene normalizzato (spazi compattati, `~` e `|` rimossi, max 24 caratteri) prima di entrare nell'URL. Accorciare a `/s/:nome` o `/s/:id` è [F8](F8-shortlink.md) (`deferred`: serve uno store).
 
 Il ritratto in campo segue il lato (host casa, ospite trasferta), non la squadra di appartenenza: l'ingest genera per ogni sprite anche `players/{slug}-alt.svg` con la maglia opposta e `PlayerPortrait` sceglie in base al kit richiesto. Un PNG disegnato a mano ha comunque la precedenza su entrambe le varianti.
 
