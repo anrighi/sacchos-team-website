@@ -26,7 +26,7 @@ export function MatchBoard({
 
   return (
     <div
-      className="scoutball relative mx-auto mt-6 aspect-[3/5] h-[min(62vh,34rem)] w-auto max-w-full overflow-hidden rounded-[22px]"
+      className="scoutball relative mx-auto mt-6 aspect-[3/5] h-[min(70vh,38rem)] w-auto max-w-full overflow-hidden rounded-[22px]"
       role="img"
       aria-label="Campo scoutball 30 per 18 metri"
     >
