@@ -2,9 +2,9 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | in_progress |
 | Phase | 2 |
-| Files | `src/routes/sfida.tsx`, `src/lib/challenge/` |
+| Files | `src/routes/sfida.tsx`, `src/lib/challenge/`, `src/components/challenge/` |
 | Tests | encode/decode payload; displayName obbligatorio; 7 slug, 1 POR, ≥2 per sesso; stesso slug vietato sulle due rose |
 
 ## Goal
@@ -17,13 +17,13 @@ Chi crea dà un nome alla rosa, schiera 7 in 3-2-1 (default), copia `/sfida?host
 
 ## Acceptance criteria
 
-- [ ] Campo nome obbligatorio (trim, non vuoto)
-- [ ] 7 titolari, 1 portiere, ≥2 per sesso; fuori ruolo permesso (malus in F4)
-- [ ] Modulo default 3-2-1; costanti TS per 2-3-1 e 2-1-1-2 (no `formations.json`)
+- [x] Campo nome obbligatorio (trim, non vuoto)
+- [x] 7 titolari, 1 portiere, ≥2 per sesso; fuori ruolo permesso (malus in F4)
+- [x] Modulo default 3-2-1; costanti TS per 2-3-1 e 2-1-1-2 (no `formations.json`)
 - [ ] Host casa bianca; guest navy
-- [ ] Query `host=` tonda; decode non muta gli slot host
-- [ ] Etichette: nickname o nome
-- [ ] Spec + manifest `done` e PR con `Closes #N`
+- [x] Query `host=` tonda; decode non muta gli slot host
+- [x] Etichette: nickname o nome
+- [ ] Spec + manifest `done`
 
 ## Deliverables
 
@@ -33,3 +33,7 @@ Chi crea dà un nome alla rosa, schiera 7 in 3-2-1 (default), copia `/sfida?host
 ## Notes
 
 Stesso giocatore non in entrambe le rose. Varianti modulo come costanti, UI può partire dal solo 3-2-1.
+
+Codifica link: `host=<nome>~<modulo>~<7 slug separati da ~>`, slot vuoto = campo vuoto. Leggibile e tonda, niente base64. Il nome viene normalizzato (spazi compattati, `~` e `|` rimossi, max 24 caratteri) prima di entrare nell'URL.
+
+Il ritratto in campo deve seguire il lato (host casa, ospite trasferta), non la squadra di appartenenza: servono le due varianti di maglia per ogni sprite.
