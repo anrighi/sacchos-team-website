@@ -15,6 +15,12 @@ const TSHIRT_TRANSFORM = "translate(107.32 587.5)";
 const TSHIRT_PATH =
   "M356.88 46.52C461.33 80.32 536.96 178.76 537.18 295h-520c.22-116.24 75.85-214.69 180.3-248.48C222.52 82.94 248.8 101 276.68 101s55.15-18.06 80.2-54.48Z";
 
+export const KIT_LAYOUT = {
+  agesci: { x: 200, y: 688, width: 74, height: 108 },
+  sacchos: { x: 470, y: 694, width: 86, height: 86 },
+  claws: { x: 196, y: 828, width: 368, height: 344 },
+} as const;
+
 export const HAIR_VARIANTS = ["bun", "sideComed", "spiky", "undercut"] as const;
 export const REAR_HAIR_VARIANTS = [
   "longStraight",
@@ -182,19 +188,27 @@ function withClubKit(svg: string, kit: KitKind, slug: string): string {
 function kitOverlay(kit: KitKind, slug: string): string {
   const shirt = kit === "home" ? WHITE : NAVY;
   const clipId = `kit-shirt-clip-${slug}`;
+  const clawsClipId = `kit-claws-clip-${slug}`;
   const agesci = publicUrl("/brand/crest-agesci.png");
   const sacchos = publicUrl("/brand/crest-sacchos.png");
   const claws = publicUrl("/brand/kit-claws.png");
+  const { agesci: ag, sacchos: sc, claws: cl } = KIT_LAYOUT;
+  const holePad = 10;
   return `<g id="kit-marks" aria-hidden="true">
   <clipPath id="${clipId}">
     <path transform="${TSHIRT_TRANSFORM}" d="${TSHIRT_PATH}"/>
     <rect x="124.5" y="850" width="520" height="174"/>
   </clipPath>
+  <clipPath id="${clawsClipId}" clip-rule="evenodd">
+    <path clip-rule="evenodd" d="M124.5 630h520v394h-520zM${ag.x - holePad} ${ag.y - holePad}h${ag.width + holePad * 2}v${ag.height + holePad * 2}h-${ag.width + holePad * 2}z"/>
+  </clipPath>
   <g clip-path="url(#${clipId})">
     <rect x="124.5" y="868" width="520" height="156" fill="${shirt}"/>
-    <image href="${claws}" x="168" y="792" width="400" height="373" preserveAspectRatio="xMidYMid meet"/>
-    <image href="${agesci}" x="218" y="708" width="78" height="114" preserveAspectRatio="xMidYMin meet"/>
-    <image href="${sacchos}" x="458" y="712" width="90" height="90" preserveAspectRatio="xMidYMid meet"/>
+    <g clip-path="url(#${clawsClipId})">
+      <image href="${claws}" x="${cl.x}" y="${cl.y}" width="${cl.width}" height="${cl.height}" preserveAspectRatio="xMidYMid meet"/>
+    </g>
+    <image href="${agesci}" x="${ag.x}" y="${ag.y}" width="${ag.width}" height="${ag.height}" preserveAspectRatio="xMidYMin meet"/>
+    <image href="${sacchos}" x="${sc.x}" y="${sc.y}" width="${sc.width}" height="${sc.height}" preserveAspectRatio="xMidYMid meet"/>
   </g>
 </g>`;
 }

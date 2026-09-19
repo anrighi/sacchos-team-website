@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { kitKind, portraitOptions, portraitSvg } from "#/lib/portrait";
+import { KIT_LAYOUT, kitKind, portraitOptions, portraitSvg } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
 const stats = {
@@ -79,5 +79,14 @@ describe("portraitSvg", () => {
     expect(options.mouthVariant).toEqual(["laugh"]);
     expect(options.hairColor).toEqual(["2c1b18"]);
     expect(options.clothesVariant).toEqual(["tShirt"]);
+  });
+
+  it("keeps the claws below the AGESCI crest", () => {
+    const { agesci, claws } = KIT_LAYOUT;
+    expect(claws.y).toBeGreaterThan(agesci.y + agesci.height);
+    const svg = portraitSvg(sample());
+    expect(svg).toContain(`y="${agesci.y}"`);
+    expect(svg).toContain(`y="${claws.y}"`);
+    expect(svg).toContain(`id="kit-claws-clip-${sample().slug}"`);
   });
 });
