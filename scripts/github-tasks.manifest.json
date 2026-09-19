@@ -46,14 +46,14 @@
       "id": "F2",
       "title": "Hero, font, loghi e motion",
       "phase": "1",
-      "status": "todo",
+      "status": "done",
       "spec": "docs/features/F2-visual.md"
     },
     {
       "id": "F3",
       "title": "Schieramento 3-2-1 e link sfida",
       "phase": "2",
-      "status": "todo",
+      "status": "in_progress",
       "spec": "docs/features/F3-lineup.md"
     },
     {
