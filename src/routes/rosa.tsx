@@ -75,7 +75,7 @@ function RosaPage() {
           >
             Johan Melin
           </a>
-          , CC BY 4.0, via DiceBear. Maglia casa/trasferta e artigli Saccho&apos;s.
+          , CC BY 4.0, via DiceBear. Maglia casa/trasferta, stemmi e artigli Saccho&apos;s.
         </p>
       </section>
     </main>

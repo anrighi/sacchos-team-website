@@ -2,14 +2,18 @@ import { Avatar, Style } from "@dicebear/core";
 import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
 import type { Player, PortraitTraits, TeamName } from "#/lib/player";
+import { publicUrl } from "#/lib/public-url";
 
 const toonHead = new Style(definition);
 const portraitCache = new Map<string, string>();
 
-const PINK = club.colors.pink;
-const PINK_DARK = "#c44580";
 const NAVY = club.colors.navy;
 const WHITE = club.colors.white;
+const PORTRAIT_WIDTH = 768;
+const PORTRAIT_HEIGHT = 1024;
+const TSHIRT_TRANSFORM = "translate(107.32 587.5)";
+const TSHIRT_PATH =
+  "M356.88 46.52C461.33 80.32 536.96 178.76 537.18 295h-520c.22-116.24 75.85-214.69 180.3-248.48C222.52 82.94 248.8 101 276.68 101s55.15-18.06 80.2-54.48Z";
 
 export const HAIR_VARIANTS = ["bun", "sideComed", "spiky", "undercut"] as const;
 export const REAR_HAIR_VARIANTS = [
@@ -53,7 +57,7 @@ export function portraitSvg(player: Player): string {
     return cached;
   }
   const avatar = new Avatar(toonHead, portraitOptions(player, kit) as never);
-  const svg = withKitMarks(avatar.toString(), kit);
+  const svg = withClubKit(avatar.toString(), kit, player.slug);
   portraitCache.set(key, svg);
   return svg;
 }
@@ -158,18 +162,39 @@ export function normalizeHex(value: string | undefined): string | undefined {
   return hex;
 }
 
-function withKitMarks(svg: string, kit: KitKind): string {
+function withClubKit(svg: string, kit: KitKind, slug: string): string {
+  const framed = svg
+    .replace(
+      'viewBox="0 0 768 768"',
+      `viewBox="0 0 ${PORTRAIT_WIDTH} ${PORTRAIT_HEIGHT}" preserveAspectRatio="xMidYMin meet"`,
+    )
+    .replace(
+      '<rect width="768" height="768" rx="0" ry="0"/>',
+      `<rect width="${PORTRAIT_WIDTH}" height="${PORTRAIT_HEIGHT}" rx="0" ry="0"/>`,
+    )
+    .replace(
+      /<rect width="768" height="768" fill="/u,
+      `<rect width="${PORTRAIT_WIDTH}" height="${PORTRAIT_HEIGHT}" fill="`,
+    );
+  return framed.replace(/<\/svg>\s*$/u, `${kitOverlay(kit, slug)}</svg>`);
+}
+
+function kitOverlay(kit: KitKind, slug: string): string {
   const shirt = kit === "home" ? WHITE : NAVY;
-  const marks = `<g id="kit-marks" aria-hidden="true">
-  <path d="M286 612c28 18 62 38 96 38s68-20 96-38" fill="none" stroke="${PINK}" stroke-width="14" stroke-linecap="round"/>
-  <path d="M200 748 C 268 688, 338 638, 418 612" fill="none" stroke="${PINK_DARK}" stroke-width="20" stroke-linecap="round"/>
-  <path d="M200 748 C 268 688, 338 638, 418 612" fill="none" stroke="${PINK}" stroke-width="11" stroke-linecap="round"/>
-  <path d="M258 752 C 328 694, 398 646, 478 624" fill="none" stroke="${PINK_DARK}" stroke-width="20" stroke-linecap="round"/>
-  <path d="M258 752 C 328 694, 398 646, 478 624" fill="none" stroke="${PINK}" stroke-width="11" stroke-linecap="round"/>
-  <path d="M318 756 C 384 704, 452 658, 536 640" fill="none" stroke="${PINK_DARK}" stroke-width="20" stroke-linecap="round"/>
-  <path d="M318 756 C 384 704, 452 658, 536 640" fill="none" stroke="${PINK}" stroke-width="11" stroke-linecap="round"/>
-  <circle cx="248" cy="686" r="18" fill="${shirt}" stroke="${PINK}" stroke-width="4"/>
-  <circle cx="520" cy="686" r="18" fill="${shirt}" stroke="${PINK}" stroke-width="4"/>
+  const clipId = `kit-shirt-clip-${slug}`;
+  const agesci = publicUrl("/brand/crest-agesci.png");
+  const sacchos = publicUrl("/brand/crest-sacchos.png");
+  const claws = publicUrl("/brand/kit-claws.png");
+  return `<g id="kit-marks" aria-hidden="true">
+  <clipPath id="${clipId}">
+    <path transform="${TSHIRT_TRANSFORM}" d="${TSHIRT_PATH}"/>
+    <rect x="124.5" y="850" width="520" height="174"/>
+  </clipPath>
+  <g clip-path="url(#${clipId})">
+    <rect x="124.5" y="868" width="520" height="156" fill="${shirt}"/>
+    <image href="${claws}" x="168" y="792" width="400" height="373" preserveAspectRatio="xMidYMid meet"/>
+    <image href="${agesci}" x="218" y="708" width="78" height="114" preserveAspectRatio="xMidYMin meet"/>
+    <image href="${sacchos}" x="458" y="712" width="90" height="90" preserveAspectRatio="xMidYMid meet"/>
+  </g>
 </g>`;
-  return svg.replace(/<\/svg>\s*$/u, `${marks}</svg>`);
 }

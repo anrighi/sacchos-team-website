@@ -81,7 +81,7 @@ Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 son
 
 ## Ritratti (`src/data/portraits.csv`)
 
-Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è sempre il kit del club (bianca Saccho's, navy Saccios Tim) con gli artigli rosa.
+Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è il kit del club (bianca Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 e Saccho's sul petto e gli artigli rosa.
 
 Il file `src/data/portraits.csv` è il foglio look da condividere con la squadra: una riga per giocatore, trait vuoti = avatar dallo slug. Valori ammessi:
 

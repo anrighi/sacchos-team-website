@@ -36,13 +36,15 @@ describe("kitKind", () => {
 });
 
 describe("portraitSvg", () => {
-  it("renders Toon Head with the white home kit and pink claws", () => {
+  it("renders Toon Head with the white home kit, crests and claws", () => {
     const svg = portraitSvg(sample());
-    expect(svg).toContain('viewBox="0 0 768 768"');
+    expect(svg).toContain('viewBox="0 0 768 1024"');
     expect(svg).toContain("ToonHead");
     expect(svg).toContain("Johan Melin");
     expect(svg).toContain("id=\"kit-marks\"");
-    expect(svg).toContain("#f867a5");
+    expect(svg).toContain("crest-sacchos.png");
+    expect(svg).toContain("crest-agesci.png");
+    expect(svg).toContain("kit-claws.png");
     expect(svg).toContain("#ffffff");
     expect(svg).toContain("tShirt");
   });
@@ -53,7 +55,8 @@ describe("portraitSvg", () => {
     );
     expect(svg).toContain("#1a2634");
     expect(svg).toContain("id=\"kit-marks\"");
-    expect(svg).toContain("#f867a5");
+    expect(svg).toContain("crest-sacchos.png");
+    expect(svg).toContain("kit-claws.png");
   });
 
   it("pins CSV traits on the DiceBear options", () => {
