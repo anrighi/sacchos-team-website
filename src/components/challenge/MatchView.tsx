@@ -51,7 +51,7 @@ export function MatchView({
   const newestFirst = happened.toReversed();
 
   return (
-    <section className="mx-auto flex h-[calc(100dvh-6.5rem)] w-full max-w-3xl flex-col px-4 md:h-[calc(100dvh-6rem)] md:px-8">
+    <section className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-hidden px-4 md:px-8">
       <div className="shrink-0">
         <Scoreboard
           match={match}
@@ -207,10 +207,10 @@ function EventLog({ events, current }: { events: SimEvent[]; current: SimEvent |
           key={`${event.kind}-${event.t}-${index}`}
           className={cn(
             "flex items-baseline justify-between gap-3 rounded-xl px-3 py-2",
-            event === current ? "bg-white/8 text-white" : "text-white/55",
+            event === current ? "bg-white/8 text-white" : "text-white/70",
           )}
         >
-          <span className="shrink-0 font-display text-[11px] tracking-[0.08em] text-white/40">
+          <span className="shrink-0 font-display text-[11px] tracking-[0.08em] text-white/50">
             {event.clock}
           </span>
           <span className="flex-1 text-left font-display text-[15px] leading-snug tracking-[0.05em]">
