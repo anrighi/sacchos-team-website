@@ -31,21 +31,25 @@ export function MatchBoard({
       aria-label="Campo scoutball 30 per 18 metri"
     >
       <FieldMarkings />
-      <div className="relative z-10 flex h-full flex-col justify-between px-2 py-[11%] md:px-3">
-        <TeamLines
-          lineup={guest}
-          roster={roster}
-          bySlug={bySlug}
-          kit="away"
-          keeperFirst
-        />
-        <TeamLines
-          lineup={host}
-          roster={roster}
-          bySlug={bySlug}
-          kit="home"
-          keeperFirst={false}
-        />
+      <div className="relative z-10 flex h-full flex-col px-2 md:px-3">
+        <div className="flex flex-1 flex-col justify-start pt-[3%] pb-1">
+          <TeamLines
+            lineup={guest}
+            roster={roster}
+            bySlug={bySlug}
+            kit="away"
+            keeperFirst
+          />
+        </div>
+        <div className="flex flex-1 flex-col justify-end pb-[3%] pt-1">
+          <TeamLines
+            lineup={host}
+            roster={roster}
+            bySlug={bySlug}
+            kit="home"
+            keeperFirst={false}
+          />
+        </div>
       </div>
       <span
         className={cn("scoutball-ball", reducedMotion && "scoutball-ball-static")}
@@ -83,9 +87,9 @@ function TeamLines({
   const ordered = keeperFirst ? rows : [...rows].toReversed();
 
   return (
-    <div className="flex flex-col gap-1.5 md:gap-2.5">
+    <div className="flex flex-col gap-1 md:gap-1.5">
       {ordered.map((row) => (
-        <div key={row.label} className="flex items-start justify-center gap-1.5 md:gap-3">
+        <div key={row.label} className="flex items-start justify-center gap-1 md:gap-2">
           {row.slots.map((slot) => {
             const slug = lineup.slots[slot];
             const token = slug ? bySlug.get(slug) : undefined;
