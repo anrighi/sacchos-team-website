@@ -90,6 +90,7 @@ export function LineupEditor({
         slotLabel={slotLabel(lineup, openSlot)}
         roster={roster}
         taken={taken}
+        kit={kit}
         current={openSlot === null ? null : (lineup.slots[openSlot] ?? null)}
         onClose={() => setOpenSlot(null)}
         onPick={(slug) => {

@@ -146,6 +146,9 @@ export function serializePlayer(player: Player): Player {
   if (player.photo) {
     row.photo = player.photo;
   }
+  if (player.photoAlt) {
+    row.photoAlt = player.photoAlt;
+  }
   return row;
 }
 

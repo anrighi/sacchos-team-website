@@ -81,7 +81,7 @@ function PitchSlot({
         )}
       >
         {player ? (
-          <PlayerPortrait player={player} className="scale-[1.35] object-top" />
+          <PlayerPortrait player={player} kit={kit} className="scale-[1.35] object-top" />
         ) : (
           <Plus className="size-5 text-white/45" aria-hidden />
         )}

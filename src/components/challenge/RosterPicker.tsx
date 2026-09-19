@@ -12,6 +12,7 @@ import {
 import { PlayerPortrait } from "#/components/PlayerPortrait";
 import type { Player } from "#/lib/player";
 import { ROLE_LABELS } from "#/lib/player";
+import type { KitKind } from "#/lib/portrait";
 import { playerLabel } from "#/lib/challenge/lineup";
 import { slugify } from "#/lib/roster";
 import { cn } from "#/lib/utils";
@@ -22,6 +23,7 @@ export function RosterPicker({
   roster,
   taken,
   current,
+  kit,
   onPick,
   onClose,
 }: {
@@ -30,6 +32,7 @@ export function RosterPicker({
   roster: readonly Player[];
   taken: ReadonlySet<string>;
   current: string | null;
+  kit: KitKind;
   onPick: (slug: string | null) => void;
   onClose: () => void;
 }) {
@@ -115,7 +118,11 @@ export function RosterPicker({
                     )}
                   >
                     <span className="size-10 shrink-0 overflow-hidden rounded-full bg-navy-deep">
-                      <PlayerPortrait player={player} className="scale-[1.35] object-top" />
+                      <PlayerPortrait
+                        player={player}
+                        kit={kit}
+                        className="scale-[1.35] object-top"
+                      />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[15px] font-medium text-white">

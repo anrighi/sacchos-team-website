@@ -77,8 +77,8 @@ type Grid = {
 type Skin = (typeof SKINS)[number];
 type Hair = (typeof HAIRS)[number];
 
-export function portraitSvg(player: Player): string {
-  const kind = kitKind(player.team);
+export function portraitSvg(player: Player, kit?: KitKind): string {
+  const kind = kit ?? kitKind(player.team);
   const grid = paintPortrait(player, kitPalette(kind));
   const desc = kind === "home" ? "Maglia casa bianca" : "Maglia trasferta navy";
 

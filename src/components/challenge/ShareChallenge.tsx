@@ -7,6 +7,12 @@ import { cn } from "#/lib/utils";
 
 const RESET_MS = 2400;
 
+function queryString(search: Record<string, string>): string {
+  return Object.entries(search)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value).replace(/%7E/g, "~")}`)
+    .join("&");
+}
+
 export function ShareChallenge({
   ready,
   search,
@@ -37,7 +43,7 @@ export function ShareChallenge({
     return () => window.clearTimeout(timer);
   }, [copied]);
 
-  const url = `${origin}${publicUrl("/sfida")}?${new URLSearchParams(search).toString()}`;
+  const url = `${origin}${publicUrl("/sfida")}?${queryString(search)}`;
   const canShare = typeof navigator !== "undefined" && "share" in navigator;
 
   const share = async () => {

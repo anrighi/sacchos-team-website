@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { portraitSvg } from "#/lib/portrait";
+import { kitKind, portraitSvg, type KitKind } from "#/lib/portrait";
 import { parseRosterCsv, serializePlayer } from "#/lib/roster";
 import type { Player } from "#/lib/player";
 
@@ -69,14 +69,18 @@ async function loadCsv(): Promise<string | null> {
 function attachPhotos(list: Player[]): Player[] {
   return list.map((player) => {
     const png = `players/${player.slug}.png`;
-    const svg = `players/${player.slug}.svg`;
     if (existsSync(resolve(publicDir, png))) {
       return { ...player, photo: png };
     }
-    if (existsSync(resolve(publicDir, svg))) {
-      return { ...player, photo: svg };
+    const svg = `players/${player.slug}.svg`;
+    if (!existsSync(resolve(publicDir, svg))) {
+      return serializePlayer({ ...player, photo: undefined });
     }
-    return serializePlayer({ ...player, photo: undefined });
+    const alt = `players/${player.slug}-alt.svg`;
+    if (existsSync(resolve(publicDir, alt))) {
+      return { ...player, photo: svg, photoAlt: alt };
+    }
+    return { ...player, photo: svg };
   });
 }
 
@@ -93,7 +97,10 @@ function ensurePortraits(list: Player[]) {
     if (existsSync(png)) {
       continue;
     }
-    writeFileSync(resolve(dir, `${player.slug}.svg`), portraitSvg(player));
+    const own = kitKind(player.team);
+    const other: KitKind = own === "home" ? "away" : "home";
+    writeFileSync(resolve(dir, `${player.slug}.svg`), portraitSvg(player, own));
+    writeFileSync(resolve(dir, `${player.slug}-alt.svg`), portraitSvg(player, other));
   }
 }
 

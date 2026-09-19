@@ -18,7 +18,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/andrea-4.svg"
+    "photo": "players/andrea-4.svg",
+    "photoAlt": "players/andrea-4-alt.svg"
   },
   {
     "slug": "nicolo-5",
@@ -36,7 +37,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/nicolo-5.svg"
+    "photo": "players/nicolo-5.svg",
+    "photoAlt": "players/nicolo-5-alt.svg"
   },
   {
     "slug": "michele-7",
@@ -54,7 +56,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/michele-7.svg"
+    "photo": "players/michele-7.svg",
+    "photoAlt": "players/michele-7-alt.svg"
   },
   {
     "slug": "miriam-8",
@@ -72,7 +75,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/miriam-8.svg"
+    "photo": "players/miriam-8.svg",
+    "photoAlt": "players/miriam-8-alt.svg"
   },
   {
     "slug": "giorgia-bomberona",
@@ -91,7 +95,8 @@ export const players: Player[] = [
       "gk": 75
     },
     "nickname": "bomberona",
-    "photo": "players/giorgia-bomberona.svg"
+    "photo": "players/giorgia-bomberona.svg",
+    "photoAlt": "players/giorgia-bomberona-alt.svg"
   },
   {
     "slug": "federico-13",
@@ -109,7 +114,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/federico-13.svg"
+    "photo": "players/federico-13.svg",
+    "photoAlt": "players/federico-13-alt.svg"
   },
   {
     "slug": "alice-14",
@@ -127,7 +133,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/alice-14.svg"
+    "photo": "players/alice-14.svg",
+    "photoAlt": "players/alice-14-alt.svg"
   },
   {
     "slug": "andrea-23",
@@ -145,7 +152,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/andrea-23.svg"
+    "photo": "players/andrea-23.svg",
+    "photoAlt": "players/andrea-23-alt.svg"
   },
   {
     "slug": "chiara-29",
@@ -163,7 +171,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/chiara-29.svg"
+    "photo": "players/chiara-29.svg",
+    "photoAlt": "players/chiara-29-alt.svg"
   },
   {
     "slug": "marco-33",
@@ -181,7 +190,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/marco-33.svg"
+    "photo": "players/marco-33.svg",
+    "photoAlt": "players/marco-33-alt.svg"
   },
   {
     "slug": "guia-42",
@@ -199,7 +209,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/guia-42.svg"
+    "photo": "players/guia-42.svg",
+    "photoAlt": "players/guia-42-alt.svg"
   },
   {
     "slug": "stefano-99",
@@ -217,7 +228,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/stefano-99.svg"
+    "photo": "players/stefano-99.svg",
+    "photoAlt": "players/stefano-99-alt.svg"
   },
   {
     "slug": "gianluca-9",
@@ -235,7 +247,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/gianluca-9.svg"
+    "photo": "players/gianluca-9.svg",
+    "photoAlt": "players/gianluca-9-alt.svg"
   },
   {
     "slug": "alex-11",
@@ -253,7 +266,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/alex-11.svg"
+    "photo": "players/alex-11.svg",
+    "photoAlt": "players/alex-11-alt.svg"
   },
   {
     "slug": "luca-15",
@@ -271,7 +285,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/luca-15.svg"
+    "photo": "players/luca-15.svg",
+    "photoAlt": "players/luca-15-alt.svg"
   },
   {
     "slug": "rebecca-18",
@@ -289,7 +304,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/rebecca-18.svg"
+    "photo": "players/rebecca-18.svg",
+    "photoAlt": "players/rebecca-18-alt.svg"
   },
   {
     "slug": "giulio-21",
@@ -307,7 +323,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/giulio-21.svg"
+    "photo": "players/giulio-21.svg",
+    "photoAlt": "players/giulio-21-alt.svg"
   },
   {
     "slug": "marialaura-22",
@@ -325,7 +342,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/marialaura-22.svg"
+    "photo": "players/marialaura-22.svg",
+    "photoAlt": "players/marialaura-22-alt.svg"
   },
   {
     "slug": "gabriele-28",
@@ -343,7 +361,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/gabriele-28.svg"
+    "photo": "players/gabriele-28.svg",
+    "photoAlt": "players/gabriele-28-alt.svg"
   },
   {
     "slug": "pietro-30",
@@ -361,7 +380,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/pietro-30.svg"
+    "photo": "players/pietro-30.svg",
+    "photoAlt": "players/pietro-30-alt.svg"
   },
   {
     "slug": "veronica-39",
@@ -379,7 +399,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/veronica-39.svg"
+    "photo": "players/veronica-39.svg",
+    "photoAlt": "players/veronica-39-alt.svg"
   },
   {
     "slug": "tommaso-67",
@@ -397,7 +418,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/tommaso-67.svg"
+    "photo": "players/tommaso-67.svg",
+    "photoAlt": "players/tommaso-67-alt.svg"
   },
   {
     "slug": "chiara-81",
@@ -415,7 +437,8 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/chiara-81.svg"
+    "photo": "players/chiara-81.svg",
+    "photoAlt": "players/chiara-81-alt.svg"
   },
   {
     "slug": "guglielmo-0",
@@ -433,6 +456,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "photo": "players/guglielmo-0.svg"
+    "photo": "players/guglielmo-0.svg",
+    "photoAlt": "players/guglielmo-0-alt.svg"
   }
 ];

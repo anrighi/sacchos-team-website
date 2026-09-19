@@ -57,4 +57,10 @@ describe("portraitSvg", () => {
     expect(svg).toContain("Maglia trasferta navy");
     expect(svg).toContain('id="claw-slashes"');
   });
+
+  it("dresses a player in the kit asked for, not the one of his team", () => {
+    const player = sample();
+    expect(portraitSvg(player, "away")).toContain("Maglia trasferta navy");
+    expect(portraitSvg(player, "home")).toBe(portraitSvg(player));
+  });
 });
