@@ -8,13 +8,14 @@ Generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-re
 
 1. Open feature issue (`label:feature`) matching the active phase in `docs/FEATURES.md`
 2. Read the linked `docs/features/F*.md` spec
-3. Follow `.cursor/rules/github-workflow.mdc` and `.cursor/rules/stack.mdc`
+3. Follow `.cursor/rules/github-workflow.mdc`, `.cursor/rules/stack.mdc`, and `.cursor/rules/visual.mdc` (`docs/VISUAL.md`)
 4. Branch: `cursor/phase-<n>-f<id>-<slug>-91b9` (stack if previous PR is unmerged)
 
 ## During work
 
 - One feature per branch
 - Early returns, `#/` imports, UI italiana, pochi commenti
+- UI: PNG ritagliati in `public/brand/`, headline corte, CTA a pillola (vedi `docs/VISUAL.md`)
 - ADR in `docs/FEATURES.md`
 - Deferred work stays `deferred` in manifest (F7 album)
 

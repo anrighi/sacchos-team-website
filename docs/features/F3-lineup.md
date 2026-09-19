@@ -33,3 +33,4 @@ Chi crea dà un nome alla rosa, schiera 7 in 3-2-1 (default), copia `/sfida?host
 ## Notes
 
 Stesso giocatore non in entrambe le rose. Varianti modulo come costanti, UI può partire dal solo 3-2-1.
+Skin della pagina: `docs/VISUAL.md` (PNG ritagliati, hero scuro, CTA a pillola, poco testo).

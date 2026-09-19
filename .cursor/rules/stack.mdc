@@ -28,6 +28,7 @@ shadcn può usare `@/` (stesso `src/`). Nel codice scritto a mano preferisci `#/
 - Solo identità **Saccho's Team**. Saccios Tim = valore filtro, logo pennarello solo sul chip
 - In UI: nickname se c'è, altrimenti nome. Mai cognomi, mai foto reali
 - shadcn per primitive (Button, Dialog, …); skin custom, non look dashboard
+- Pagine (asset PNG, poco testo, motion): `.cursor/rules/visual.mdc` e `docs/VISUAL.md`
 
 ## Dati
 

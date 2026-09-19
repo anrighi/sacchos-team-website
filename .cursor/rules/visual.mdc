@@ -1,0 +1,41 @@
+---
+description: Visual Saccho's Team — asset PNG, poco testo, motion
+alwaysApply: true
+---
+
+# Visual
+
+Quando stili una pagina (route, componente, CSS), segui `docs/VISUAL.md`. La home (`src/components/HomeLanding.tsx`) è il riferimento.
+
+## Asset in UI
+
+Usa sempre `publicUrl(...)`. In UI **solo PNG ritagliati**, mai i JPG di reference.
+
+| Cosa | Path |
+|------|------|
+| Logo Saccho's | `/brand/logo-sacchos.png` |
+| Chip Saccios Tim | `/brand/logo-saccios-tim.png` |
+| Maglia casa | `/brand/kit-home-front.png` |
+| Maglia trasferta | `/brand/kit-away-front.png` |
+
+JPG in `public/brand/` (`logo-*.jpg`, `maglie-scoutball.jpg`) = solo source. Non inserirli in `<img>`.
+
+Logo: `object-contain`, niente `rounded-full` / `object-cover` (tagliano l’anello o riportano un disco bianco). Il PNG è già senza fondo: il nero della pagina deve vedersi dentro l’anello; i pannelli bianchi del pallone restano.
+
+## Pagine
+
+- `main` nero, testo bianco. Hero con `landing-hero-glow`
+- Titoli `font-display` (MrAlex), grandi, leading stretto. Una riga di claim, non paragrafi
+- CTA primaria: pillola `rounded-full bg-pink text-navy-deep min-h-11`
+- CTA secondaria: pillola `rounded-full text-pink ring-1 ring-pink/40 min-h-11`
+- Link testuale: `text-pink min-h-11`
+- Kit e ritratti fluttuanti sul nero, non in riquadri bianchi o grigi
+- Ritratti “in aria”: `<PlayerPortrait backdrop={false} />`. Nelle carte FUT lascia il default (`backdrop`)
+- Motion: `float-drift` sulle cutout, `<Reveal>` sui capitoli. `prefers-reduced-motion` = niente drift, solo fade (già in `src/styles.css`)
+
+## Non fare
+
+- Nuove palette, rosso marker fuori dal chip Saccios Tim
+- Copia lunga, sezioni che ripetono la stessa immagine
+- Sfondi dipinti dietro logo/kit
+- Import relativi; usa `#/` e `publicUrl`

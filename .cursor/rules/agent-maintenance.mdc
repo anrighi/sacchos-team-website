@@ -20,6 +20,7 @@ Project: **Saccho's Team** (Scoutball, AGESCI Pesaro 1).
 - Prefer small diffs, early returns, and self-explanatory names over comments
 - Do not skip phases defined in `docs/FEATURES.md`
 - Add stack-specific conventions in additional `.cursor/rules/*.mdc` files (language, imports, UI locale, etc.)
+- UI: `.cursor/rules/visual.mdc` e `docs/VISUAL.md` (PNG ritagliati, poco testo, stessa skin della home)
 
 ## End of session
 

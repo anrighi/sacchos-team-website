@@ -36,3 +36,4 @@ Niente restyling palette. Rosso marker solo sul chip Saccios Tim.
 JPG di reference restano in `public/brand/`; la UI usa PNG ritagliati (sfondo rimosso). Ridisegnare i loghi in SVG resta una chore di grafica in fase 0+.
 Home: tre blocchi (hero, carte, chiusura), poco testo, kit e ritratti fluttuanti, `prefers-reduced-motion` = niente drift.
 Reference home: landing prodotto Apple (iPhone 17 Pro) — capitoli a tutto schermo, headline grandi, CTA a pillola, niente copia Apple.
+Linee guida per le altre pagine: `docs/VISUAL.md` e `.cursor/rules/visual.mdc`.

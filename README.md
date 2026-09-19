@@ -37,7 +37,7 @@ Copia `.env.example` in `.env` quando hai gli URL degli Sheet.
 | `/sfida/partita` | Tabellino (F5) |
 | `/sfide` | Archivio Sheet (F6) |
 
-UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa.
+UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa. Skin e asset: [docs/VISUAL.md](docs/VISUAL.md).
 
 Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali nel repo.
 
