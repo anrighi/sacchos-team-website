@@ -3,7 +3,7 @@ import type { Player } from "#/lib/player";
 
 export const players: Player[] = [
   {
-    "slug": "andrea-4",
+    "slug": "andrea-papu",
     "firstName": "Andrea",
     "team": "Saccho's Team",
     "sex": "M",
@@ -17,10 +17,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "PAPU"
   },
   {
-    "slug": "nicolo-5",
+    "slug": "nicolo-nick",
     "firstName": "Nicolò",
     "team": "Saccho's Team",
     "sex": "M",
@@ -34,10 +35,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Nick"
   },
   {
-    "slug": "michele-7",
+    "slug": "michele-baljeet",
     "firstName": "Michele",
     "team": "Saccho's Team",
     "sex": "M",
@@ -51,10 +53,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "baljeet"
   },
   {
-    "slug": "miriam-8",
+    "slug": "miriam-nonmiribecco",
     "firstName": "Miriam",
     "team": "Saccho's Team",
     "sex": "F",
@@ -68,10 +71,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "nonMIRibecco"
   },
   {
-    "slug": "giorgia-bomberona",
+    "slug": "giorgia-pappagiorgia",
     "firstName": "Giorgia",
     "team": "Saccho's Team",
     "sex": "F",
@@ -86,7 +90,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "bomberona",
+    "nickname": "pappagiorgia",
     "portrait": {
       "hair": "undercut",
       "rearHair": "longWavy",
@@ -98,7 +102,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "federico-13",
+    "slug": "federico-peppinson",
     "firstName": "Federico",
     "team": "Saccho's Team",
     "sex": "M",
@@ -112,10 +116,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Peppinson"
   },
   {
-    "slug": "alice-14",
+    "slug": "alice-winx",
     "firstName": "Alice",
     "team": "Saccho's Team",
     "sex": "F",
@@ -129,10 +134,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Winx"
   },
   {
-    "slug": "andrea-23",
+    "slug": "andrea-mascotte",
     "firstName": "Andrea",
     "team": "Saccho's Team",
     "sex": "M",
@@ -146,7 +152,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Mascotte"
   },
   {
     "slug": "chiara-29",
@@ -166,7 +173,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "marco-33",
+    "slug": "marco-mt",
     "firstName": "Marco",
     "team": "Saccho's Team",
     "sex": "M",
@@ -180,10 +187,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "MT"
   },
   {
-    "slug": "guia-42",
+    "slug": "guia-vaiana",
     "firstName": "Guia",
     "team": "Saccho's Team",
     "sex": "F",
@@ -197,10 +205,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "vaiana"
   },
   {
-    "slug": "stefano-99",
+    "slug": "stefano-ragno",
     "firstName": "Stefano",
     "team": "Saccho's Team",
     "sex": "M",
@@ -215,6 +224,7 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
+    "nickname": "Ragno",
     "portrait": {
       "hair": "sideComed",
       "rearHair": "none",
@@ -226,7 +236,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "gianluca-9",
+    "slug": "gianluca-jack",
     "firstName": "Gianluca",
     "team": "Saccios Tim",
     "sex": "M",
@@ -240,10 +250,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Jack"
   },
   {
-    "slug": "alex-11",
+    "slug": "alex-trabucco-donosor",
     "firstName": "Alex",
     "team": "Saccios Tim",
     "sex": "M",
@@ -257,10 +268,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Trabucco Donosor"
   },
   {
-    "slug": "luca-15",
+    "slug": "luca-puffin",
     "firstName": "Luca",
     "team": "Saccios Tim",
     "sex": "M",
@@ -274,10 +286,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Puffin"
   },
   {
-    "slug": "rebecca-18",
+    "slug": "rebecca-quechua",
     "firstName": "Rebecca",
     "team": "Saccios Tim",
     "sex": "F",
@@ -291,7 +304,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Quechua"
   },
   {
     "slug": "giulio-21",
@@ -311,7 +325,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "marialaura-22",
+    "slug": "marialaura-baguette",
     "firstName": "MariaLaura",
     "team": "Saccios Tim",
     "sex": "F",
@@ -325,10 +339,11 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Baguette"
   },
   {
-    "slug": "gabriele-28",
+    "slug": "gabriele-lando",
     "firstName": "Gabriele",
     "team": "Saccios Tim",
     "sex": "M",
@@ -342,7 +357,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "Lando"
   },
   {
     "slug": "pietro-30",
@@ -362,7 +378,7 @@ export const players: Player[] = [
     }
   },
   {
-    "slug": "veronica-39",
+    "slug": "veronica-leo-corno",
     "firstName": "Veronica",
     "team": "Saccios Tim",
     "sex": "F",
@@ -376,7 +392,8 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
-    }
+    },
+    "nickname": "leo-corno"
   },
   {
     "slug": "tommaso-67",

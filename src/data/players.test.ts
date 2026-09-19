@@ -18,8 +18,15 @@ describe("players snapshot", () => {
 
   it("uses nickname when present", () => {
     const giorgia = players.find((p) => p.number === 10 && p.team === "Saccho's Team");
-    expect(giorgia?.nickname).toBe("bomberona");
-    expect(displayName(giorgia!)).toBe("bomberona");
+    expect(giorgia?.nickname).toBe("pappagiorgia");
+    expect(displayName(giorgia!)).toBe("pappagiorgia");
+  });
+
+  it("uses shirt names as nicknames for matching numbers", () => {
+    expect(players.find((p) => p.number === 4)?.nickname).toBe("PAPU");
+    expect(players.find((p) => p.number === 11)?.nickname).toBe("Trabucco Donosor");
+    expect(players.find((p) => p.number === 99)?.nickname).toBe("Ragno");
+    expect(players.find((p) => p.number === 0)?.nickname).toBeUndefined();
   });
 
   it("defaults overall to 75", () => {
@@ -27,7 +34,7 @@ describe("players snapshot", () => {
   });
 
   it("stores Toon Head traits from portraits.csv", () => {
-    const giorgia = players.find((p) => p.slug === "giorgia-bomberona");
+    const giorgia = players.find((p) => p.slug === "giorgia-pappagiorgia");
     expect(giorgia?.photo).toBeUndefined();
     expect(giorgia?.portrait?.mouth).toBe("smile");
     expect(giorgia?.portrait?.rearHair).toBe("longWavy");

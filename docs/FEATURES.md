@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-19 | Cursor | 1 | Nickname = nomi maglia agganciati al numero in rosa | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Maglie senza match in rosa (Pongo 2, Dasyp 15, …) |
 | 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (con PNG e linee guida visuali) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
 | 2026-09-19 | Cursor | 1 polish | Preset colori capelli/carnagione; espressioni vuote = seed runtime | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-19 | Cursor | 1 | Linee guida visuali: `docs/VISUAL.md` + `.cursor/rules/visual.mdc` | F3: schieramento 3-2-1 su `/sfida` con la stessa skin | Loghi SVG originali ancora in 0+ |
