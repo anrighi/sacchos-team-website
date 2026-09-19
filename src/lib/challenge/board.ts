@@ -185,7 +185,13 @@ function calloutFor(slug: string, event: SimEvent | null, flash: BoardFlash): st
     return undefined;
   }
   if (event.target === slug && event.actor !== slug) {
-    return event.kind === "scalpo-pieno" ? "Scalpato" : undefined;
+    if (event.kind === "scalpo-pieno") {
+      return "Scalpato";
+    }
+    if (event.kind === "parata") {
+      return "Meta tentata";
+    }
+    return undefined;
   }
   return flash.label;
 }

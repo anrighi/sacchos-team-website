@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnalogClock } from "#/components/challenge/AnalogClock";
 import { MatchBoard } from "#/components/challenge/MatchBoard";
+import { MatchEfficiency } from "#/components/challenge/MatchEfficiency";
 import { ShareChallenge } from "#/components/challenge/ShareChallenge";
 import { players } from "#/data/players.generated";
 import { boardAt } from "#/lib/challenge/board";
@@ -81,6 +82,7 @@ export function MatchView({
       <EventLog events={newestFirst} current={frame.event} />
       {frame.done ? (
         <div className="mt-8 space-y-4">
+          <MatchEfficiency seed={seed} events={match.events} roster={players} />
           <button
             type="button"
             onClick={onReplay}

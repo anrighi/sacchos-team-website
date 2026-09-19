@@ -141,6 +141,10 @@ describe("boardAt", () => {
     expect(frame.flash?.label).toBe("Impedisce la meta");
     const keeper = frame.tokens.find((token) => token.slug === stop!.actor);
     expect(keeper?.callout).toBe("Impedisce la meta");
-    expect(stop?.text).toMatch(/impedisce la meta$/);
+    expect(stop?.target).toBeTruthy();
+    const shooter = frame.tokens.find((token) => token.slug === stop!.target);
+    expect(shooter?.highlight).toBe(true);
+    expect(shooter?.callout).toBe("Meta tentata");
+    expect(stop?.text).toMatch(/impedisce la meta di /);
   });
 });

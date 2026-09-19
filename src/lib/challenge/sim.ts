@@ -342,6 +342,7 @@ export function simulateMatch(input: SimulateInput): MatchSim {
         score,
         side: shot.kind === "parata" ? def.side : att.side,
         actor: shot.actor,
+        target: shot.target,
         text: shot.text,
         pauseMs: pauseMs(rng, shot.kind),
       });
@@ -585,6 +586,7 @@ function tryShot(att: SquadState, def: SquadState, rng: Rng, roster: readonly Pl
     return {
       kind: "meta" as const,
       actor: shooter.player.slug,
+      target: keeper.player.slug,
       text: `${labelOf(shooter.player, roster)} appoggia la meta`,
     };
   }
@@ -592,7 +594,8 @@ function tryShot(att: SquadState, def: SquadState, rng: Rng, roster: readonly Pl
     return {
       kind: "parata" as const,
       actor: keeper.player.slug,
-      text: `${labelOf(keeper.player, roster)} impedisce la meta`,
+      target: shooter.player.slug,
+      text: `${labelOf(keeper.player, roster)} impedisce la meta di ${labelOf(shooter.player, roster)}`,
     };
   }
   return { kind: "turnover" as const, actor: shooter.player.slug, text: "" };

@@ -178,8 +178,10 @@ describe("simulateMatch", () => {
     expect(restart?.text).toMatch(/Palla a /);
     const stop = match.events.find((event) => event.kind === "parata");
     if (stop) {
-      expect(stop.text).toMatch(/impedisce la meta$/);
+      expect(stop.text).toMatch(/impedisce la meta di /);
       expect(stop.text).not.toMatch(/\bpara\b/i);
+      expect(stop.target).toBeTruthy();
+      expect(stop.actor).not.toBe(stop.target);
     }
     expect(kinds).toContain("intervallo");
     expect(kinds).toContain("secondo-tempo");
