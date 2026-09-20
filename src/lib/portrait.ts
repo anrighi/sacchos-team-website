@@ -1,7 +1,7 @@
 import { Avatar, Style } from "@dicebear/core";
 import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
-import type { Player, PortraitTraits, TeamName } from "#/lib/player";
+import type { Player, TeamName } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
 
 const toonHead = new Style(definition);
@@ -28,9 +28,6 @@ export const REAR_HAIR_VARIANTS = [
   "neckHigh",
   "shoulderHigh",
 ] as const;
-export const EYES_VARIANTS = ["bow", "happy", "humble", "wide", "wink"] as const;
-export const EYEBROWS_VARIANTS = ["angry", "happy", "neutral", "raised", "sad"] as const;
-export const MOUTH_VARIANTS = ["agape", "angry", "laugh", "sad", "smile"] as const;
 export const BEARD_VARIANTS = [
   "chin",
   "chinMoustache",
@@ -55,18 +52,6 @@ export const SKIN_COLOR_PRESETS = {
   light: "f1c3a5",
 } as const;
 
-export const DEFAULT_HAIR_COLORS = [
-  HAIR_COLOR_PRESETS.black,
-  HAIR_COLOR_PRESETS.brown,
-  HAIR_COLOR_PRESETS.blonde,
-] as const;
-
-export const DEFAULT_SKIN_COLORS = [
-  SKIN_COLOR_PRESETS.deep,
-  SKIN_COLOR_PRESETS.medium,
-  SKIN_COLOR_PRESETS.light,
-] as const;
-
 const HAIR_COLOR_ALIASES: Record<string, keyof typeof HAIR_COLOR_PRESETS> = {
   nero: "black",
   castano: "brown",
@@ -85,12 +70,17 @@ const SKIN_COLOR_ALIASES: Record<string, keyof typeof SKIN_COLOR_PRESETS> = {
   chiara: "light",
 };
 
-export type HairVariant = (typeof HAIR_VARIANTS)[number];
-export type RearHairVariant = (typeof REAR_HAIR_VARIANTS)[number];
-export type EyesVariant = (typeof EYES_VARIANTS)[number];
-export type EyebrowsVariant = (typeof EYEBROWS_VARIANTS)[number];
-export type MouthVariant = (typeof MOUTH_VARIANTS)[number];
-export type BeardVariant = (typeof BEARD_VARIANTS)[number];
+const HAIR_COLOR_LABELS: Record<string, string> = {
+  [HAIR_COLOR_PRESETS.black]: "nero",
+  [HAIR_COLOR_PRESETS.brown]: "castano",
+  [HAIR_COLOR_PRESETS.blonde]: "biondo",
+};
+
+const SKIN_COLOR_LABELS: Record<string, string> = {
+  [SKIN_COLOR_PRESETS.deep]: "scura",
+  [SKIN_COLOR_PRESETS.medium]: "media",
+  [SKIN_COLOR_PRESETS.light]: "chiara",
+};
 
 export type KitKind = "home" | "away";
 
@@ -107,7 +97,7 @@ export function portraitSvg(
 ): string {
   const kit = options.kit ?? kitKind(player.team);
   const backdrop = options.backdrop !== false;
-  const key = `${player.slug}:${kit}:${backdrop}:${player.sex}:${JSON.stringify(player.portrait ?? {})}`;
+  const key = `${player.slug}:${kit}:${backdrop}:${JSON.stringify(player.portrait ?? {})}`;
   const cached = portraitCache.get(key);
   if (cached) {
     return cached;
@@ -123,7 +113,7 @@ export function portraitOptions(
   kit: KitKind = kitKind(player.team),
   backdrop = true,
 ): Record<string, unknown> {
-  const traits = completePortraitTraits(player);
+  const traits = player.portrait ?? {};
 
   return {
     seed: player.slug,
@@ -143,9 +133,6 @@ export function portraitOptions(
     ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
     ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
     ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
-    ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
-    ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
-    ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
     ...colorOption("hair", traits.hairColor),
     ...colorOption("skin", traits.skinColor),
   };
@@ -193,51 +180,18 @@ export function resolveSkinColor(value: string | undefined): string | undefined 
 
 export function sheetHairColorLabel(value: string | undefined): string {
   const hex = resolveHairColor(value);
-  if (hex === HAIR_COLOR_PRESETS.black) {
-    return "nero";
+  if (!hex) {
+    return "";
   }
-  if (hex === HAIR_COLOR_PRESETS.brown) {
-    return "castano";
-  }
-  if (hex === HAIR_COLOR_PRESETS.blonde) {
-    return "biondo";
-  }
-  return "";
+  return HAIR_COLOR_LABELS[hex] ?? "";
 }
 
 export function sheetSkinColorLabel(value: string | undefined): string {
   const hex = resolveSkinColor(value);
-  if (hex === SKIN_COLOR_PRESETS.deep) {
-    return "scura";
+  if (!hex) {
+    return "";
   }
-  if (hex === SKIN_COLOR_PRESETS.medium) {
-    return "media";
-  }
-  if (hex === SKIN_COLOR_PRESETS.light) {
-    return "chiara";
-  }
-  return "";
-}
-
-export function completePortraitTraits(player: Player): PortraitTraits {
-  const traits = player.portrait ?? {};
-  const look: PortraitTraits = {};
-  if (traits.hair) {
-    look.hair = traits.hair;
-  }
-  if (traits.rearHair) {
-    look.rearHair = traits.rearHair;
-  }
-  if (traits.beard) {
-    look.beard = traits.beard;
-  }
-  if (traits.hairColor) {
-    look.hairColor = traits.hairColor;
-  }
-  if (traits.skinColor) {
-    look.skinColor = traits.skinColor;
-  }
-  return look;
+  return SKIN_COLOR_LABELS[hex] ?? "";
 }
 
 function resolvePresetColor<T extends Record<string, string>>(
@@ -259,7 +213,7 @@ function resolvePresetColor<T extends Record<string, string>>(
   return normalizeHex(value);
 }
 
-export function normalizeHex(value: string | undefined): string | undefined {
+function normalizeHex(value: string | undefined): string | undefined {
   if (!value) {
     return undefined;
   }

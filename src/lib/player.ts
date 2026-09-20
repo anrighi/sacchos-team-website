@@ -24,9 +24,6 @@ export type PortraitTraits = {
   rearHair?: string;
   hairColor?: string;
   skinColor?: string;
-  eyes?: string;
-  eyebrows?: string;
-  mouth?: string;
   beard?: string;
 };
 

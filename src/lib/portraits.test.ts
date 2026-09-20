@@ -5,7 +5,7 @@ import {
   parsePortraitsCsv,
   serializePortraitsCsv,
 } from "#/lib/portraits";
-import { DEFAULT_HAIR_COLORS } from "#/lib/portrait";
+import { SHEET_HAIR_COLORS } from "#/lib/sheet-schema";
 import type { Player } from "#/lib/player";
 
 describe("parsePortraitTraits", () => {
@@ -90,7 +90,7 @@ describe("serializePortraitsCsv", () => {
       }),
     ]);
     expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,biondo,chiara,none");
-    expect(DEFAULT_HAIR_COLORS.length).toBe(3);
+    expect(SHEET_HAIR_COLORS).toHaveLength(3);
     expect(serializePortraitsCsv([sample()])).toContain("ada-10,Ada,10,Saccho's Team,,,,,");
   });
 });

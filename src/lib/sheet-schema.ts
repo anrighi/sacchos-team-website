@@ -1,5 +1,5 @@
 import { foldHeader } from "#/lib/csv";
-import { ROLE_LABELS, ROLES, TEAMS, type Role } from "#/lib/player";
+import { ROLE_LABELS, ROLES, type Role } from "#/lib/player";
 
 export const SHEET_HEADERS = [
   "Nome",
@@ -20,10 +20,6 @@ export const SHEET_HEADERS = [
   "Carnagione",
   "Barba",
 ] as const;
-
-export const SHEET_TEAMS = [...TEAMS] as const;
-export const SHEET_SEX = ["Femmina", "Maschio"] as const;
-export const SHEET_ROLES = ROLES.map((role) => ROLE_LABELS[role]);
 
 export const SHEET_HAIR = [
   { value: "crocchia", trait: "bun", aliases: ["chignon"] },
@@ -53,9 +49,6 @@ export const SHEET_BEARD = [
 export const SHEET_HAIR_COLORS = ["nero", "castano", "biondo"] as const;
 export const SHEET_SKIN_COLORS = ["scura", "media", "chiara"] as const;
 
-export const DEFAULT_HAIR_COLOR_KEYS = ["black", "brown", "blonde"] as const;
-export const DEFAULT_SKIN_COLOR_KEYS = ["deep", "medium", "light"] as const;
-
 export const STAT_SHEET_ALIASES = {
   velocita: ["velocita", "velocità", "vel"],
   salto: ["salto"],
@@ -64,10 +57,6 @@ export const STAT_SHEET_ALIASES = {
   finalizzazione: ["finalizzazione"],
   gk: ["gk", "parate", "parata"],
 } as const;
-
-export function sheetValues(rows: readonly { value: string }[]): string[] {
-  return rows.map((row) => row.value);
-}
 
 export function sheetTraitLabel(
   rows: readonly { value: string; trait: string }[],
@@ -106,9 +95,9 @@ export function parseSheetRole(raw: string): Role | undefined {
   if ((ROLES as readonly string[]).includes(code)) {
     return code as Role;
   }
-  const folded = foldLabel(value);
+  const folded = foldHeader(value);
   for (const role of ROLES) {
-    if (foldLabel(ROLE_LABELS[role]) === folded) {
+    if (foldHeader(ROLE_LABELS[role]) === folded) {
       return role;
     }
   }
@@ -116,7 +105,7 @@ export function parseSheetRole(raw: string): Role | undefined {
 }
 
 export function parseSheetSex(raw: string): "F" | "M" | undefined {
-  const folded = foldLabel(raw);
+  const folded = foldHeader(raw);
   if (!folded) {
     return undefined;
   }
@@ -127,12 +116,4 @@ export function parseSheetSex(raw: string): "F" | "M" | undefined {
     return "M";
   }
   return undefined;
-}
-
-function foldLabel(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "");
 }

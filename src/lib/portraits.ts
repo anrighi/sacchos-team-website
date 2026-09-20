@@ -2,7 +2,6 @@ import { csvCell, csvEscape, foldHeader, parseCsv, slugify } from "#/lib/csv";
 import type { Player, PortraitTraits } from "#/lib/player";
 import {
   BEARD_VARIANTS,
-  completePortraitTraits,
   HAIR_VARIANTS,
   REAR_HAIR_VARIANTS,
   resolveHairColor,
@@ -78,7 +77,7 @@ export function serializePortraitsCsv(players: readonly Player[]): string {
   const header = "slug,firstName,number,team,hair,rearHair,hairColor,skinColor,beard";
   const lines = [header];
   for (const player of players) {
-    const traits = completePortraitTraits(player);
+    const traits = player.portrait ?? {};
     lines.push(
       [
         player.slug,

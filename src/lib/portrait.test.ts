@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  completePortraitTraits,
   KIT_LAYOUT,
   kitKind,
   portraitOptions,
@@ -75,8 +74,6 @@ describe("portraitSvg", () => {
           hair: "spiky",
           rearHair: "none",
           beard: "none",
-          eyes: "wink",
-          mouth: "laugh",
           hairColor: "2c1b18",
         },
       }),
@@ -132,25 +129,5 @@ describe("portraitSvg", () => {
     const player = sample();
     expect(portraitSvg(player, { kit: "away" })).toContain("#1a2634");
     expect(portraitSvg(player, { kit: "home" })).toBe(portraitSvg(player));
-  });
-});
-
-describe("completePortraitTraits", () => {
-  it("keeps only the look from the Sheet", () => {
-    const player = sample({
-      portrait: {
-        hair: "undercut",
-        rearHair: "longWavy",
-        beard: "none",
-        skinColor: "f1c3a5",
-      },
-    });
-    expect(completePortraitTraits(player)).toEqual({
-      hair: "undercut",
-      rearHair: "longWavy",
-      beard: "none",
-      skinColor: "f1c3a5",
-    });
-    expect(completePortraitTraits(sample())).toEqual({});
   });
 });

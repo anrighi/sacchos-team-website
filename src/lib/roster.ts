@@ -1,5 +1,5 @@
 import { csvCell, csvEscape, parseCsv, slugify } from "#/lib/csv";
-import { completePortraitTraits, sheetHairColorLabel, sheetSkinColorLabel } from "#/lib/portrait";
+import { sheetHairColorLabel, sheetSkinColorLabel } from "#/lib/portrait";
 import { parsePortraitTraits } from "#/lib/portraits";
 import {
   parseSheetRole,
@@ -239,7 +239,7 @@ export function filterPlayers(players: readonly Player[], filters: RosterFilters
 export function serializeSheetCsv(players: readonly Player[]): string {
   const lines = [SHEET_HEADERS.join(",")];
   for (const player of players) {
-    const traits = completePortraitTraits(player);
+    const traits = player.portrait ?? {};
     lines.push(
       [
         player.firstName,
@@ -254,35 +254,6 @@ export function serializeSheetCsv(players: readonly Player[]): string {
         sheetHairColorLabel(traits.hairColor),
         sheetSkinColorLabel(traits.skinColor),
         sheetTraitLabel(SHEET_BEARD, traits.beard),
-      ]
-        .map(csvEscape)
-        .join(","),
-    );
-  }
-  return `${lines.join("\n")}\n`;
-}
-
-export function serializeSeedCsv(players: readonly Player[]): string {
-  const header = [
-    "firstName",
-    "nickname",
-    "number",
-    "team",
-    "sex",
-    "role",
-    ...STAT_KEYS,
-  ].join(",");
-  const lines = [header];
-  for (const player of players) {
-    lines.push(
-      [
-        player.firstName,
-        player.nickname ?? "",
-        String(player.number),
-        player.team,
-        player.sex,
-        player.role ?? "",
-        ...STAT_KEYS.map((key) => String(player.stats[key])),
       ]
         .map(csvEscape)
         .join(","),
