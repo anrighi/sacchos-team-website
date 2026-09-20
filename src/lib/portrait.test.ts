@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  applyPortraitDefaults,
   completePortraitTraits,
-  DEFAULT_HAIR_COLORS,
-  DEFAULT_SKIN_COLORS,
-  defaultPortraitTraits,
-  HAIR_VARIANTS,
   KIT_LAYOUT,
   kitKind,
   portraitOptions,
@@ -33,7 +28,6 @@ function sample(overrides: Partial<Player> = {}): Player {
     team: "Saccho's Team",
     sex: "F",
     number: 10,
-    birthYear: 2000,
     overall: 75,
     stats,
     ...overrides,
@@ -96,15 +90,14 @@ describe("portraitSvg", () => {
     expect(options.clothesVariant).toEqual(["tShirt"]);
   });
 
-  it("pins hair, beard and a single color from the 3 defaults", () => {
+  it("does not invent hair, beard or colors when the Sheet look is empty", () => {
     const options = portraitOptions(sample());
-    expect(HAIR_VARIANTS).toContain((options.hairVariant as string[])[0]);
-    expect(options.hairColor).toHaveLength(1);
-    expect(DEFAULT_HAIR_COLORS).toContain((options.hairColor as string[])[0]);
-    expect(options.skinColor).toHaveLength(1);
-    expect(DEFAULT_SKIN_COLORS).toContain((options.skinColor as string[])[0]);
-    expect(options.rearHairProbability).toBe(100);
+    expect(options.hairVariant).toBeUndefined();
+    expect(options.hairProbability).toBe(0);
+    expect(options.rearHairProbability).toBe(0);
     expect(options.beardProbability).toBe(0);
+    expect(options.hairColor).toBeUndefined();
+    expect(options.skinColor).toBeUndefined();
     expect(options.eyesVariant).toBeUndefined();
     expect(options.eyebrowsVariant).toBeUndefined();
     expect(options.mouthVariant).toBeUndefined();
@@ -142,34 +135,8 @@ describe("portraitSvg", () => {
   });
 });
 
-describe("defaultPortraitTraits", () => {
-  it("gives women rear hair and no beard", () => {
-    const traits = defaultPortraitTraits(sample({ sex: "F", birthYear: 1998 }));
-    expect(traits.beard).toBe("none");
-    expect(traits.rearHair).not.toBe("none");
-    expect(DEFAULT_HAIR_COLORS).toContain(traits.hairColor);
-    expect(DEFAULT_SKIN_COLORS).toContain(traits.skinColor);
-  });
-
-  it("gives young men no rear hair and no beard", () => {
-    const traits = defaultPortraitTraits(sample({ sex: "M", birthYear: 2000 }));
-    expect(traits.rearHair).toBe("none");
-    expect(traits.beard).toBe("none");
-  });
-
-  it("gives older men a beard", () => {
-    const traits = defaultPortraitTraits(
-      sample({ slug: "marco-mt", sex: "M", birthYear: 1983 }),
-    );
-    expect(traits.rearHair).toBe("none");
-    expect(traits.beard).not.toBe("none");
-  });
-
-  it("is stable for the same slug", () => {
-    expect(defaultPortraitTraits(sample())).toEqual(defaultPortraitTraits(sample()));
-  });
-
-  it("fills only missing custom traits", () => {
+describe("completePortraitTraits", () => {
+  it("keeps only the look from the Sheet", () => {
     const player = sample({
       portrait: {
         hair: "undercut",
@@ -178,18 +145,12 @@ describe("defaultPortraitTraits", () => {
         skinColor: "f1c3a5",
       },
     });
-    const traits = completePortraitTraits(player);
-    expect(traits.hair).toBe("undercut");
-    expect(traits.rearHair).toBe("longWavy");
-    expect(traits.beard).toBe("none");
-    expect(traits.skinColor).toBe("f1c3a5");
-    expect(DEFAULT_HAIR_COLORS).toContain(traits.hairColor);
-  });
-
-  it("applies a complete look to every player", () => {
-    const [filled] = applyPortraitDefaults([sample({ portrait: undefined })]);
-    expect(filled?.portrait?.hair).toBeTruthy();
-    expect(filled?.portrait?.hairColor).toBeTruthy();
-    expect(filled?.portrait?.skinColor).toBeTruthy();
+    expect(completePortraitTraits(player)).toEqual({
+      hair: "undercut",
+      rearHair: "longWavy",
+      beard: "none",
+      skinColor: "f1c3a5",
+    });
+    expect(completePortraitTraits(sample())).toEqual({});
   });
 });

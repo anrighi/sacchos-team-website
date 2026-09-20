@@ -1,7 +1,6 @@
 import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { applyPortraitDefaults } from "#/lib/portrait";
 import { applyPortraits } from "#/lib/portraits";
 import {
   balanceRosterStats,
@@ -45,7 +44,6 @@ const portraitsCsv = loadPortraitsCsv();
 if (portraitsCsv) {
   players = applyPortraits(players, portraitsCsv);
 }
-players = applyPortraitDefaults(players);
 const beforeOverall = players.map((player) => player.overall);
 players = balanceRosterStats(players);
 const adjusted = players.filter((player, index) => player.overall !== beforeOverall[index]).length;

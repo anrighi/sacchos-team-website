@@ -64,7 +64,6 @@ function PlayerPage() {
             <p className="mt-4 text-lg text-white/55">
               {`#${player.number}`}
               {player.role ? ` · ${ROLE_LABELS[player.role]}` : ""}
-              {player.birthYear ? ` · ${player.birthYear}` : ""}
               {` · maglia ${kit === "home" ? "casa" : "trasferta"}`}
             </p>
 

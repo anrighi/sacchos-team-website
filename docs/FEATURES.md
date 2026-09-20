@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-20 | Cursor | 1 | Look solo dallo Sheet (niente default slug/anno); colonna Anno tolta | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Menu capelli in italiano chiaro (crocchia, pettinati di lato, a punte, lati rasati; dietro alla nuca / alle spalle) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Ruolo PAL = Palo; stats singole 60–100 (vuoto=75) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Fascia overall 75–90: formula Sheet + ricalibro in ingest | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |

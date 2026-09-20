@@ -73,23 +73,23 @@ Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
 L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Ogni riga ha già look e stats 75; il ruolo resta vuoto. Celle ancora vuote = gli stessi default a ingest. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
+Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Look e stats vengono dallo Sheet, senza default a ingest. Il ruolo resta vuoto finché non lo sceglie la squadra. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
-Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(H2:M1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra. Stats singole: **60–100**, cella vuota = **75**. Ruolo PAL = **Palo**.
+Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(G2:L1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra. Stats singole: **60–100**, cella vuota = **75**. Ruolo PAL = **Palo**.
 
 ## Ritratti (`src/data/portraits.csv`)
 
 Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è il kit del club (bianca Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 e Saccho's sul petto e gli artigli rosa.
 
-Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). Ogni giocatore ha un look completo; Giorgia, Stefano e Guglielmo tengono il viso custom. Trait ancora vuoti = default stabile dallo slug. Valori ammessi:
+Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). Look e colori vengono sempre dallo Sheet; celle vuote restano vuote (niente default dallo slug). Giorgia, Stefano e Guglielmo tengono il viso custom. Valori ammessi:
 
 | Colonna | Valori (IT sullo Sheet) |
 |---------|--------|
 | `hair` / Capelli | `crocchia`, `pettinati di lato`, `a punte`, `lati rasati`, `nessuno` |
 | `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `alla nuca`, `alle spalle`, `nessuno` |
 | `beard` / Barba | `pizzo`, `pizzo e baffi`, `barba`, `barba lunga`, `baffi`, `nessuno` |
-| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5; default già compilato) |
-| `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5; default già compilato) |
+| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5) |
+| `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5) |
 
 Occhi, sopracciglia e bocca non sono colonne: espressione dal seed dello slug a runtime, stabile per giocatore. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
 

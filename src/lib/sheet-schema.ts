@@ -5,7 +5,6 @@ export const SHEET_HEADERS = [
   "Nome",
   "Soprannome",
   "Numero",
-  "Anno",
   "Squadra",
   "Sesso",
   "Ruolo",

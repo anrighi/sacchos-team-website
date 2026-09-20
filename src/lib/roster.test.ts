@@ -19,7 +19,7 @@ import {
 import type { Player, PlayerStats } from "#/lib/player";
 
 const header =
-  "firstName,nickname,number,birthYear,team,sex,role,velocita,salto,intercetto,scalpo,finalizzazione,gk";
+  "firstName,nickname,number,team,sex,role,velocita,salto,intercetto,scalpo,finalizzazione,gk";
 
 describe("clampStat", () => {
   it("defaults empty values to 75", () => {
@@ -130,7 +130,7 @@ describe("balancePlayerStats", () => {
   });
 
   it("documents the Sheet formula and the 75–90 note", () => {
-    expect(SHEET_BALANCE_FORMULA).toContain("AVERAGE(H2:M1000)");
+    expect(SHEET_BALANCE_FORMULA).toContain("AVERAGE(G2:L1000)");
     expect(SHEET_BALANCE_NOTE).toContain("75–90");
     expect(SHEET_BALANCE_NOTE).toContain("60–100");
   });
@@ -144,7 +144,7 @@ describe("parseRosterCsv", () => {
   });
 
   it("clamps stats and computes overall", () => {
-    const csv = `${header}\nAda,,1,2000,Saccho's Team,F,,10,150,80,80,80,80`;
+    const csv = `${header}\nAda,,1,Saccho's Team,F,,10,150,80,80,80,80`;
     const [player] = parseRosterCsv(csv);
     expect(player?.stats.velocita).toBe(60);
     expect(player?.stats.salto).toBe(100);
@@ -153,9 +153,9 @@ describe("parseRosterCsv", () => {
 
   it("discards rows without number or firstName", () => {
     const csv = `${header}
-, ,1,2000,Saccho's Team,F,,75,75,75,75,75,75
-Ada,, ,2000,Saccho's Team,F,,75,75,75,75,75,75
-Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
+, ,1,Saccho's Team,F,,75,75,75,75,75,75
+Ada,, ,Saccho's Team,F,,75,75,75,75,75,75
+Ada,,2,Saccho's Team,F,,75,75,75,75,75,75`;
     const players = parseRosterCsv(csv);
     expect(players).toHaveLength(1);
     expect(players[0]?.firstName).toBe("Ada");
@@ -187,8 +187,8 @@ Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
   });
 
   it("reads Italian headers, roles and look values", () => {
-    const csv = `Nome,Soprannome,Numero,Anno,Squadra,Sesso,Ruolo,Velocità,Salto,Intercetto,Scalpo,Finalizzazione,Parate,Capelli,Capelli dietro,Colore capelli,Carnagione,Barba
-Ada,Winx,14,1998,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,crocchia,lunghi mossi,biondo,chiara,nessuno`;
+    const csv = `Nome,Soprannome,Numero,Squadra,Sesso,Ruolo,Velocità,Salto,Intercetto,Scalpo,Finalizzazione,Parate,Capelli,Capelli dietro,Colore capelli,Carnagione,Barba
+Ada,Winx,14,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,crocchia,lunghi mossi,biondo,chiara,nessuno`;
     const [player] = parseRosterCsv(csv);
     expect(player?.firstName).toBe("Ada");
     expect(player?.nickname).toBe("Winx");
@@ -235,11 +235,10 @@ describe("serializeSheetCsv", () => {
     const csv = serializeSheetCsv([
       player("ada", "Saccho's Team", undefined),
     ]);
-    expect(csv.startsWith("Nome,Soprannome,Numero,Anno,Squadra,Sesso,Ruolo,")).toBe(true);
+    expect(csv.startsWith("Nome,Soprannome,Numero,Squadra,Sesso,Ruolo,")).toBe(true);
     const row = csv.trim().split("\n")[1] ?? "";
-    expect(row).toContain("ada,,1,2000,Saccho's Team,Femmina,,75,75,75,75,75,75,");
-    expect(row.split(",")[6]).toBe("");
-    expect(row).toMatch(/,(nero|castano|biondo),(scura|media|chiara),/);
+    expect(row).toBe("ada,,1,Saccho's Team,Femmina,,75,75,75,75,75,75,,,,,");
+    expect(row.split(",")[5]).toBe("");
   });
 
   it("writes Palo for the PAL role", () => {
@@ -271,7 +270,6 @@ function player(
     role,
     sex: "F",
     number: 1,
-    birthYear: 2000,
     overall: overallFromStats(resolved),
     stats: resolved,
   };

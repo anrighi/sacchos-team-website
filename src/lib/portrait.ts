@@ -107,7 +107,7 @@ export function portraitSvg(
 ): string {
   const kit = options.kit ?? kitKind(player.team);
   const backdrop = options.backdrop !== false;
-  const key = `${player.slug}:${kit}:${backdrop}:${player.sex}:${player.birthYear}:${JSON.stringify(player.portrait ?? {})}`;
+  const key = `${player.slug}:${kit}:${backdrop}:${player.sex}:${JSON.stringify(player.portrait ?? {})}`;
   const cached = portraitCache.get(key);
   if (cached) {
     return cached;
@@ -124,7 +124,6 @@ export function portraitOptions(
   backdrop = true,
 ): Record<string, unknown> {
   const traits = completePortraitTraits(player);
-  const older = player.birthYear > 0 && player.birthYear <= 1986;
 
   return {
     seed: player.slug,
@@ -141,46 +140,15 @@ export function portraitOptions(
           backgroundColor: ["00000000"],
           backgroundColorFill: ["solid"],
         }),
-    ...variantOption("hair", traits.hair, HAIR_VARIANTS),
-    ...variantOption(
-      "rearHair",
-      traits.rearHair,
-      REAR_HAIR_VARIANTS,
-      defaultRearHairProbability(player, traits),
-    ),
-    ...variantOption(
-      "beard",
-      traits.beard,
-      BEARD_VARIANTS,
-      defaultBeardProbability(player, traits, older),
-    ),
+    ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
+    ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
+    ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
     ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
     ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
     ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
-    ...colorOption("hair", traits.hairColor, DEFAULT_HAIR_COLORS),
-    ...colorOption("skin", traits.skinColor, DEFAULT_SKIN_COLORS),
+    ...colorOption("hair", traits.hairColor),
+    ...colorOption("skin", traits.skinColor),
   };
-}
-
-function defaultRearHairProbability(player: Player, traits: PortraitTraits): number {
-  if (traits.rearHair) {
-    return 100;
-  }
-  return player.sex === "F" ? 100 : 12;
-}
-
-function defaultBeardProbability(
-  player: Player,
-  traits: PortraitTraits,
-  older: boolean,
-): number {
-  if (traits.beard) {
-    return 100;
-  }
-  if (player.sex === "F") {
-    return 0;
-  }
-  return older ? 70 : 22;
 }
 
 function variantOption(
@@ -204,14 +172,13 @@ function variantOption(
   return { [`${name}Probability`]: fallbackProbability };
 }
 
-function colorOption(
-  name: "hair" | "skin",
-  value: string | undefined,
-  fallback: readonly string[],
-): Record<string, unknown> {
+function colorOption(name: "hair" | "skin", value: string | undefined): Record<string, unknown> {
   const hex = name === "hair" ? resolveHairColor(value) : resolveSkinColor(value);
+  if (!hex) {
+    return {};
+  }
   return {
-    [`${name}Color`]: hex ? [hex] : [...fallback],
+    [`${name}Color`]: [hex],
     [`${name}ColorFill`]: ["solid"],
   };
 }
@@ -252,52 +219,25 @@ export function sheetSkinColorLabel(value: string | undefined): string {
   return "";
 }
 
-export function defaultPortraitTraits(
-  player: Pick<Player, "slug" | "sex" | "birthYear">,
-): Required<Pick<PortraitTraits, "hair" | "rearHair" | "beard" | "hairColor" | "skinColor">> {
-  const older = player.birthYear > 0 && player.birthYear <= 1986;
-  return {
-    hair: pickStable(player.slug, "hair", HAIR_VARIANTS),
-    rearHair:
-      player.sex === "F" ? pickStable(player.slug, "rearHair", REAR_HAIR_VARIANTS) : "none",
-    beard:
-      player.sex === "F"
-        ? "none"
-        : older
-          ? pickStable(player.slug, "beard", BEARD_VARIANTS)
-          : "none",
-    hairColor: pickStable(player.slug, "hairColor", DEFAULT_HAIR_COLORS),
-    skinColor: pickStable(player.slug, "skinColor", DEFAULT_SKIN_COLORS),
-  };
-}
-
 export function completePortraitTraits(player: Player): PortraitTraits {
-  const fallback = defaultPortraitTraits(player);
   const traits = player.portrait ?? {};
-  return {
-    hair: traits.hair ?? fallback.hair,
-    rearHair: traits.rearHair ?? fallback.rearHair,
-    beard: traits.beard ?? fallback.beard,
-    hairColor: traits.hairColor ?? fallback.hairColor,
-    skinColor: traits.skinColor ?? fallback.skinColor,
-  };
-}
-
-export function applyPortraitDefaults(players: Player[]): Player[] {
-  return players.map((player) => ({
-    ...player,
-    portrait: completePortraitTraits(player),
-  }));
-}
-
-function pickStable<T extends string>(seed: string, salt: string, items: readonly T[]): T {
-  let hash = 2166136261;
-  const text = `${seed}:${salt}`;
-  for (let i = 0; i < text.length; i += 1) {
-    hash ^= text.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
+  const look: PortraitTraits = {};
+  if (traits.hair) {
+    look.hair = traits.hair;
   }
-  return items[(hash >>> 0) % items.length] ?? items[0]!;
+  if (traits.rearHair) {
+    look.rearHair = traits.rearHair;
+  }
+  if (traits.beard) {
+    look.beard = traits.beard;
+  }
+  if (traits.hairColor) {
+    look.hairColor = traits.hairColor;
+  }
+  if (traits.skinColor) {
+    look.skinColor = traits.skinColor;
+  }
+  return look;
 }
 
 function resolvePresetColor<T extends Record<string, string>>(

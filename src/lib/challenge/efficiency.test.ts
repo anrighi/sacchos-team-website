@@ -24,7 +24,6 @@ function player(slug: string, sex: Sex, number: number): Player {
     team: "Saccho's Team",
     sex,
     number,
-    birthYear: 2000,
     overall: 75,
     stats: {
       velocita: 75,

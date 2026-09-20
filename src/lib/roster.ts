@@ -31,7 +31,7 @@ const STAT_DEFAULT = 75;
 export const OVERALL_MIN = 75;
 export const OVERALL_MAX = 90;
 
-export const SHEET_BALANCE_FORMULA = "=IFERROR(ROUND(AVERAGE(H2:M1000);1);\"\")";
+export const SHEET_BALANCE_FORMULA = "=IFERROR(ROUND(AVERAGE(G2:L1000);1);\"\")";
 export const SHEET_BALANCE_NOTE =
   "Fascia 75–90: la media delle sei stats di ogni giocatore deve stare tra 75 e 90. Fuori fascia, la build ricalibra (la singola stats resta 60–100, vuota = 75).";
 
@@ -199,7 +199,6 @@ export function parseRosterCsv(csv: string): Player[] {
     const nicknameRaw = csvCell(row, "nickname", "soprannome");
     const nickname = nicknameRaw || undefined;
     const stats = parseStats(row);
-    const birthYearRaw = Number(csvCell(row, "birthYear", "anno"));
     const portrait = parsePortraitTraits(row);
 
     const player: Player = {
@@ -210,7 +209,6 @@ export function parseRosterCsv(csv: string): Player[] {
       role: parseRole(csvCell(row, "role", "ruolo")),
       sex,
       number,
-      birthYear: Number.isFinite(birthYearRaw) ? birthYearRaw : 0,
       overall: overallFromStats(stats),
       stats,
     };
@@ -247,7 +245,6 @@ export function serializeSheetCsv(players: readonly Player[]): string {
         player.firstName,
         player.nickname ?? "",
         String(player.number),
-        player.birthYear > 0 ? String(player.birthYear) : "",
         player.team,
         player.sex === "F" ? "Femmina" : "Maschio",
         player.role ? ROLE_LABELS[player.role] : "",
@@ -270,7 +267,6 @@ export function serializeSeedCsv(players: readonly Player[]): string {
     "firstName",
     "nickname",
     "number",
-    "birthYear",
     "team",
     "sex",
     "role",
@@ -283,7 +279,6 @@ export function serializeSeedCsv(players: readonly Player[]): string {
         player.firstName,
         player.nickname ?? "",
         String(player.number),
-        player.birthYear > 0 ? String(player.birthYear) : "",
         player.team,
         player.sex,
         player.role ?? "",
@@ -303,7 +298,6 @@ export function serializePlayer(player: Player): Player {
     team: player.team,
     sex: player.sex,
     number: player.number,
-    birthYear: player.birthYear,
     overall: player.overall,
     stats: player.stats,
   };

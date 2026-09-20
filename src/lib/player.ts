@@ -38,7 +38,6 @@ export type Player = {
   role?: Role;
   sex: Sex;
   number: number;
-  birthYear: number;
   photo?: string;
   portrait?: PortraitTraits;
   overall: number;

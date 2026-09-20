@@ -77,22 +77,21 @@ nico-11,undercut`);
 });
 
 describe("serializePortraitsCsv", () => {
-  it("writes a complete look using Italian color names", () => {
+  it("writes the Sheet look using Italian color names, without inventing missing colors", () => {
     const csv = serializePortraitsCsv([
       sample({
         portrait: {
           hair: "undercut",
           rearHair: "longWavy",
           beard: "none",
+          hairColor: "d6b370",
           skinColor: "f1c3a5",
         },
       }),
     ]);
-    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,");
-    expect(csv).toContain(",chiara,none");
-    const hairColor = csv.split("\n")[1]?.split(",")[6];
-    expect(["nero", "castano", "biondo"]).toContain(hairColor);
+    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,biondo,chiara,none");
     expect(DEFAULT_HAIR_COLORS.length).toBe(3);
+    expect(serializePortraitsCsv([sample()])).toContain("ada-10,Ada,10,Saccho's Team,,,,,");
   });
 });
 
@@ -103,7 +102,6 @@ function sample(overrides: Partial<Player> = {}): Player {
     team: "Saccho's Team",
     sex: "F",
     number: 10,
-    birthYear: 2000,
     overall: 75,
     stats: {
       velocita: 75,
