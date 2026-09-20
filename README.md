@@ -45,7 +45,7 @@ Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali 
 
 Due Google Sheet:
 
-1. **Rosa** — lettura a **build** (`ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 75–100. `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; senza URL si usa lo snapshot `src/data/players.generated.ts`.
+1. **Rosa** — lettura a **build** dallo Sheet condiviso (`src/data/roster.sheet.url`, override `ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 75–100. `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; Sheet vuoto o irraggiungibile → seed `src/data/roster.seed.csv`.
 2. **Partite** — append a runtime (webhook Apps Script). Senza webhook la sfida resta nel link.
 
 Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete, foto.
@@ -65,19 +65,17 @@ In Settings → Pages: **Deploy from a branch** → `gh-pages` / `/(root)`. Non 
 
 Nessun secret Cloudflare per ora.
 
-## Sheet rosa (`ROSTER_SHEET_CSV_URL`)
+## Sheet rosa
 
-Finché l’URL non è configurato, la build tiene lo snapshot dei 26 giocatori 2026.
+Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
-Quando lo Sheet è pronto:
+[Sacchos Data](https://docs.google.com/spreadsheets/d/10tFgbhIPJk9l5p4w3K28GV4ez7Gh-hmUEhKh9hRYGtE/edit?gid=0#gid=0)
 
-1. Google Sheet con colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`. Colonne look opzionali: `hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`.
-2. File → Condividi → **Pubblica sul web** → formato **CSV**
-3. Copia l’URL del CSV
-4. In locale: mettilo in `.env` come `ROSTER_SHEET_CSV_URL=...` (vedi `.env.example`) e lancia `pnpm ingest-roster`
-5. In CI: secret `ROSTER_SHEET_CSV_URL` (già letto da `.github/workflows/ci.yml`)
+L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 sono clampate; vuote = 75. Overall = media arrotonda delle sei stats.
+Colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`. Colonne look opzionali: `hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`.
+
+Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 sono clampate; vuote = 75. Overall = media arrotonda delle sei stats. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
 ## Ritratti (`src/data/portraits.csv`)
 

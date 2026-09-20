@@ -3,11 +3,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyPortraits } from "#/lib/portraits";
 import { parseRosterCsv, serializePlayer } from "#/lib/roster";
+import { toGoogleSheetCsvUrl } from "#/lib/sheet-url";
 import type { Player } from "#/lib/player";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outPath = resolve(root, "src/data/players.generated.ts");
 const seedPath = resolve(root, "src/data/roster.seed.csv");
+const sheetUrlPath = resolve(root, "src/data/roster.sheet.url");
 const portraitsPath = resolve(root, "src/data/portraits.csv");
 const publicDir = resolve(root, "public");
 
@@ -46,23 +48,60 @@ async function loadCsv(): Promise<string | null> {
   if (fromArg) {
     return readFileSync(resolve(root, fromArg), "utf8");
   }
-  const url = process.env.ROSTER_SHEET_CSV_URL?.trim();
+  const url = rosterSheetUrl();
   if (!url) {
-    if (existsSync(seedPath)) {
-      console.log("No ROSTER_SHEET_CSV_URL — using seed CSV");
-      return readFileSync(seedPath, "utf8");
-    }
-    return null;
+    return readSeedCsv("No roster Sheet URL — using seed CSV");
   }
   if (url.startsWith("http://") || url.startsWith("https://")) {
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`Roster CSV HTTP ${res.status}`);
+    const csvUrl = toGoogleSheetCsvUrl(url);
+    try {
+      const res = await fetch(csvUrl);
+      if (!res.ok) {
+        console.warn(`Roster CSV HTTP ${res.status} — using seed CSV`);
+        return readSeedCsv();
+      }
+      const text = await res.text();
+      if (parseRosterCsv(text).length === 0) {
+        console.warn("Roster Sheet is empty — using seed CSV");
+        return readSeedCsv();
+      }
+      console.log(`Loaded roster from ${csvUrl}`);
+      return text;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(`Roster Sheet fetch failed (${message}) — using seed CSV`);
+      return readSeedCsv();
     }
-    return await res.text();
   }
   const filePath = url.startsWith("file://") ? fileURLToPath(url) : resolve(root, url);
   return readFileSync(filePath, "utf8");
+}
+
+function rosterSheetUrl(): string | undefined {
+  const fromEnv = process.env.ROSTER_SHEET_CSV_URL?.trim();
+  if (fromEnv) {
+    return fromEnv;
+  }
+  if (!existsSync(sheetUrlPath)) {
+    return undefined;
+  }
+  for (const line of readFileSync(sheetUrlPath, "utf8").split("\n")) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith("#")) {
+      return trimmed;
+    }
+  }
+  return undefined;
+}
+
+function readSeedCsv(message?: string): string | null {
+  if (message) {
+    console.log(message);
+  }
+  if (!existsSync(seedPath)) {
+    return null;
+  }
+  return readFileSync(seedPath, "utf8");
 }
 
 function loadPortraitsCsv(): string | null {
