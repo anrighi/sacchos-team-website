@@ -85,8 +85,8 @@ Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). O
 
 | Colonna | Valori (IT sullo Sheet) |
 |---------|--------|
-| `hair` / Capelli | `chignon`, `piegata`, `irti`, `undercut`, `nessuno` |
-| `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `nuca`, `spalle`, `nessuno` |
+| `hair` / Capelli | `crocchia`, `pettinati di lato`, `a punte`, `lati rasati`, `nessuno` |
+| `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `alla nuca`, `alle spalle`, `nessuno` |
 | `beard` / Barba | `pizzo`, `pizzo e baffi`, `barba`, `barba lunga`, `baffi`, `nessuno` |
 | `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5; default già compilato) |
 | `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5; default già compilato) |

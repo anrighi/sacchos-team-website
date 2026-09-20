@@ -188,7 +188,7 @@ Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
 
   it("reads Italian headers, roles and look values", () => {
     const csv = `Nome,Soprannome,Numero,Anno,Squadra,Sesso,Ruolo,Velocità,Salto,Intercetto,Scalpo,Finalizzazione,Parate,Capelli,Capelli dietro,Colore capelli,Carnagione,Barba
-Ada,Winx,14,1998,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,chignon,lunghi mossi,biondo,chiara,nessuno`;
+Ada,Winx,14,1998,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,crocchia,lunghi mossi,biondo,chiara,nessuno`;
     const [player] = parseRosterCsv(csv);
     expect(player?.firstName).toBe("Ada");
     expect(player?.nickname).toBe("Winx");

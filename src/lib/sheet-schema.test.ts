@@ -6,6 +6,7 @@ import {
   SHEET_BEARD,
   SHEET_HAIR,
   SHEET_HAIR_COLORS,
+  SHEET_REAR_HAIR,
   SHEET_SKIN_COLORS,
   sheetTraitLabel,
 } from "#/lib/sheet-schema";
@@ -33,7 +34,12 @@ describe("sheet enums", () => {
   });
 
   it("maps trait ids to Italian sheet labels", () => {
-    expect(sheetTraitLabel(SHEET_HAIR, "spiky")).toBe("irti");
+    expect(sheetTraitLabel(SHEET_HAIR, "bun")).toBe("crocchia");
+    expect(sheetTraitLabel(SHEET_HAIR, "sideComed")).toBe("pettinati di lato");
+    expect(sheetTraitLabel(SHEET_HAIR, "spiky")).toBe("a punte");
+    expect(sheetTraitLabel(SHEET_HAIR, "undercut")).toBe("lati rasati");
+    expect(sheetTraitLabel(SHEET_REAR_HAIR, "neckHigh")).toBe("alla nuca");
+    expect(sheetTraitLabel(SHEET_REAR_HAIR, "shoulderHigh")).toBe("alle spalle");
     expect(sheetTraitLabel(SHEET_BEARD, "none")).toBe("nessuno");
     expect(sheetTraitLabel(SHEET_HAIR, undefined)).toBe("");
   });

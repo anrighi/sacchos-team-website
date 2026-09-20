@@ -31,9 +31,11 @@ describe("parsePortraitTraits", () => {
 
   it("ignores unknown variants and face expressions", () => {
     expect(parsePortraitTraits({ hair: "mohawk", eyes: "laser" })).toBeUndefined();
-    expect(parsePortraitTraits({ occhi: "wink", bocca: "smile", capelli: "irti" })).toEqual({
+    expect(parsePortraitTraits({ occhi: "wink", bocca: "smile", capelli: "a punte" })).toEqual({
       hair: "spiky",
     });
+    expect(parsePortraitTraits({ capelli: "irti" })).toEqual({ hair: "spiky" });
+    expect(parsePortraitTraits({ capelli: "piegata" })).toEqual({ hair: "sideComed" });
   });
 });
 

@@ -27,18 +27,18 @@ export const SHEET_SEX = ["Femmina", "Maschio"] as const;
 export const SHEET_ROLES = ROLES.map((role) => ROLE_LABELS[role]);
 
 export const SHEET_HAIR = [
-  { value: "chignon", trait: "bun" },
-  { value: "piegata", trait: "sideComed" },
-  { value: "irti", trait: "spiky" },
-  { value: "undercut", trait: "undercut" },
+  { value: "crocchia", trait: "bun", aliases: ["chignon"] },
+  { value: "pettinati di lato", trait: "sideComed", aliases: ["piegata"] },
+  { value: "a punte", trait: "spiky", aliases: ["irti"] },
+  { value: "lati rasati", trait: "undercut" },
   { value: "nessuno", trait: "none" },
 ] as const;
 
 export const SHEET_REAR_HAIR = [
   { value: "lunghi lisci", trait: "longStraight" },
   { value: "lunghi mossi", trait: "longWavy" },
-  { value: "nuca", trait: "neckHigh" },
-  { value: "spalle", trait: "shoulderHigh" },
+  { value: "alla nuca", trait: "neckHigh", aliases: ["nuca"] },
+  { value: "alle spalle", trait: "shoulderHigh", aliases: ["spalle"] },
   { value: "nessuno", trait: "none" },
 ] as const;
 
@@ -85,12 +85,15 @@ export function sheetTraitLabel(
 }
 
 export function variantAliasMap(
-  rows: readonly { value: string; trait: string }[],
+  rows: readonly { value: string; trait: string; aliases?: readonly string[] }[],
 ): Record<string, string> {
   const map: Record<string, string> = {};
   for (const row of rows) {
     map[foldHeader(row.value)] = row.trait;
     map[foldHeader(row.trait)] = row.trait;
+    for (const alias of row.aliases ?? []) {
+      map[foldHeader(alias)] = row.trait;
+    }
   }
   return map;
 }
