@@ -53,14 +53,14 @@
       "id": "F3",
       "title": "Schieramento 3-2-1 e link sfida",
       "phase": "2",
-      "status": "in_progress",
+      "status": "done",
       "spec": "docs/features/F3-lineup.md"
     },
     {
       "id": "F4",
       "title": "Simulazione 2×15′ in 90s",
       "phase": "2",
-      "status": "todo",
+      "status": "done",
       "spec": "docs/features/F4-sim.md"
     },
     {

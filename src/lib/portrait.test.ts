@@ -121,4 +121,10 @@ describe("portraitSvg", () => {
     expect(withBackdrop).toContain('fill="#182430"');
     expect(cutout).not.toContain('fill="#182430"');
   });
+
+  it("dresses a player in the kit asked for, not the one of his team", () => {
+    const player = sample();
+    expect(portraitSvg(player, { kit: "away" })).toContain("#1a2634");
+    expect(portraitSvg(player, { kit: "home" })).toBe(portraitSvg(player));
+  });
 });
