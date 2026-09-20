@@ -3,7 +3,14 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyPortraitDefaults } from "#/lib/portrait";
 import { applyPortraits } from "#/lib/portraits";
-import { parseRosterCsv, serializePlayer } from "#/lib/roster";
+import {
+  balanceRosterStats,
+  OVERALL_MAX,
+  OVERALL_MIN,
+  parseRosterCsv,
+  rosterAverage,
+  serializePlayer,
+} from "#/lib/roster";
 import { toGoogleSheetCsvUrl } from "#/lib/sheet-url";
 import type { Player } from "#/lib/player";
 
@@ -39,6 +46,17 @@ if (portraitsCsv) {
   players = applyPortraits(players, portraitsCsv);
 }
 players = applyPortraitDefaults(players);
+const beforeOverall = players.map((player) => player.overall);
+players = balanceRosterStats(players);
+const adjusted = players.filter((player, index) => player.overall !== beforeOverall[index]).length;
+if (adjusted > 0) {
+  console.warn(
+    `Adjusted ${adjusted} player overall(s) into ${OVERALL_MIN}–${OVERALL_MAX}`,
+  );
+}
+console.log(
+  `Roster average ${rosterAverage(players).toFixed(1)} (band ${OVERALL_MIN}–${OVERALL_MAX})`,
+);
 
 stripGeneratedSvgs();
 const withPhotos = attachPhotos(players);

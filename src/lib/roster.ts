@@ -28,6 +28,13 @@ const STAT_MIN = 75;
 const STAT_MAX = 100;
 const STAT_DEFAULT = 75;
 
+export const OVERALL_MIN = 75;
+export const OVERALL_MAX = 90;
+
+export const SHEET_BALANCE_FORMULA = "=IFERROR(ROUND(AVERAGE(H2:M1000);1);\"\")";
+export const SHEET_BALANCE_NOTE =
+  "Fascia 75–90: la media delle sei stats di ogni giocatore deve stare tra 75 e 90. Fuori fascia, la build ricalibra (la singola stats resta 75–100).";
+
 export type RosterFilters = {
   team?: "sacchos" | "saccios";
   role?: Role;
@@ -54,6 +61,86 @@ export function clampStat(value: unknown): number {
 export function overallFromStats(stats: PlayerStats): number {
   const sum = STAT_KEYS.reduce((acc, key) => acc + stats[key], 0);
   return Math.round(sum / STAT_KEYS.length);
+}
+
+export function rosterAverage(players: readonly Player[]): number {
+  if (players.length === 0) {
+    return STAT_DEFAULT;
+  }
+  const sum = players.reduce((acc, player) => acc + overallFromStats(player.stats), 0);
+  return sum / players.length;
+}
+
+export function balancePlayerStats(stats: PlayerStats): PlayerStats {
+  const next = {} as PlayerStats;
+  for (const key of STAT_KEYS) {
+    next[key] = clampStat(stats[key]);
+  }
+  const overall = overallFromStats(next);
+  if (overall >= OVERALL_MIN && overall <= OVERALL_MAX) {
+    return next;
+  }
+  const target = overall < OVERALL_MIN ? OVERALL_MIN : OVERALL_MAX;
+  return distributeToOverall(next, target);
+}
+
+export function balanceRosterStats(players: Player[]): Player[] {
+  return players.map((player) => {
+    const stats = balancePlayerStats(player.stats);
+    const overall = overallFromStats(stats);
+    if (sameStats(stats, player.stats) && overall === player.overall) {
+      return player;
+    }
+    return { ...player, stats, overall };
+  });
+}
+
+function distributeToOverall(stats: PlayerStats, target: number): PlayerStats {
+  const next = { ...stats };
+  const targetSum = target * STAT_KEYS.length;
+  let sum = STAT_KEYS.reduce((acc, key) => acc + next[key], 0);
+
+  while (sum < targetSum) {
+    let moved = false;
+    for (const key of STAT_KEYS) {
+      if (next[key] >= STAT_MAX) {
+        continue;
+      }
+      next[key] += 1;
+      sum += 1;
+      moved = true;
+      if (sum >= targetSum) {
+        break;
+      }
+    }
+    if (!moved) {
+      break;
+    }
+  }
+
+  while (sum > targetSum) {
+    let moved = false;
+    for (const key of STAT_KEYS) {
+      if (next[key] <= STAT_MIN) {
+        continue;
+      }
+      next[key] -= 1;
+      sum -= 1;
+      moved = true;
+      if (sum <= targetSum) {
+        break;
+      }
+    }
+    if (!moved) {
+      break;
+    }
+  }
+
+  return next;
+}
+
+function sameStats(left: PlayerStats, right: PlayerStats): boolean {
+  return STAT_KEYS.every((key) => left[key] === right[key]);
 }
 
 export function playerSlug(

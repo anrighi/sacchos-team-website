@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+  balancePlayerStats,
+  balanceRosterStats,
   clampStat,
   displayName,
   filterPlayers,
+  OVERALL_MAX,
+  OVERALL_MIN,
   overallFromStats,
   parseRosterCsv,
   playerSlug,
+  rosterAverage,
   serializeSheetCsv,
+  SHEET_BALANCE_FORMULA,
+  SHEET_BALANCE_NOTE,
   slugify,
 } from "#/lib/roster";
 import type { Player, PlayerStats } from "#/lib/player";
@@ -39,6 +46,76 @@ describe("overallFromStats", () => {
       gk: 80,
     } satisfies PlayerStats;
     expect(overallFromStats(stats)).toBe(78);
+  });
+});
+
+describe("balancePlayerStats", () => {
+  it("leaves a media inside 75–90 untouched", () => {
+    const stats = {
+      velocita: 80,
+      salto: 82,
+      intercetto: 78,
+      scalpo: 75,
+      finalizzazione: 90,
+      gk: 75,
+    } satisfies PlayerStats;
+    expect(balancePlayerStats(stats)).toEqual(stats);
+    expect(overallFromStats(stats)).toBeGreaterThanOrEqual(OVERALL_MIN);
+    expect(overallFromStats(stats)).toBeLessThanOrEqual(OVERALL_MAX);
+  });
+
+  it("pulls an overall above 90 down to 90", () => {
+    const stats = {
+      velocita: 100,
+      salto: 100,
+      intercetto: 100,
+      scalpo: 100,
+      finalizzazione: 100,
+      gk: 100,
+    } satisfies PlayerStats;
+    const balanced = balancePlayerStats(stats);
+    expect(overallFromStats(balanced)).toBe(OVERALL_MAX);
+    expect(Object.values(balanced).every((value) => value >= 75 && value <= 100)).toBe(true);
+  });
+
+  it("spreads a high overall without flattening identity", () => {
+    const stats = {
+      velocita: 100,
+      salto: 100,
+      intercetto: 100,
+      scalpo: 100,
+      finalizzazione: 100,
+      gk: 75,
+    } satisfies PlayerStats;
+    const balanced = balancePlayerStats(stats);
+    expect(overallFromStats(balanced)).toBe(OVERALL_MAX);
+    expect(balanced.gk).toBe(75);
+    expect(balanced.velocita).toBeGreaterThan(balanced.gk);
+  });
+
+  it("keeps the roster average inside the band", () => {
+    const raw = [
+      player("hot", "Saccho's Team", undefined, {
+        velocita: 100,
+        salto: 100,
+        intercetto: 100,
+        scalpo: 100,
+        finalizzazione: 100,
+        gk: 100,
+      }),
+      player("cold", "Saccios Tim", undefined),
+    ];
+    const balanced = balanceRosterStats(raw);
+    expect(balanced.every((item) => item.overall >= OVERALL_MIN && item.overall <= OVERALL_MAX)).toBe(
+      true,
+    );
+    expect(rosterAverage(balanced)).toBeGreaterThanOrEqual(OVERALL_MIN);
+    expect(rosterAverage(balanced)).toBeLessThanOrEqual(OVERALL_MAX);
+  });
+
+  it("documents the Sheet formula and the 75–90 note", () => {
+    expect(SHEET_BALANCE_FORMULA).toContain("AVERAGE(H2:M1000)");
+    expect(SHEET_BALANCE_NOTE).toContain("75–90");
   });
 });
 
@@ -153,7 +230,16 @@ function player(
   slug: string,
   team: Player["team"],
   role: Player["role"],
+  stats?: PlayerStats,
 ): Player {
+  const resolved = stats ?? {
+    velocita: 75,
+    salto: 75,
+    intercetto: 75,
+    scalpo: 75,
+    finalizzazione: 75,
+    gk: 75,
+  };
   return {
     slug,
     firstName: slug,
@@ -162,14 +248,7 @@ function player(
     sex: "F",
     number: 1,
     birthYear: 2000,
-    overall: 75,
-    stats: {
-      velocita: 75,
-      salto: 75,
-      intercetto: 75,
-      scalpo: 75,
-      finalizzazione: 75,
-      gk: 75,
-    },
+    overall: overallFromStats(resolved),
+    stats: resolved,
   };
 }

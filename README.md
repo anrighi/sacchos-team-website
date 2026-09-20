@@ -73,7 +73,9 @@ Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
 L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`. Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Ogni riga ha già look e stats 75; il ruolo resta vuoto. Celle ancora vuote = gli stessi default a ingest. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
+Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Ogni riga ha già look e stats 75; il ruolo resta vuoto. Celle ancora vuote = gli stessi default a ingest. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
+
+Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(H2:M1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra.
 
 ## Ritratti (`src/data/portraits.csv`)
 

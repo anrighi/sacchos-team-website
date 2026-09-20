@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-20 | Cursor | 1 | Fascia overall 75–90: formula Sheet + ricalibro in ingest | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Default look + stats 75 su ogni riga (visi custom Giorgia/Stefano/Guglielmo) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Sheet rosa in italiano con menu a tendina; niente occhi/sopracciglia/bocca; colori 3/5 | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti (stats 75); F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 polish | Merge visual su `main`: Archivio fuori nav, MrAlex ovunque, `/rosa` senza conteggio carte | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |

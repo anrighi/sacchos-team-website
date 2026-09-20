@@ -41,6 +41,10 @@ describe("players snapshot", () => {
     expect(players.every((p) => p.overall === 75)).toBe(true);
   });
 
+  it("keeps every overall inside the 75–90 play band", () => {
+    expect(players.every((p) => p.overall >= 75 && p.overall <= 90)).toBe(true);
+  });
+
   it("stores a complete Toon Head look for every player, without face expressions", () => {
     const giorgia = players.find((p) => p.slug === "giorgia-pappagiorgia");
     expect(giorgia?.photo).toBeUndefined();
