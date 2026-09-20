@@ -80,7 +80,26 @@ Ada,,2,2000,Saccho's Team,F,,75,75,75,75,75,75`;
     expect(player?.portrait).toEqual({
       hair: "spiky",
       beard: "none",
-      mouth: "smile",
+    });
+  });
+
+  it("reads Italian headers, roles and look values", () => {
+    const csv = `Nome,Soprannome,Numero,Anno,Squadra,Sesso,Ruolo,Velocità,Salto,Intercetto,Scalpo,Finalizzazione,Parate,Capelli,Capelli dietro,Colore capelli,Carnagione,Barba
+Ada,Winx,14,1998,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,chignon,lunghi mossi,biondo,chiara,nessuno`;
+    const [player] = parseRosterCsv(csv);
+    expect(player?.firstName).toBe("Ada");
+    expect(player?.nickname).toBe("Winx");
+    expect(player?.sex).toBe("F");
+    expect(player?.role).toBe("ALA");
+    expect(player?.stats.velocita).toBe(80);
+    expect(player?.stats.finalizzazione).toBe(90);
+    expect(player?.stats.gk).toBe(75);
+    expect(player?.portrait).toEqual({
+      hair: "bun",
+      rearHair: "longWavy",
+      hairColor: "d6b370",
+      skinColor: "f1c3a5",
+      beard: "none",
     });
   });
 });

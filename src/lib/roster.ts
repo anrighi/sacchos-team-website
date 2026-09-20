@@ -1,5 +1,6 @@
 import { csvCell, parseCsv, slugify } from "#/lib/csv";
 import { parsePortraitTraits } from "#/lib/portraits";
+import { parseSheetRole, parseSheetSex, STAT_SHEET_ALIASES } from "#/lib/sheet-schema";
 import { STAT_KEYS, TEAMS, type Player, type PlayerStats, type Role, type Sex, type TeamName } from "#/lib/player";
 
 export { slugify } from "#/lib/csv";
@@ -155,7 +156,7 @@ export function serializePlayer(player: Player): Player {
 function parseStats(row: Record<string, string>): PlayerStats {
   const stats = {} as PlayerStats;
   for (const key of STAT_KEYS) {
-    stats[key] = clampStat(row[key] ?? row[key.toUpperCase()]);
+    stats[key] = clampStat(csvCell(row, key, ...STAT_SHEET_ALIASES[key]));
   }
   return stats;
 }
@@ -169,17 +170,9 @@ function parseTeam(raw: string): TeamName {
 }
 
 function parseRole(raw: string): Role | undefined {
-  const value = raw.trim().toUpperCase();
-  if (value === "POR" || value === "PAL" || value === "CEN" || value === "ALA" || value === "PUN") {
-    return value;
-  }
-  return undefined;
+  return parseSheetRole(raw);
 }
 
 function parseSex(raw: string): Sex | undefined {
-  const value = raw.trim().toUpperCase();
-  if (value === "F" || value === "M") {
-    return value;
-  }
-  return undefined;
+  return parseSheetSex(raw);
 }

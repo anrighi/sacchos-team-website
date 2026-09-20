@@ -55,6 +55,18 @@ export const SKIN_COLOR_PRESETS = {
   light: "f1c3a5",
 } as const;
 
+export const DEFAULT_HAIR_COLORS = [
+  HAIR_COLOR_PRESETS.black,
+  HAIR_COLOR_PRESETS.brown,
+  HAIR_COLOR_PRESETS.blonde,
+] as const;
+
+export const DEFAULT_SKIN_COLORS = [
+  SKIN_COLOR_PRESETS.deep,
+  SKIN_COLOR_PRESETS.medium,
+  SKIN_COLOR_PRESETS.light,
+] as const;
+
 const HAIR_COLOR_ALIASES: Record<string, keyof typeof HAIR_COLOR_PRESETS> = {
   nero: "black",
   castano: "brown",
@@ -145,8 +157,8 @@ export function portraitOptions(
     ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
     ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
     ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
-    ...colorOption("hair", traits.hairColor, Object.values(HAIR_COLOR_PRESETS)),
-    ...colorOption("skin", traits.skinColor, Object.values(SKIN_COLOR_PRESETS)),
+    ...colorOption("hair", traits.hairColor, DEFAULT_HAIR_COLORS),
+    ...colorOption("skin", traits.skinColor, DEFAULT_SKIN_COLORS),
   };
 }
 

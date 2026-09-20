@@ -23,8 +23,11 @@ describe("parsePortraitTraits", () => {
     });
   });
 
-  it("ignores unknown variants", () => {
+  it("ignores unknown variants and face expressions", () => {
     expect(parsePortraitTraits({ hair: "mohawk", eyes: "laser" })).toBeUndefined();
+    expect(parsePortraitTraits({ occhi: "wink", bocca: "smile", capelli: "irti" })).toEqual({
+      hair: "spiky",
+    });
   });
 });
 
@@ -33,25 +36,25 @@ describe("applyPortraits", () => {
     const csv = `slug,hair,mouth
 ada-10,bun,smile`;
     const [player] = applyPortraits([sample()], csv);
-    expect(player?.portrait).toEqual({ hair: "bun", mouth: "smile" });
+    expect(player?.portrait).toEqual({ hair: "bun" });
     expect(player?.stats.velocita).toBe(75);
   });
 
   it("matches by firstName and number when slug is missing", () => {
-    const csv = `firstName,number,eyes
-Ada,10,wink`;
+    const csv = `firstName,number,beard
+Ada,10,nessuno`;
     const [player] = applyPortraits([sample()], csv);
-    expect(player?.portrait?.eyes).toBe("wink");
+    expect(player?.portrait?.beard).toBe("none");
   });
 
   it("lets roster-sheet traits win over the portraits file", () => {
     const csv = `slug,hair
 ada-10,spiky`;
     const [player] = applyPortraits(
-      [sample({ portrait: { hair: "bun", mouth: "smile" } })],
+      [sample({ portrait: { hair: "bun", beard: "none" } })],
       csv,
     );
-    expect(player?.portrait).toEqual({ hair: "bun", mouth: "smile" });
+    expect(player?.portrait).toEqual({ hair: "bun", beard: "none" });
   });
 });
 

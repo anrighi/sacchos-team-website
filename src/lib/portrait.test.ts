@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  HAIR_COLOR_PRESETS,
+  DEFAULT_HAIR_COLORS,
+  DEFAULT_SKIN_COLORS,
   KIT_LAYOUT,
-  SKIN_COLOR_PRESETS,
   kitKind,
   portraitOptions,
   portraitSvg,
@@ -90,10 +90,10 @@ describe("portraitSvg", () => {
     expect(options.clothesVariant).toEqual(["tShirt"]);
   });
 
-  it("picks hair and skin from the 5 presets when the CSV leaves them empty", () => {
+  it("picks hair and skin from 3 of 5 presets when the CSV leaves them empty", () => {
     const options = portraitOptions(sample());
-    expect(options.hairColor).toEqual(Object.values(HAIR_COLOR_PRESETS));
-    expect(options.skinColor).toEqual(Object.values(SKIN_COLOR_PRESETS));
+    expect(options.hairColor).toEqual([...DEFAULT_HAIR_COLORS]);
+    expect(options.skinColor).toEqual([...DEFAULT_SKIN_COLORS]);
     expect(options.eyesVariant).toBeUndefined();
     expect(options.eyebrowsVariant).toBeUndefined();
     expect(options.mouthVariant).toBeUndefined();

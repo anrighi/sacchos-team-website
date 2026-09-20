@@ -41,10 +41,12 @@ describe("players snapshot", () => {
     expect(players.every((p) => p.overall === 75)).toBe(true);
   });
 
-  it("stores Toon Head traits from portraits.csv", () => {
+  it("stores Toon Head traits from portraits.csv without face expressions", () => {
     const giorgia = players.find((p) => p.slug === "giorgia-pappagiorgia");
     expect(giorgia?.photo).toBeUndefined();
-    expect(giorgia?.portrait?.mouth).toBe("smile");
+    expect(giorgia?.portrait?.mouth).toBeUndefined();
+    expect(giorgia?.portrait?.eyes).toBeUndefined();
     expect(giorgia?.portrait?.rearHair).toBe("longWavy");
+    expect(giorgia?.portrait?.skinColor).toBe("f1c3a5");
   });
 });

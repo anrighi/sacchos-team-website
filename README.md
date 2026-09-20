@@ -73,28 +73,23 @@ Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
 L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Colonne: `firstName`, `nickname`, `number`, `birthYear`, `team`, `sex`, `role`, `velocita`, `salto`, `intercetto`, `scalpo`, `finalizzazione`, `gk`. Colonne look opzionali: `hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`.
-
-Righe senza `number` o `firstName` vengono scartate. Stats fuori da 75–100 sono clampate; vuote = 75. Overall = media arrotonda delle sei stats. Sheet vuoto → seed `src/data/roster.seed.csv`.
+Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`. Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Celle vuote = default (stats 75, colori 3/5 preset). Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
 ## Ritratti (`src/data/portraits.csv`)
 
 Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è il kit del club (bianca Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 e Saccho's sul petto e gli artigli rosa.
 
-Il file `src/data/portraits.csv` è il foglio look da condividere con la squadra: una riga per giocatore, trait vuoti = avatar dallo slug. Valori ammessi:
+Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). Trait vuoti = avatar dallo slug. Valori ammessi:
 
-| Colonna | Valori |
+| Colonna | Valori (IT sullo Sheet) |
 |---------|--------|
-| `hair` | `bun`, `sideComed`, `spiky`, `undercut`, `none` |
-| `rearHair` | `longStraight`, `longWavy`, `neckHigh`, `shoulderHigh`, `none` |
-| `eyes` | `bow`, `happy`, `humble`, `wide`, `wink` |
-| `eyebrows` | `angry`, `happy`, `neutral`, `raised`, `sad` |
-| `mouth` | `agape`, `angry`, `laugh`, `sad`, `smile` |
-| `beard` | `chin`, `chinMoustache`, `fullBeard`, `longBeard`, `moustacheTwirl`, `none` |
-| `hairColor` | preset `black`, `brown`, `auburn`, `blonde`, `gold` (IT: `nero`, `castano`, `ramato`, `biondo`, `miele`) oppure hex |
-| `skinColor` | preset `deep`, `tan`, `medium`, `warm`, `light` (IT: `scura`, `olivastra`, `media`, `calda`, `chiara`) oppure hex |
+| `hair` / Capelli | `chignon`, `piegata`, `irti`, `undercut`, `nessuno` |
+| `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `nuca`, `spalle`, `nessuno` |
+| `beard` / Barba | `pizzo`, `pizzo e baffi`, `barba`, `barba lunga`, `baffi`, `nessuno` |
+| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5; vuoto = questi tre a runtime) |
+| `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5; vuoto = questi tre a runtime) |
 
-Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Alias italiani: `capelli`, `capelliDietro`, `coloreCapelli`, `carnagione`, `occhi`, `sopracciglia`, `bocca`, `barba`. Celle `eyes` / `eyebrows` / `mouth` vuote = espressione dal seed dello slug (runtime, stabile per giocatore, non a build). Se lo Sheet rosa ha le stesse colonne, quelle vincono sul file. Poi `pnpm ingest-roster`.
+Occhi, sopracciglia e bocca non sono colonne: espressione dal seed dello slug a runtime, stabile per giocatore. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
 
 Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
 

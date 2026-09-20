@@ -7,11 +7,21 @@ export function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+export function foldHeader(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
 export function csvCell(row: Record<string, string>, ...keys: string[]): string {
+  const entries = Object.entries(row);
   for (const key of keys) {
-    const value = row[key] ?? row[key.toLowerCase()];
-    if (value != null && value !== "") {
-      return value.trim();
+    const want = foldHeader(key);
+    const found = entries.find(([header]) => foldHeader(header) === want);
+    if (found && found[1] != null && found[1] !== "") {
+      return found[1].trim();
     }
   }
   return "";
