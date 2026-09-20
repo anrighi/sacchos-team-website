@@ -47,7 +47,7 @@ function PlayerPage() {
       <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-8 md:px-8 md:pt-14">
         <Link
           to="/rosa"
-          className="inline-flex min-h-11 items-center gap-0.5 text-sm font-medium text-pink hover:text-pink/80"
+          className="inline-flex min-h-11 items-center gap-0.5 text-sm text-pink hover:text-pink/80"
         >
           <ChevronLeft className="size-4" aria-hidden />
           Rosa
@@ -57,7 +57,7 @@ function PlayerPage() {
           <PlayerCard player={player} size="hero" linked={false} />
 
           <div className="md:pt-4">
-            <p className="text-sm font-medium text-pink">{player.team}</p>
+            <p className="text-sm text-pink">{player.team}</p>
             <h1 className="mt-3 font-display text-[clamp(2.6rem,9vw,4.5rem)] leading-none tracking-tight">
               {name}
             </h1>
@@ -69,7 +69,7 @@ function PlayerPage() {
             </p>
 
             <div className="mt-10">
-              <h2 className="text-[15px] font-semibold tracking-tight text-white">
+              <h2 className="font-display text-2xl tracking-tight text-white">
                 Statistiche
               </h2>
               <dl className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
@@ -112,7 +112,7 @@ function PlayerPage() {
 function PlayerMissing() {
   return (
     <main className="bg-black px-5 py-24 text-center text-white">
-      <p className="text-sm font-medium text-pink">404</p>
+      <p className="text-sm text-pink">404</p>
       <h1 className="mt-4 font-display text-[clamp(2.2rem,8vw,4rem)] leading-none tracking-tight">
         Giocatore non trovato
       </h1>
@@ -121,7 +121,7 @@ function PlayerMissing() {
       </p>
       <Link
         to="/rosa"
-        className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
+        className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90"
       >
         Vai alla rosa
       </Link>

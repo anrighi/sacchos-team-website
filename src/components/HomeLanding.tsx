@@ -52,25 +52,25 @@ function Hero() {
       <img
         src={publicUrl("/brand/logo-sacchos.png")}
         alt={club.name}
-        className="float-drift relative z-10 h-[min(28vw,9.5rem)] w-auto drop-shadow-[0_20px_40px_rgba(248,103,165,0.28)]"
+        className="float-drift relative z-10 h-[min(28vw,9.5rem)] w-auto object-contain drop-shadow-[0_20px_40px_rgba(248,103,165,0.28)]"
       />
       <h1 className="relative z-10 mt-5 font-display text-[clamp(3.2rem,11vw,7rem)] leading-[0.86] tracking-tight">
         Saccho&apos;s
         <span className="mt-1 block text-pink">Team</span>
       </h1>
-      <p className="relative z-10 mt-4 max-w-xs text-base font-medium tracking-tight text-white/65 md:max-w-md md:text-lg">
+      <p className="relative z-10 mt-4 max-w-xs text-base tracking-tight text-white/65 md:max-w-md md:text-lg">
         La squadra più titolata del centro sud
       </p>
       <div className="relative z-10 mt-7 flex flex-wrap items-center justify-center gap-4">
         <Link
           to="/rosa"
-          className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
+          className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90"
         >
           Vedi la rosa
         </Link>
         <Link
           to="/sfida"
-          className="inline-flex min-h-11 items-center rounded-full px-5 text-sm font-medium text-pink ring-1 ring-pink/40 hover:bg-pink/10"
+          className="inline-flex min-h-11 items-center rounded-full px-5 text-sm text-pink ring-1 ring-pink/40 hover:bg-pink/10"
         >
           Lancia una sfida
         </Link>
@@ -132,7 +132,7 @@ function CardsChapter() {
       <div className="mt-10 text-center">
         <Link
           to="/rosa"
-          className="inline-flex min-h-11 items-center text-sm font-medium text-pink hover:text-pink/80"
+          className="inline-flex min-h-11 items-center text-sm text-pink hover:text-pink/80"
         >
           Tutta la rosa
         </Link>
@@ -150,7 +150,7 @@ function CloseChapter() {
         </h2>
         <Link
           to="/sfida"
-          className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90"
+          className="mt-8 inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90"
         >
           Lancia una sfida
         </Link>

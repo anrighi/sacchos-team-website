@@ -24,7 +24,7 @@ shadcn può usare `@/` (stesso `src/`). Nel codice scritto a mano preferisci `#/
 
 - Mobile-first; `md`/`lg` solo per allargare
 - Tap target ≥ 44px; `prefers-reduced-motion` = fade only
-- Brand: navy `#1a2634`, rosa `#f867a5`, bianco. Font titoli **MrAlex**
+- Brand: navy `#1a2634`, rosa `#f867a5`, bianco. Font **MrAlex** su tutta la UI
 - Solo identità **Saccho's Team**. Saccios Tim = valore filtro, logo pennarello solo sul chip
 - In UI: nickname se c'è, altrimenti nome. Mai cognomi, mai foto reali
 - shadcn per primitive (Button, Dialog, …); skin custom, non look dashboard

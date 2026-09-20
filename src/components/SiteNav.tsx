@@ -1,13 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { club } from "#/lib/club";
+import { siteNavItems } from "#/lib/nav";
 import { publicUrl } from "#/lib/public-url";
-
-const items = [
-  { to: "/", label: "Home", exact: true },
-  { to: "/rosa", label: "Rosa", exact: false },
-  { to: "/sfida", label: "Sfida", exact: false },
-  { to: "/sfide", label: "Archivio", exact: false },
-] as const;
 
 export function SiteNav() {
   return (
@@ -17,19 +11,19 @@ export function SiteNav() {
           <img
             src={publicUrl("/brand/logo-sacchos.png")}
             alt={club.name}
-            className="h-9 w-auto"
+            className="h-9 w-auto object-contain"
           />
-          <span className="text-sm font-semibold tracking-tight text-white">
+          <span className="font-display text-sm tracking-tight text-white">
             Saccho&apos;s
           </span>
         </Link>
         <ul className="flex w-full items-center justify-around md:w-auto md:gap-7">
-          {items.map((item) => (
+          {siteNavItems.map((item) => (
             <li key={item.to}>
               <Link
                 to={item.to}
                 activeOptions={{ exact: item.exact }}
-                className="flex min-h-11 items-center px-2 text-[13px] font-medium tracking-tight text-white/70 hover:text-white"
+                className="flex min-h-11 items-center px-2 font-display text-sm tracking-tight text-white/70 hover:text-white"
                 activeProps={{ className: "text-pink" }}
               >
                 {item.label}

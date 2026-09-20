@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-20 | Cursor | 1 polish | Merge visual su `main`: Archivio fuori nav, MrAlex ovunque, `/rosa` senza conteggio carte | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 2 | Merge F3+F4 su `main` (sfida 3-2-1, sim 2×15′, silver/gold meta) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: extras copy silver/gold meta; niente box score a fine partita | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3/F4 merged here | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |

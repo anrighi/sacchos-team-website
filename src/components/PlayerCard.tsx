@@ -49,7 +49,7 @@ export function PlayerCard({
             </p>
             <p
               className={cn(
-                "mt-0.5 font-semibold uppercase tracking-[0.2em] text-white/65",
+                "mt-0.5 font-display uppercase tracking-[0.2em] text-white/65",
                 hero ? "text-[11px]" : "text-[9px]",
               )}
             >
@@ -59,10 +59,7 @@ export function PlayerCard({
           <img
             src={publicUrl("/brand/logo-sacchos.png")}
             alt="Saccho's Team"
-            className={cn(
-              "rounded-full object-cover ring-1 ring-white/25",
-              hero ? "size-11" : "size-7",
-            )}
+            className={cn("w-auto object-contain", hero ? "h-11" : "h-7")}
           />
         </div>
         <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/88 via-black/25 to-transparent px-3 pb-2.5 pt-8">

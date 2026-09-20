@@ -13,8 +13,9 @@ Riferimento implementato: `src/components/HomeLanding.tsx`.
 | Rosa | `#f867a5` | accent, CTA, artigli |
 | Bianco | `#ffffff` / `#f4f1ea` | testo, maglia casa |
 | Titoli | `font-display` (MrAlex) | h1/h2, overall, nickname in evidenza |
+| Corpo | `font-sans` (MrAlex) | claim, CTA, nav, filtri — niente system UI |
 
-Tema dark fisso. UI in italiano. Identità solo **Saccho's Team**; Saccios Tim è un filtro, logo pennarello solo sul chip.
+Tema dark fisso. UI in italiano. **Solo MrAlex** (`--font-sans` e `--font-display`). Identità solo **Saccho's Team**; Saccios Tim è un filtro, logo pennarello solo sul chip.
 
 ## Asset
 
@@ -31,7 +32,7 @@ Path da passare a `publicUrl`. I JPG nello stesso folder sono **reference**, non
 | Favicon | `/favicon.jpg` | Eccezione: icona tab, non hero |
 
 ```tsx
-<img src={publicUrl("/brand/logo-sacchos.png")} alt={club.name} className="h-9 w-auto" />
+<img src={publicUrl("/brand/logo-sacchos.png")} alt={club.name} className="h-9 w-auto object-contain" />
 ```
 
 Logo e kit: `object-contain` e altezza/larghezza esplicite. Non `rounded-full` + `object-cover` sul logo intero.
@@ -48,10 +49,10 @@ Poco testo. Headline da due parole con punto (`Le carte.`, `In campo.`). Non dup
 CTA (tap ≥ 44px / `min-h-11`):
 
 ```tsx
-<Link to="/rosa" className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm font-medium text-navy-deep hover:bg-pink/90">
+<Link to="/rosa" className="inline-flex min-h-11 items-center rounded-full bg-pink px-6 text-sm text-navy-deep hover:bg-pink/90">
   Vedi la rosa
 </Link>
-<Link to="/sfida" className="inline-flex min-h-11 items-center rounded-full px-5 text-sm font-medium text-pink ring-1 ring-pink/40 hover:bg-pink/10">
+<Link to="/sfida" className="inline-flex min-h-11 items-center rounded-full px-5 text-sm text-pink ring-1 ring-pink/40 hover:bg-pink/10">
   Lancia una sfida
 </Link>
 ```
@@ -69,8 +70,8 @@ Niente bounce, loop veloci, o parallax. Drift lento (~6s).
 
 ## Altre superfici
 
-- **Nav:** logo PNG `h-9 w-auto`, non cerchio ritagliato dal JPG
-- **Rosa / scheda:** `PlayerCard` invariata (backdrop in carta). Intestazioni squadra e chip: PNG contain
+- **Nav:** logo PNG `h-9 w-auto object-contain`, non cerchio ritagliato dal JPG. Voci: Home, Rosa, Sfida. Archivio (`/sfide`) nascosto fino a F6
+- **Rosa / scheda:** hero compatto come la home (`La rosa.` + CTA, niente conteggio carte). Filtri a pillola `min-h-11`. `PlayerCard` con backdrop in carta, logo contain (niente `rounded-full`). Intestazioni squadra e chip: PNG contain
 - **Sfida (F3+):** stesso hero scuro, MrAlex, pillole, eventuali kit PNG come cutout sul campo, non JPG
 
 ## Non fare

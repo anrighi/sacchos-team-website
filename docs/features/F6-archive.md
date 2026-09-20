@@ -29,3 +29,4 @@ Fine partita: `POST` webhook Apps Script → riga ricca sullo Sheet. `/sfide` le
 ## Notes
 
 Niente S3. Winrate/utilizzo: pivot successivi o sullo Sheet, non obbligatori in F6.
+La voce **Archivio** resta fuori dalla nav (`src/lib/nav.ts`) finché questa feature non è pronta: `/sfide` esiste ma non è linkata.

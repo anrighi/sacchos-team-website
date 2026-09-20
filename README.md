@@ -35,7 +35,7 @@ Copia `.env.example` in `.env` quando hai gli URL degli Sheet.
 | `/giocatori/$slug` | Scheda (F1) |
 | `/sfida` | Schieramento e link (F3–F4) |
 | `/sfida/partita` | Tabellino (F5) |
-| `/sfide` | Archivio Sheet (F6) |
+| `/sfide` | Archivio Sheet (F6) — nascosto dalla nav finché F6 non è pronto |
 
 UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa. Skin e asset: [docs/VISUAL.md](docs/VISUAL.md).
 
