@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { clampStat, displayName, filterPlayers, overallFromStats, parseRosterCsv, playerSlug, slugify } from "#/lib/roster";
+import {
+  clampStat,
+  displayName,
+  filterPlayers,
+  overallFromStats,
+  parseRosterCsv,
+  playerSlug,
+  serializeSheetCsv,
+  slugify,
+} from "#/lib/roster";
 import type { Player, PlayerStats } from "#/lib/player";
 
 const header =
@@ -124,6 +133,19 @@ describe("playerSlug", () => {
 
   it("slugifies italian letters", () => {
     expect(slugify("Nicolò")).toBe("nicolo");
+  });
+});
+
+describe("serializeSheetCsv", () => {
+  it("writes Italian labels, stats 75 and leaves role empty", () => {
+    const csv = serializeSheetCsv([
+      player("ada", "Saccho's Team", undefined),
+    ]);
+    expect(csv.startsWith("Nome,Soprannome,Numero,Anno,Squadra,Sesso,Ruolo,")).toBe(true);
+    const row = csv.trim().split("\n")[1] ?? "";
+    expect(row).toContain("ada,,1,2000,Saccho's Team,Femmina,,75,75,75,75,75,75,");
+    expect(row.split(",")[6]).toBe("");
+    expect(row).toMatch(/,(nero|castano|biondo),(scura|media|chiara),/);
   });
 });
 

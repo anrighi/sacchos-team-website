@@ -1,11 +1,14 @@
-import { csvCell, foldHeader, parseCsv, slugify } from "#/lib/csv";
+import { csvCell, csvEscape, foldHeader, parseCsv, slugify } from "#/lib/csv";
 import type { Player, PortraitTraits } from "#/lib/player";
 import {
   BEARD_VARIANTS,
+  completePortraitTraits,
   HAIR_VARIANTS,
   REAR_HAIR_VARIANTS,
   resolveHairColor,
   resolveSkinColor,
+  sheetHairColorLabel,
+  sheetSkinColorLabel,
 } from "#/lib/portrait";
 import { SHEET_BEARD, SHEET_HAIR, SHEET_REAR_HAIR, variantAliasMap } from "#/lib/sheet-schema";
 
@@ -69,6 +72,30 @@ export function parsePortraitsCsv(csv: string): Map<string, PortraitTraits> {
     byKey.set(portraitMatchKey(firstName, number, team || undefined), traits);
   }
   return byKey;
+}
+
+export function serializePortraitsCsv(players: readonly Player[]): string {
+  const header = "slug,firstName,number,team,hair,rearHair,hairColor,skinColor,beard";
+  const lines = [header];
+  for (const player of players) {
+    const traits = completePortraitTraits(player);
+    lines.push(
+      [
+        player.slug,
+        player.firstName,
+        String(player.number),
+        player.team,
+        traits.hair ?? "",
+        traits.rearHair ?? "",
+        sheetHairColorLabel(traits.hairColor),
+        sheetSkinColorLabel(traits.skinColor),
+        traits.beard ?? "",
+      ]
+        .map(csvEscape)
+        .join(","),
+    );
+  }
+  return `${lines.join("\n")}\n`;
 }
 
 export function applyPortraits(players: Player[], csv: string): Player[] {

@@ -1,7 +1,26 @@
-import { csvCell, parseCsv, slugify } from "#/lib/csv";
+import { csvCell, csvEscape, parseCsv, slugify } from "#/lib/csv";
+import { completePortraitTraits, sheetHairColorLabel, sheetSkinColorLabel } from "#/lib/portrait";
 import { parsePortraitTraits } from "#/lib/portraits";
-import { parseSheetRole, parseSheetSex, STAT_SHEET_ALIASES } from "#/lib/sheet-schema";
-import { STAT_KEYS, TEAMS, type Player, type PlayerStats, type Role, type Sex, type TeamName } from "#/lib/player";
+import {
+  parseSheetRole,
+  parseSheetSex,
+  SHEET_BEARD,
+  SHEET_HAIR,
+  SHEET_HEADERS,
+  SHEET_REAR_HAIR,
+  STAT_SHEET_ALIASES,
+  sheetTraitLabel,
+} from "#/lib/sheet-schema";
+import {
+  ROLE_LABELS,
+  STAT_KEYS,
+  TEAMS,
+  type Player,
+  type PlayerStats,
+  type Role,
+  type Sex,
+  type TeamName,
+} from "#/lib/player";
 
 export { slugify } from "#/lib/csv";
 
@@ -125,6 +144,64 @@ export function filterPlayers(players: readonly Player[], filters: RosterFilters
     }
     return true;
   });
+}
+
+export function serializeSheetCsv(players: readonly Player[]): string {
+  const lines = [SHEET_HEADERS.join(",")];
+  for (const player of players) {
+    const traits = completePortraitTraits(player);
+    lines.push(
+      [
+        player.firstName,
+        player.nickname ?? "",
+        String(player.number),
+        player.birthYear > 0 ? String(player.birthYear) : "",
+        player.team,
+        player.sex === "F" ? "Femmina" : "Maschio",
+        player.role ? ROLE_LABELS[player.role] : "",
+        ...STAT_KEYS.map((key) => String(player.stats[key])),
+        sheetTraitLabel(SHEET_HAIR, traits.hair),
+        sheetTraitLabel(SHEET_REAR_HAIR, traits.rearHair),
+        sheetHairColorLabel(traits.hairColor),
+        sheetSkinColorLabel(traits.skinColor),
+        sheetTraitLabel(SHEET_BEARD, traits.beard),
+      ]
+        .map(csvEscape)
+        .join(","),
+    );
+  }
+  return `${lines.join("\n")}\n`;
+}
+
+export function serializeSeedCsv(players: readonly Player[]): string {
+  const header = [
+    "firstName",
+    "nickname",
+    "number",
+    "birthYear",
+    "team",
+    "sex",
+    "role",
+    ...STAT_KEYS,
+  ].join(",");
+  const lines = [header];
+  for (const player of players) {
+    lines.push(
+      [
+        player.firstName,
+        player.nickname ?? "",
+        String(player.number),
+        player.birthYear > 0 ? String(player.birthYear) : "",
+        player.team,
+        player.sex,
+        player.role ?? "",
+        ...STAT_KEYS.map((key) => String(player.stats[key])),
+      ]
+        .map(csvEscape)
+        .join(","),
+    );
+  }
+  return `${lines.join("\n")}\n`;
 }
 
 export function serializePlayer(player: Player): Player {

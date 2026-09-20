@@ -18,7 +18,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "PAPU"
+    "nickname": "PAPU",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "nicolo-nick",
@@ -36,7 +43,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Nick"
+    "nickname": "Nick",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "michele-costa",
@@ -54,7 +68,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Costa"
+    "nickname": "Costa",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "miriam-nonmiribecco",
@@ -72,7 +93,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "nonMIRibecco"
+    "nickname": "nonMIRibecco",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "giorgia-pappagiorgia",
@@ -95,6 +123,7 @@ export const players: Player[] = [
       "hair": "undercut",
       "rearHair": "longWavy",
       "beard": "none",
+      "hairColor": "724133",
       "skinColor": "f1c3a5"
     }
   },
@@ -114,7 +143,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Peppinson"
+    "nickname": "Peppinson",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "alice-winx",
@@ -132,7 +168,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Winx"
+    "nickname": "Winx",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "andrea-mascotte",
@@ -150,7 +193,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Mascotte"
+    "nickname": "Mascotte",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "chiara-kia",
@@ -168,7 +218,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "KIA"
+    "nickname": "KIA",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "marco-mt",
@@ -186,7 +243,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "MT"
+    "nickname": "MT",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "moustacheTwirl",
+      "hairColor": "2c1b18",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "guia-vaiana",
@@ -204,7 +268,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "vaiana"
+    "nickname": "vaiana",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "stefano-ragno",
@@ -227,6 +298,7 @@ export const players: Player[] = [
       "hair": "sideComed",
       "rearHair": "none",
       "beard": "fullBeard",
+      "hairColor": "d6b370",
       "skinColor": "c68e7a"
     }
   },
@@ -246,7 +318,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "GB"
+    "nickname": "GB",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "alex-axel",
@@ -264,7 +343,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "AXEL"
+    "nickname": "AXEL",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "luca-luc-avelli",
@@ -282,7 +368,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Luc'Avelli"
+    "nickname": "Luc'Avelli",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "rebecca-quechua",
@@ -300,7 +393,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Quechua"
+    "nickname": "Quechua",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "giulio-j-tata",
@@ -318,7 +418,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "J-TATA"
+    "nickname": "J-TATA",
+    "portrait": {
+      "hair": "bun",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "marialaura-baguette",
@@ -336,7 +443,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Baguette"
+    "nickname": "Baguette",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "gabriele-gabbo",
@@ -354,7 +468,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Gabbo"
+    "nickname": "Gabbo",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "pietro-della",
@@ -372,7 +493,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "DELLA"
+    "nickname": "DELLA",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "veronica-vero",
@@ -390,7 +518,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Vero"
+    "nickname": "Vero",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "tommaso-tommygamer",
@@ -408,7 +543,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "TommyGamer"
+    "nickname": "TommyGamer",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "chiara-81",
@@ -425,6 +567,13 @@ export const players: Player[] = [
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
+    },
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
     }
   },
   {
@@ -447,7 +596,9 @@ export const players: Player[] = [
     "portrait": {
       "hair": "spiky",
       "rearHair": "none",
-      "beard": "none"
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
     }
   },
   {
@@ -466,7 +617,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Ga"
+    "nickname": "Ga",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "mordecai-mordecai",
@@ -484,6 +642,13 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "MORDECAI"
+    "nickname": "MORDECAI",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   }
 ];

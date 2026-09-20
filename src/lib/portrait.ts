@@ -123,7 +123,7 @@ export function portraitOptions(
   kit: KitKind = kitKind(player.team),
   backdrop = true,
 ): Record<string, unknown> {
-  const traits = player.portrait ?? {};
+  const traits = completePortraitTraits(player);
   const older = player.birthYear > 0 && player.birthYear <= 1986;
 
   return {
@@ -222,6 +222,82 @@ export function resolveHairColor(value: string | undefined): string | undefined 
 
 export function resolveSkinColor(value: string | undefined): string | undefined {
   return resolvePresetColor(value, SKIN_COLOR_PRESETS, SKIN_COLOR_ALIASES);
+}
+
+export function sheetHairColorLabel(value: string | undefined): string {
+  const hex = resolveHairColor(value);
+  if (hex === HAIR_COLOR_PRESETS.black) {
+    return "nero";
+  }
+  if (hex === HAIR_COLOR_PRESETS.brown) {
+    return "castano";
+  }
+  if (hex === HAIR_COLOR_PRESETS.blonde) {
+    return "biondo";
+  }
+  return "";
+}
+
+export function sheetSkinColorLabel(value: string | undefined): string {
+  const hex = resolveSkinColor(value);
+  if (hex === SKIN_COLOR_PRESETS.deep) {
+    return "scura";
+  }
+  if (hex === SKIN_COLOR_PRESETS.medium) {
+    return "media";
+  }
+  if (hex === SKIN_COLOR_PRESETS.light) {
+    return "chiara";
+  }
+  return "";
+}
+
+export function defaultPortraitTraits(
+  player: Pick<Player, "slug" | "sex" | "birthYear">,
+): Required<Pick<PortraitTraits, "hair" | "rearHair" | "beard" | "hairColor" | "skinColor">> {
+  const older = player.birthYear > 0 && player.birthYear <= 1986;
+  return {
+    hair: pickStable(player.slug, "hair", HAIR_VARIANTS),
+    rearHair:
+      player.sex === "F" ? pickStable(player.slug, "rearHair", REAR_HAIR_VARIANTS) : "none",
+    beard:
+      player.sex === "F"
+        ? "none"
+        : older
+          ? pickStable(player.slug, "beard", BEARD_VARIANTS)
+          : "none",
+    hairColor: pickStable(player.slug, "hairColor", DEFAULT_HAIR_COLORS),
+    skinColor: pickStable(player.slug, "skinColor", DEFAULT_SKIN_COLORS),
+  };
+}
+
+export function completePortraitTraits(player: Player): PortraitTraits {
+  const fallback = defaultPortraitTraits(player);
+  const traits = player.portrait ?? {};
+  return {
+    hair: traits.hair ?? fallback.hair,
+    rearHair: traits.rearHair ?? fallback.rearHair,
+    beard: traits.beard ?? fallback.beard,
+    hairColor: traits.hairColor ?? fallback.hairColor,
+    skinColor: traits.skinColor ?? fallback.skinColor,
+  };
+}
+
+export function applyPortraitDefaults(players: Player[]): Player[] {
+  return players.map((player) => ({
+    ...player,
+    portrait: completePortraitTraits(player),
+  }));
+}
+
+function pickStable<T extends string>(seed: string, salt: string, items: readonly T[]): T {
+  let hash = 2166136261;
+  const text = `${seed}:${salt}`;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return items[(hash >>> 0) % items.length] ?? items[0]!;
 }
 
 function resolvePresetColor<T extends Record<string, string>>(

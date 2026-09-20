@@ -73,21 +73,21 @@ Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
 L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`. Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Celle vuote = default (stats 75, colori 3/5 preset). Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
+Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`. Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Ogni riga ha già look e stats 75; il ruolo resta vuoto. Celle ancora vuote = gli stessi default a ingest. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
 ## Ritratti (`src/data/portraits.csv`)
 
 Le carte usano [Toon Head](https://www.dicebear.com/styles/toon-head/) (Johan Melin, CC BY 4.0) via DiceBear. La maglia è il kit del club (bianca Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 e Saccho's sul petto e gli artigli rosa.
 
-Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). Trait vuoti = avatar dallo slug. Valori ammessi:
+Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). Ogni giocatore ha un look completo; Giorgia, Stefano e Guglielmo tengono il viso custom. Trait ancora vuoti = default stabile dallo slug. Valori ammessi:
 
 | Colonna | Valori (IT sullo Sheet) |
 |---------|--------|
 | `hair` / Capelli | `chignon`, `piegata`, `irti`, `undercut`, `nessuno` |
 | `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `nuca`, `spalle`, `nessuno` |
 | `beard` / Barba | `pizzo`, `pizzo e baffi`, `barba`, `barba lunga`, `baffi`, `nessuno` |
-| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5; vuoto = questi tre a runtime) |
-| `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5; vuoto = questi tre a runtime) |
+| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5; default già compilato) |
+| `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5; default già compilato) |
 
 Occhi, sopracciglia e bocca non sono colonne: espressione dal seed dello slug a runtime, stabile per giocatore. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
 

@@ -27,6 +27,13 @@ export function csvCell(row: Record<string, string>, ...keys: string[]): string 
   return "";
 }
 
+export function csvEscape(value: string): string {
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replaceAll('"', '""')}"`;
+  }
+  return value;
+}
+
 export function parseCsv(text: string): Record<string, string>[] {
   const lines = text
     .replace(/^\uFEFF/, "")

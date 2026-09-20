@@ -1,13 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+  applyPortraitDefaults,
+  completePortraitTraits,
   DEFAULT_HAIR_COLORS,
   DEFAULT_SKIN_COLORS,
+  defaultPortraitTraits,
+  HAIR_VARIANTS,
   KIT_LAYOUT,
   kitKind,
   portraitOptions,
   portraitSvg,
   resolveHairColor,
   resolveSkinColor,
+  sheetHairColorLabel,
+  sheetSkinColorLabel,
 } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
@@ -68,7 +74,7 @@ describe("portraitSvg", () => {
     expect(svg).toContain("kit-claws.png");
   });
 
-  it("pins CSV traits on the DiceBear options", () => {
+  it("pins CSV hair, beard and color and ignores face expressions", () => {
     const options = portraitOptions(
       sample({
         portrait: {
@@ -84,16 +90,21 @@ describe("portraitSvg", () => {
     expect(options.hairVariant).toEqual(["spiky"]);
     expect(options.rearHairProbability).toBe(0);
     expect(options.beardProbability).toBe(0);
-    expect(options.eyesVariant).toEqual(["wink"]);
-    expect(options.mouthVariant).toEqual(["laugh"]);
+    expect(options.eyesVariant).toBeUndefined();
+    expect(options.mouthVariant).toBeUndefined();
     expect(options.hairColor).toEqual(["2c1b18"]);
     expect(options.clothesVariant).toEqual(["tShirt"]);
   });
 
-  it("picks hair and skin from 3 of 5 presets when the CSV leaves them empty", () => {
+  it("pins hair, beard and a single color from the 3 defaults", () => {
     const options = portraitOptions(sample());
-    expect(options.hairColor).toEqual([...DEFAULT_HAIR_COLORS]);
-    expect(options.skinColor).toEqual([...DEFAULT_SKIN_COLORS]);
+    expect(HAIR_VARIANTS).toContain((options.hairVariant as string[])[0]);
+    expect(options.hairColor).toHaveLength(1);
+    expect(DEFAULT_HAIR_COLORS).toContain((options.hairColor as string[])[0]);
+    expect(options.skinColor).toHaveLength(1);
+    expect(DEFAULT_SKIN_COLORS).toContain((options.skinColor as string[])[0]);
+    expect(options.rearHairProbability).toBe(100);
+    expect(options.beardProbability).toBe(0);
     expect(options.eyesVariant).toBeUndefined();
     expect(options.eyebrowsVariant).toBeUndefined();
     expect(options.mouthVariant).toBeUndefined();
@@ -104,6 +115,8 @@ describe("portraitSvg", () => {
     expect(resolveHairColor("black")).toBe("2c1b18");
     expect(resolveSkinColor("chiara")).toBe("f1c3a5");
     expect(resolveSkinColor("#f5d0b0")).toBe("f5d0b0");
+    expect(sheetHairColorLabel("2c1b18")).toBe("nero");
+    expect(sheetSkinColorLabel("chiara")).toBe("chiara");
   });
 
   it("keeps the claws below the AGESCI crest", () => {
@@ -126,5 +139,57 @@ describe("portraitSvg", () => {
     const player = sample();
     expect(portraitSvg(player, { kit: "away" })).toContain("#1a2634");
     expect(portraitSvg(player, { kit: "home" })).toBe(portraitSvg(player));
+  });
+});
+
+describe("defaultPortraitTraits", () => {
+  it("gives women rear hair and no beard", () => {
+    const traits = defaultPortraitTraits(sample({ sex: "F", birthYear: 1998 }));
+    expect(traits.beard).toBe("none");
+    expect(traits.rearHair).not.toBe("none");
+    expect(DEFAULT_HAIR_COLORS).toContain(traits.hairColor);
+    expect(DEFAULT_SKIN_COLORS).toContain(traits.skinColor);
+  });
+
+  it("gives young men no rear hair and no beard", () => {
+    const traits = defaultPortraitTraits(sample({ sex: "M", birthYear: 2000 }));
+    expect(traits.rearHair).toBe("none");
+    expect(traits.beard).toBe("none");
+  });
+
+  it("gives older men a beard", () => {
+    const traits = defaultPortraitTraits(
+      sample({ slug: "marco-mt", sex: "M", birthYear: 1983 }),
+    );
+    expect(traits.rearHair).toBe("none");
+    expect(traits.beard).not.toBe("none");
+  });
+
+  it("is stable for the same slug", () => {
+    expect(defaultPortraitTraits(sample())).toEqual(defaultPortraitTraits(sample()));
+  });
+
+  it("fills only missing custom traits", () => {
+    const player = sample({
+      portrait: {
+        hair: "undercut",
+        rearHair: "longWavy",
+        beard: "none",
+        skinColor: "f1c3a5",
+      },
+    });
+    const traits = completePortraitTraits(player);
+    expect(traits.hair).toBe("undercut");
+    expect(traits.rearHair).toBe("longWavy");
+    expect(traits.beard).toBe("none");
+    expect(traits.skinColor).toBe("f1c3a5");
+    expect(DEFAULT_HAIR_COLORS).toContain(traits.hairColor);
+  });
+
+  it("applies a complete look to every player", () => {
+    const [filled] = applyPortraitDefaults([sample({ portrait: undefined })]);
+    expect(filled?.portrait?.hair).toBeTruthy();
+    expect(filled?.portrait?.hairColor).toBeTruthy();
+    expect(filled?.portrait?.skinColor).toBeTruthy();
   });
 });

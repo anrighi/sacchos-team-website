@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { applyPortraits, parsePortraitTraits, parsePortraitsCsv } from "#/lib/portraits";
+import {
+  applyPortraits,
+  parsePortraitTraits,
+  parsePortraitsCsv,
+  serializePortraitsCsv,
+} from "#/lib/portraits";
+import { DEFAULT_HAIR_COLORS } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
 describe("parsePortraitTraits", () => {
@@ -65,6 +71,26 @@ ada-10,
 nico-11,undercut`);
     expect(map.has("ada-10")).toBe(false);
     expect(map.get("nico-11")).toEqual({ hair: "undercut" });
+  });
+});
+
+describe("serializePortraitsCsv", () => {
+  it("writes a complete look using Italian color names", () => {
+    const csv = serializePortraitsCsv([
+      sample({
+        portrait: {
+          hair: "undercut",
+          rearHair: "longWavy",
+          beard: "none",
+          skinColor: "f1c3a5",
+        },
+      }),
+    ]);
+    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,");
+    expect(csv).toContain(",chiara,none");
+    const hairColor = csv.split("\n")[1]?.split(",")[6];
+    expect(["nero", "castano", "biondo"]).toContain(hairColor);
+    expect(DEFAULT_HAIR_COLORS.length).toBe(3);
   });
 });
 

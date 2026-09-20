@@ -70,6 +70,20 @@ export function sheetValues(rows: readonly { value: string }[]): string[] {
   return rows.map((row) => row.value);
 }
 
+export function sheetTraitLabel(
+  rows: readonly { value: string; trait: string }[],
+  trait: string | undefined,
+): string {
+  if (!trait) {
+    return "";
+  }
+  if (trait === "none") {
+    return "nessuno";
+  }
+  const match = rows.find((row) => row.trait === trait || row.value === trait);
+  return match?.value ?? "";
+}
+
 export function variantAliasMap(
   rows: readonly { value: string; trait: string }[],
 ): Record<string, string> {
