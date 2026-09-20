@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { portraitSvg } from "#/lib/portrait";
+import { portraitSvg, type KitKind } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
 export function PlayerPortrait({
   player,
+  kit,
   className,
   backdrop = true,
 }: {
   player: Player;
+  kit?: KitKind;
   className?: string;
   backdrop?: boolean;
 }) {
@@ -27,7 +29,7 @@ export function PlayerPortrait({
     );
   }
 
-  const svg = portraitSvg(player, { backdrop }).replace(/^<\?xml[^>]*>\s*/u, "");
+  const svg = portraitSvg(player, { backdrop, kit }).replace(/^<\?xml[^>]*>\s*/u, "");
   return (
     <div
       aria-hidden

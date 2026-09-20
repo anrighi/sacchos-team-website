@@ -17,7 +17,7 @@ Fine partita: `POST` webhook Apps Script → riga ricca sullo Sheet. `/sfide` le
 
 ## Acceptance criteria
 
-- [ ] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score, log JSON, URL tabellino
+- [ ] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
 - [ ] Senza webhook: toast, link recap resta valido, archivio vuoto
 - [ ] `/sfide` lista da CSV
 - [ ] Spec + manifest `done` e PR con `Closes #N`

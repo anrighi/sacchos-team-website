@@ -1,6 +1,6 @@
 # Feature registry
 
-> Last updated: 2026-09-19 | Active phase: 2 | Agent: Cursor
+> Last updated: 2026-09-20 | Active phase: 2 | Agent: Cursor
 
 **Collaboration:** GitHub Issues (`label:feature`) · branch `cursor/phase-<n>-f<id>-<slug>-91b9` · PR with `Closes #N` · CI syncs manifest → issues on `main`. Workflow: `.cursor/rules/github-workflow.mdc`
 
@@ -10,15 +10,15 @@
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
-| 2 | Sfida | in_progress | 0% |
+| 2 | Sfida | in_progress | 50% |
 | 0+ | Dopo | deferred | — |
 
 ## Active phase — what to do now
 
 - **Current goal:** Phase 2 — sfida: schieramento, link, simulazione, tabellino
 - **Remaining tasks:**
-  - [ ] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
-  - [ ] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
+  - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
+  - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Google Sheet
 - **Open blockers:** nel seed rosa `role` e le sei stat sono vuote (tutti 75, nessun ruolo): la sfida gira ma i giocatori si equivalgono; F6 richiede un runtime server, Pages è statico
@@ -30,8 +30,8 @@
 | F0 | Bootstrap TanStack Start e CI Cloudflare | 0 | done | [F0-bootstrap.md](features/F0-bootstrap.md) |
 | F1 | Ingest Sheet, carte FUT e filtri rosa | 1 | done | [F1-rosa.md](features/F1-rosa.md) |
 | F2 | Hero, font, loghi e motion | 1 | done | [F2-visual.md](features/F2-visual.md) |
-| F3 | Schieramento 3-2-1 e link sfida | 2 | in_progress | [F3-lineup.md](features/F3-lineup.md) |
-| F4 | Simulazione 2×15′ in 90s | 2 | not_started | [F4-sim.md](features/F4-sim.md) |
+| F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
+| F4 | Simulazione 2×15′ in 90s | 2 | done | [F4-sim.md](features/F4-sim.md) |
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
 | F6 | Archivio partite su Google Sheet | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
@@ -57,15 +57,12 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-19 | Cursor | 1 polish | Archivio fuori nav; MrAlex su tutta la UI; `/rosa` allineata a `docs/VISUAL.md` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Ruoli/stats vuoti nel seed; F6 resta senza nav fino al runtime server |
-| 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
-| 2026-09-19 | Cursor | 1 | Ga 24 e MORDECAI 6 aggiunti in Saccios Tim (rosa 26) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
-| 2026-09-19 | Cursor | 1 | Nickname = nomi maglia agganciati al numero in rosa | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Maglie senza match in rosa (Pongo 2, Dasyp 15, …) |
-| 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (con PNG e linee guida visuali) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
-| 2026-09-19 | Cursor | 1 polish | Preset colori capelli/carnagione; espressioni vuote = seed runtime | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
-| 2026-09-19 | Cursor | 1 | Linee guida visuali: `docs/VISUAL.md` + `.cursor/rules/visual.mdc` | F3: schieramento 3-2-1 su `/sfida` con la stessa skin | Loghi SVG originali ancora in 0+ |
-| 2026-09-19 | Cursor | 1 | Home: claim titolata, logo senza disco bianco; polish su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi SVG originali ancora in 0+ |
-| 2026-09-19 | Cursor | 1 polish | Rosa: Toon Head + kit, `portraits.csv` per la squadra | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
+| 2026-09-20 | Cursor | 1 polish | Merge visual su `main`: Archivio fuori nav, MrAlex ovunque, `/rosa` senza conteggio carte | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 2 | Merge F3+F4 su `main` (sfida 3-2-1, sim 2×15′, silver/gold meta) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
+| 2026-09-19 | Cursor | 2 | F4: extras copy silver/gold meta; niente box score a fine partita | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
+| 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3/F4 merged here | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
+| 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (PNG e linee guida visuali) | F5 | Loghi SVG originali ancora in 0+ |
+| 2026-09-19 | Cursor | 1 polish | Rosa: Toon Head + kit, `portraits.csv` per la squadra | F5 | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |

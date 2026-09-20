@@ -1,5 +1,6 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
+import { CareerEfficiency } from "#/components/player/CareerEfficiency";
 import { PlayerCard } from "#/components/PlayerCard";
 import { players } from "#/data/players.generated";
 import { ROLE_LABELS, STAT_KEYS, STAT_NAMES } from "#/lib/player";
@@ -99,6 +100,7 @@ function PlayerPage() {
                   {player.overall}
                 </p>
               </div>
+              <CareerEfficiency slug={player.slug} />
             </div>
           </div>
         </div>

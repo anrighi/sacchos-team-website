@@ -91,9 +91,9 @@ export function kitKind(team: TeamName): KitKind {
 
 export function portraitSvg(
   player: Player,
-  options: { backdrop?: boolean } = {},
+  options: { backdrop?: boolean; kit?: KitKind } = {},
 ): string {
-  const kit = kitKind(player.team);
+  const kit = options.kit ?? kitKind(player.team);
   const backdrop = options.backdrop !== false;
   const key = `${player.slug}:${kit}:${backdrop}:${player.sex}:${player.birthYear}:${JSON.stringify(player.portrait ?? {})}`;
   const cached = portraitCache.get(key);
