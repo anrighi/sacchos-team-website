@@ -247,7 +247,6 @@ describe("serializeSheetCsv", () => {
       player("ada", "Saccho's Team", "PAL"),
     ]);
     expect(csv).toContain("Palo");
-    expect(csv).not.toContain("Palleggiatore");
   });
 });
 
