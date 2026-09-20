@@ -21,6 +21,7 @@ describe("csvCell", () => {
 
 describe("sheet enums", () => {
   it("parses Italian roles and sex", () => {
+    expect(parseSheetRole("Palo")).toBe("PAL");
     expect(parseSheetRole("Palleggiatore")).toBe("PAL");
     expect(parseSheetRole("por")).toBe("POR");
     expect(parseSheetSex("Femmina")).toBe("F");

@@ -65,7 +65,7 @@ export const STAT_NAMES: Record<StatKey, string> = {
 
 export const ROLE_LABELS: Record<Role, string> = {
   POR: "Portiere",
-  PAL: "Palleggiatore",
+  PAL: "Palo",
   CEN: "Centrale",
   ALA: "Ala",
   PUN: "Punta",

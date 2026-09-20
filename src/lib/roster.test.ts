@@ -28,8 +28,10 @@ describe("clampStat", () => {
     expect(clampStat("nope")).toBe(75);
   });
 
-  it("clamps to 75–100", () => {
-    expect(clampStat(10)).toBe(75);
+  it("clamps to 60–100", () => {
+    expect(clampStat(10)).toBe(60);
+    expect(clampStat(60)).toBe(60);
+    expect(clampStat(75)).toBe(75);
     expect(clampStat(150)).toBe(100);
     expect(clampStat(82.4)).toBe(82);
   });
@@ -75,7 +77,7 @@ describe("balancePlayerStats", () => {
     } satisfies PlayerStats;
     const balanced = balancePlayerStats(stats);
     expect(overallFromStats(balanced)).toBe(OVERALL_MAX);
-    expect(Object.values(balanced).every((value) => value >= 75 && value <= 100)).toBe(true);
+    expect(Object.values(balanced).every((value) => value >= 60 && value <= 100)).toBe(true);
   });
 
   it("spreads a high overall without flattening identity", () => {
@@ -113,9 +115,24 @@ describe("balancePlayerStats", () => {
     expect(rosterAverage(balanced)).toBeLessThanOrEqual(OVERALL_MAX);
   });
 
+  it("keeps a dumped stat at 60 when raising overall to 75", () => {
+    const stats = {
+      velocita: 60,
+      salto: 75,
+      intercetto: 75,
+      scalpo: 75,
+      finalizzazione: 75,
+      gk: 75,
+    } satisfies PlayerStats;
+    const balanced = balancePlayerStats(stats);
+    expect(balanced.velocita).toBe(60);
+    expect(overallFromStats(balanced)).toBe(OVERALL_MIN);
+  });
+
   it("documents the Sheet formula and the 75–90 note", () => {
     expect(SHEET_BALANCE_FORMULA).toContain("AVERAGE(H2:M1000)");
     expect(SHEET_BALANCE_NOTE).toContain("75–90");
+    expect(SHEET_BALANCE_NOTE).toContain("60–100");
   });
 });
 
@@ -129,9 +146,9 @@ describe("parseRosterCsv", () => {
   it("clamps stats and computes overall", () => {
     const csv = `${header}\nAda,,1,2000,Saccho's Team,F,,10,150,80,80,80,80`;
     const [player] = parseRosterCsv(csv);
-    expect(player?.stats.velocita).toBe(75);
+    expect(player?.stats.velocita).toBe(60);
     expect(player?.stats.salto).toBe(100);
-    expect(player?.overall).toBe(83);
+    expect(player?.overall).toBe(80);
   });
 
   it("discards rows without number or firstName", () => {
@@ -223,6 +240,14 @@ describe("serializeSheetCsv", () => {
     expect(row).toContain("ada,,1,2000,Saccho's Team,Femmina,,75,75,75,75,75,75,");
     expect(row.split(",")[6]).toBe("");
     expect(row).toMatch(/,(nero|castano|biondo),(scura|media|chiara),/);
+  });
+
+  it("writes Palo for the PAL role", () => {
+    const csv = serializeSheetCsv([
+      player("ada", "Saccho's Team", "PAL"),
+    ]);
+    expect(csv).toContain("Palo");
+    expect(csv).not.toContain("Palleggiatore");
   });
 });
 

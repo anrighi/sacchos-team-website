@@ -105,6 +105,9 @@ export function parseSheetRole(raw: string): Role | undefined {
     return code as Role;
   }
   const folded = foldLabel(value);
+  if (folded === "palo" || folded === "palleggiatore") {
+    return "PAL";
+  }
   for (const role of ROLES) {
     if (foldLabel(ROLE_LABELS[role]) === folded) {
       return role;

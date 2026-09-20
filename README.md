@@ -45,7 +45,7 @@ Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali 
 
 Due Google Sheet:
 
-1. **Rosa** — lettura a **build** dallo Sheet condiviso (`src/data/roster.sheet.url`, override `ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 75–100. `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; Sheet vuoto o irraggiungibile → seed `src/data/roster.seed.csv`.
+1. **Rosa** — lettura a **build** dallo Sheet condiviso (`src/data/roster.sheet.url`, override `ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 60–100 (vuoto = 75). `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; Sheet vuoto o irraggiungibile → seed `src/data/roster.seed.csv`.
 2. **Partite** — append a runtime (webhook Apps Script). Senza webhook la sfida resta nel link.
 
 Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete, foto.
@@ -75,7 +75,7 @@ L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in 
 
 Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Anno`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Ogni riga ha già look e stats 75; il ruolo resta vuoto. Celle ancora vuote = gli stessi default a ingest. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
-Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(H2:M1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra.
+Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(H2:M1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra. Stats singole: **60–100**, cella vuota = **75**. Ruolo PAL = **Palo**.
 
 ## Ritratti (`src/data/portraits.csv`)
 

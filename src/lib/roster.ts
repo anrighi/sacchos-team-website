@@ -24,7 +24,7 @@ import {
 
 export { slugify } from "#/lib/csv";
 
-const STAT_MIN = 75;
+const STAT_MIN = 60;
 const STAT_MAX = 100;
 const STAT_DEFAULT = 75;
 
@@ -33,7 +33,7 @@ export const OVERALL_MAX = 90;
 
 export const SHEET_BALANCE_FORMULA = "=IFERROR(ROUND(AVERAGE(H2:M1000);1);\"\")";
 export const SHEET_BALANCE_NOTE =
-  "Fascia 75–90: la media delle sei stats di ogni giocatore deve stare tra 75 e 90. Fuori fascia, la build ricalibra (la singola stats resta 75–100).";
+  "Fascia 75–90: la media delle sei stats di ogni giocatore deve stare tra 75 e 90. Fuori fascia, la build ricalibra (la singola stats resta 60–100, vuota = 75).";
 
 export type RosterFilters = {
   team?: "sacchos" | "saccios";
@@ -101,42 +101,47 @@ function distributeToOverall(stats: PlayerStats, target: number): PlayerStats {
   let sum = STAT_KEYS.reduce((acc, key) => acc + next[key], 0);
 
   while (sum < targetSum) {
-    let moved = false;
-    for (const key of STAT_KEYS) {
-      if (next[key] >= STAT_MAX) {
-        continue;
-      }
-      next[key] += 1;
-      sum += 1;
-      moved = true;
-      if (sum >= targetSum) {
-        break;
-      }
-    }
-    if (!moved) {
+    const key = nextRaiseKey(next);
+    if (!key) {
       break;
     }
+    next[key] += 1;
+    sum += 1;
   }
 
   while (sum > targetSum) {
-    let moved = false;
-    for (const key of STAT_KEYS) {
-      if (next[key] <= STAT_MIN) {
-        continue;
-      }
-      next[key] -= 1;
-      sum -= 1;
-      moved = true;
-      if (sum <= targetSum) {
-        break;
-      }
-    }
-    if (!moved) {
+    const key = nextLowerKey(next);
+    if (!key) {
       break;
     }
+    next[key] -= 1;
+    sum -= 1;
   }
 
   return next;
+}
+
+function nextRaiseKey(stats: PlayerStats): (typeof STAT_KEYS)[number] | undefined {
+  const preferred = STAT_KEYS.find(
+    (key) => stats[key] >= STAT_DEFAULT && stats[key] < STAT_MAX,
+  );
+  if (preferred) {
+    return preferred;
+  }
+  return STAT_KEYS.find((key) => stats[key] < STAT_MAX);
+}
+
+function nextLowerKey(stats: PlayerStats): (typeof STAT_KEYS)[number] | undefined {
+  let best: (typeof STAT_KEYS)[number] | undefined;
+  for (const key of STAT_KEYS) {
+    if (stats[key] <= STAT_MIN) {
+      continue;
+    }
+    if (!best || stats[key] > stats[best]) {
+      best = key;
+    }
+  }
+  return best;
 }
 
 function sameStats(left: PlayerStats, right: PlayerStats): boolean {

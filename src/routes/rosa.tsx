@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { PlayerCard } from "#/components/PlayerCard";
 import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
-import { ROLES, TEAMS, type Role, type TeamName } from "#/lib/player";
+import { ROLE_LABELS, ROLES, TEAMS, type Role, type TeamName } from "#/lib/player";
 import { displayName, filterPlayers, type RosterFilters } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
@@ -193,7 +193,7 @@ function RosaFilters({ search }: { search: RosterFilters }) {
               active={search.role === role}
               hits={hits({ role })}
             >
-              {role}
+              {ROLE_LABELS[role]}
             </FilterChip>
           ))}
         </FilterRow>

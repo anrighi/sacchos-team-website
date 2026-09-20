@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { PlayerPortrait } from "#/components/PlayerPortrait";
-import { STAT_KEYS, STAT_LABELS, type Player, type StatKey } from "#/lib/player";
+import { ROLE_LABELS, STAT_KEYS, STAT_LABELS, type Player, type StatKey } from "#/lib/player";
 import { kitKind } from "#/lib/portrait";
 import { displayName } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
@@ -53,7 +53,7 @@ export function PlayerCard({
                 hero ? "text-[11px]" : "text-[9px]",
               )}
             >
-              {player.role ?? "—"}
+              {player.role ? ROLE_LABELS[player.role] : "—"}
             </p>
           </div>
           <img
