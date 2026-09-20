@@ -106,6 +106,32 @@ export function portraitSvg(
   return svg;
 }
 
+export function rollUnsetExpression(
+  traits: PortraitTraits | undefined,
+  random: () => number = Math.random,
+): PortraitTraits {
+  const next: PortraitTraits = { ...traits };
+  if (!next.eyes) {
+    next.eyes = pickVariant(EYES_VARIANTS, random());
+  }
+  if (!next.eyebrows) {
+    next.eyebrows = pickVariant(EYEBROWS_VARIANTS, random());
+  }
+  if (!next.mouth) {
+    next.mouth = pickVariant(MOUTH_VARIANTS, random());
+  }
+  return next;
+}
+
+function pickVariant<T extends string>(items: readonly T[], unit: number): T {
+  if (items.length === 0) {
+    throw new Error("empty variant list");
+  }
+  const clamped = Number.isFinite(unit) ? Math.min(1, Math.max(0, unit)) : 0;
+  const index = Math.min(items.length - 1, Math.floor(clamped * items.length));
+  return items[index]!;
+}
+
 export function portraitOptions(
   player: Player,
   kit: KitKind = kitKind(player.team),

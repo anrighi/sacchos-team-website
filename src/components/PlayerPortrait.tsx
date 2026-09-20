@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { portraitSvg } from "#/lib/portrait";
+import { useLayoutEffect, useState } from "react";
+import { portraitSvg, rollUnsetExpression } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
@@ -16,6 +16,15 @@ export function PlayerPortrait({
   backdrop?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
+  const [rolled, setRolled] = useState<Player | null>(null);
+
+  useLayoutEffect(() => {
+    setRolled({
+      ...player,
+      portrait: rollUnsetExpression(player.portrait),
+    });
+  }, [player]);
+
   if (backdrop && player.photo && !failed) {
     return (
       <img
@@ -27,7 +36,11 @@ export function PlayerPortrait({
     );
   }
 
-  const svg = portraitSvg(player, { backdrop }).replace(/^<\?xml[^>]*>\s*/u, "");
+  if (!rolled) {
+    return <div aria-hidden className={cn("h-full w-full", className)} />;
+  }
+
+  const svg = portraitSvg(rolled, { backdrop }).replace(/^<\?xml[^>]*>\s*/u, "");
   return (
     <div
       aria-hidden

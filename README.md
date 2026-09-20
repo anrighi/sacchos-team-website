@@ -96,7 +96,7 @@ Il file `src/data/portraits.csv` è il foglio look da condividere con la squadra
 | `hairColor` | preset `black`, `brown`, `auburn`, `blonde`, `gold` (IT: `nero`, `castano`, `ramato`, `biondo`, `miele`) oppure hex |
 | `skinColor` | preset `deep`, `tan`, `medium`, `warm`, `light` (IT: `scura`, `olivastra`, `media`, `calda`, `chiara`) oppure hex |
 
-Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Alias italiani: `capelli`, `capelliDietro`, `coloreCapelli`, `carnagione`, `occhi`, `sopracciglia`, `bocca`, `barba`. Celle `eyes` / `eyebrows` / `mouth` vuote = espressione dal seed dello slug (runtime, stabile per giocatore, non a build). Se lo Sheet rosa ha le stesse colonne, quelle vincono sul file. Poi `pnpm ingest-roster`.
+Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Alias italiani: `capelli`, `capelliDietro`, `coloreCapelli`, `carnagione`, `occhi`, `sopracciglia`, `bocca`, `barba`. Celle `eyes` / `eyebrows` / `mouth` vuote = espressione nuova a ogni reload (client). Se una cella è piena, quel tratto resta fisso. Se lo Sheet rosa ha le stesse colonne, quelle vincono sul file. Poi `pnpm ingest-roster`.
 
 Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
 

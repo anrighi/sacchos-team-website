@@ -94,9 +94,6 @@ export const players: Player[] = [
     "portrait": {
       "hair": "undercut",
       "rearHair": "longWavy",
-      "eyes": "happy",
-      "eyebrows": "happy",
-      "mouth": "smile",
       "beard": "none",
       "skinColor": "f5d0b0"
     }
@@ -229,9 +226,6 @@ export const players: Player[] = [
     "portrait": {
       "hair": "sideComed",
       "rearHair": "none",
-      "eyes": "humble",
-      "eyebrows": "neutral",
-      "mouth": "smile",
       "beard": "fullBeard",
       "skinColor": "c68e7a"
     }
@@ -453,9 +447,6 @@ export const players: Player[] = [
     "portrait": {
       "hair": "spiky",
       "rearHair": "none",
-      "eyes": "wink",
-      "eyebrows": "raised",
-      "mouth": "laugh",
       "beard": "none"
     }
   },

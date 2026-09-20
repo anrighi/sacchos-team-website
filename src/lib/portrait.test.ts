@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  EYES_VARIANTS,
   HAIR_COLOR_PRESETS,
   KIT_LAYOUT,
   SKIN_COLOR_PRESETS,
@@ -8,6 +9,7 @@ import {
   portraitSvg,
   resolveHairColor,
   resolveSkinColor,
+  rollUnsetExpression,
 } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
@@ -120,5 +122,30 @@ describe("portraitSvg", () => {
     const cutout = portraitSvg(sample(), { backdrop: false });
     expect(withBackdrop).toContain('fill="#182430"');
     expect(cutout).not.toContain('fill="#182430"');
+  });
+});
+
+describe("rollUnsetExpression", () => {
+  it("fills empty eyes, eyebrows and mouth from the roll", () => {
+    let i = 0;
+    const units = [0, 0.5, 0.99];
+    const rolled = rollUnsetExpression(undefined, () => units[i++] ?? 0);
+    expect(rolled.eyes).toBe(EYES_VARIANTS[0]);
+    expect(rolled.eyebrows).toBeDefined();
+    expect(rolled.mouth).toBeDefined();
+    expect(EYES_VARIANTS).toContain(rolled.eyes);
+  });
+
+  it("keeps CSV-pinned expression traits", () => {
+    const rolled = rollUnsetExpression({ eyes: "wink", mouth: "laugh" });
+    expect(rolled.eyes).toBe("wink");
+    expect(rolled.mouth).toBe("laugh");
+    expect(rolled.eyebrows).toBeDefined();
+  });
+
+  it("can produce different expressions across rolls", () => {
+    const a = rollUnsetExpression(undefined, () => 0);
+    const b = rollUnsetExpression(undefined, () => 0.99);
+    expect(a).not.toEqual(b);
   });
 });

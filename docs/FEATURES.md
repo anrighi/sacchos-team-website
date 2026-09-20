@@ -1,6 +1,6 @@
 # Feature registry
 
-> Last updated: 2026-09-19 | Active phase: 2 | Agent: Cursor
+> Last updated: 2026-09-20 | Active phase: 2 | Agent: Cursor
 
 **Collaboration:** GitHub Issues (`label:feature`) · branch `cursor/phase-<n>-f<id>-<slug>-91b9` · PR with `Closes #N` · CI syncs manifest → issues on `main`. Workflow: `.cursor/rules/github-workflow.mdc`
 
@@ -57,6 +57,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-20 | Cursor | 1 polish | Espressioni Toon Head (occhi/sopracciglia/bocca) casuali a ogni reload | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Ga 24 e MORDECAI 6 aggiunti in Saccios Tim (rosa 26) | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
 | 2026-09-19 | Cursor | 1 | Nickname = nomi maglia agganciati al numero in rosa | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Maglie senza match in rosa (Pongo 2, Dasyp 15, …) |
