@@ -36,9 +36,6 @@ function RosaPage() {
         <h1 className="relative font-display text-[clamp(3.2rem,11vw,7rem)] leading-[0.86] tracking-tight">
           La rosa.
         </h1>
-        <p className="relative mx-auto mt-4 max-w-xs text-base tracking-tight text-white/65 md:text-lg">
-          {players.length} carte.
-        </p>
         <div className="relative mt-7">
           <Link
             to="/sfida"

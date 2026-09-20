@@ -71,7 +71,7 @@ Niente bounce, loop veloci, o parallax. Drift lento (~6s).
 ## Altre superfici
 
 - **Nav:** logo PNG `h-9 w-auto object-contain`, non cerchio ritagliato dal JPG. Voci: Home, Rosa, Sfida. Archivio (`/sfide`) nascosto fino a F6
-- **Rosa / scheda:** hero compatto come la home (`La rosa.` + una riga di claim + CTA). Filtri a pillola `min-h-11`. `PlayerCard` con backdrop in carta, logo contain (niente `rounded-full`). Intestazioni squadra e chip: PNG contain
+- **Rosa / scheda:** hero compatto come la home (`La rosa.` + CTA, niente conteggio carte). Filtri a pillola `min-h-11`. `PlayerCard` con backdrop in carta, logo contain (niente `rounded-full`). Intestazioni squadra e chip: PNG contain
 - **Sfida (F3+):** stesso hero scuro, MrAlex, pillole, eventuali kit PNG come cutout sul campo, non JPG
 
 ## Non fare
