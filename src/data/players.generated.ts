@@ -559,11 +559,11 @@ export const players: Player[] = [
     "sex": "F",
     "number": 81,
     "birthYear": 2009,
-    "overall": 75,
+    "overall": 77,
     "stats": {
       "velocita": 75,
       "salto": 75,
-      "intercetto": 75,
+      "intercetto": 85,
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
