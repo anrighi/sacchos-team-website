@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { applyPortraits, parsePortraitTraits, parsePortraitsCsv } from "#/lib/portraits";
+import {
+  applyPortraits,
+  parsePortraitTraits,
+  parsePortraitsCsv,
+  serializePortraitsCsv,
+} from "#/lib/portraits";
+import { SHEET_HAIR_COLORS } from "#/lib/sheet-schema";
 import type { Player } from "#/lib/player";
 
 describe("parsePortraitTraits", () => {
@@ -23,8 +29,13 @@ describe("parsePortraitTraits", () => {
     });
   });
 
-  it("ignores unknown variants", () => {
+  it("ignores unknown variants and face expressions", () => {
     expect(parsePortraitTraits({ hair: "mohawk", eyes: "laser" })).toBeUndefined();
+    expect(parsePortraitTraits({ occhi: "wink", bocca: "smile", capelli: "a punte" })).toEqual({
+      hair: "spiky",
+    });
+    expect(parsePortraitTraits({ capelli: "irti" })).toEqual({ hair: "spiky" });
+    expect(parsePortraitTraits({ capelli: "piegata" })).toEqual({ hair: "sideComed" });
   });
 });
 
@@ -33,25 +44,25 @@ describe("applyPortraits", () => {
     const csv = `slug,hair,mouth
 ada-10,bun,smile`;
     const [player] = applyPortraits([sample()], csv);
-    expect(player?.portrait).toEqual({ hair: "bun", mouth: "smile" });
+    expect(player?.portrait).toEqual({ hair: "bun" });
     expect(player?.stats.velocita).toBe(75);
   });
 
   it("matches by firstName and number when slug is missing", () => {
-    const csv = `firstName,number,eyes
-Ada,10,wink`;
+    const csv = `firstName,number,beard
+Ada,10,nessuno`;
     const [player] = applyPortraits([sample()], csv);
-    expect(player?.portrait?.eyes).toBe("wink");
+    expect(player?.portrait?.beard).toBe("none");
   });
 
   it("lets roster-sheet traits win over the portraits file", () => {
     const csv = `slug,hair
 ada-10,spiky`;
     const [player] = applyPortraits(
-      [sample({ portrait: { hair: "bun", mouth: "smile" } })],
+      [sample({ portrait: { hair: "bun", beard: "none" } })],
       csv,
     );
-    expect(player?.portrait).toEqual({ hair: "bun", mouth: "smile" });
+    expect(player?.portrait).toEqual({ hair: "bun", beard: "none" });
   });
 });
 
@@ -65,6 +76,25 @@ nico-11,undercut`);
   });
 });
 
+describe("serializePortraitsCsv", () => {
+  it("writes the Sheet look using Italian color names, without inventing missing colors", () => {
+    const csv = serializePortraitsCsv([
+      sample({
+        portrait: {
+          hair: "undercut",
+          rearHair: "longWavy",
+          beard: "none",
+          hairColor: "d6b370",
+          skinColor: "f1c3a5",
+        },
+      }),
+    ]);
+    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,biondo,chiara,none");
+    expect(SHEET_HAIR_COLORS).toHaveLength(3);
+    expect(serializePortraitsCsv([sample()])).toContain("ada-10,Ada,10,Saccho's Team,,,,,");
+  });
+});
+
 function sample(overrides: Partial<Player> = {}): Player {
   return {
     slug: "ada-10",
@@ -72,7 +102,6 @@ function sample(overrides: Partial<Player> = {}): Player {
     team: "Saccho's Team",
     sex: "F",
     number: 10,
-    birthYear: 2000,
     overall: 75,
     stats: {
       velocita: 75,

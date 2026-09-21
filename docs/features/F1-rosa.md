@@ -4,8 +4,8 @@
 |-------|-------|
 | Status | done |
 | Phase | 1 |
-| Files | `scripts/ingest-roster.ts`, `src/lib/portrait.ts`, `src/lib/portraits.ts`, `src/data/players.generated.ts`, `src/data/portraits.csv`, `src/components/PlayerPortrait.tsx`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
-| Tests | parse/clamp/default 75–100; overall = media; riga senza number/firstName scartata; trait Toon Head da CSV |
+| Files | `scripts/ingest-roster.ts`, `src/lib/roster.ts`, `src/lib/sheet-url.ts`, `src/lib/sheet-schema.ts`, `src/lib/portrait.ts`, `src/lib/portraits.ts`, `src/data/players.generated.ts`, `src/data/roster.sheet.url`, `src/data/portraits.csv`, `src/components/PlayerPortrait.tsx`, `src/components/PlayerCard.tsx`, `src/routes/rosa.tsx`, `src/routes/giocatori.$slug.tsx` |
+| Tests | parse/clamp/default 60–100 (vuoto=75); overall = media in fascia 75–90; ruolo PAL = Palo; look dallo Sheet senza default slug; riga senza number/firstName scartata |
 
 ## Goal
 
@@ -20,8 +20,8 @@ Rosa 26 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 ## Acceptance criteria
 
 - [x] `pnpm ingest-roster` / `pnpm build` genera `src/data/players.generated.ts`
-- [x] Senza `ROSTER_SHEET_CSV_URL` usa lo snapshot in repo
-- [x] Stats clamp 75–100, default 75; overall arrotondato
+- [x] Senza `ROSTER_SHEET_CSV_URL` usa `src/data/roster.sheet.url`, poi il seed in repo
+- [x] Stats clamp 60–100, default 75; overall arrotondato in fascia 75–90 (la build ricalibra)
 - [x] UI: nickname se c'è, senno firstName; disambiguazione col numero
 - [x] Filtri query: squadra (chip Saccios Tim = logo pennarello), ruolo
 - [x] Badge carte sempre Saccho's Team
@@ -35,6 +35,8 @@ Rosa 26 giocatori da Google Sheet (CSV pubblicato) a build time, carte FUT illus
 
 ## Notes
 
-Colonne Sheet: firstName, nickname, number, birthYear, team, sex, role, velocita, salto, intercetto, scalpo, finalizzazione, gk. Nickname = nome maglia dove il numero coincide con la rosa. Giorgia F (pappagiorgia); Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim (GB). #15 Luca = Luc'Avelli. Veronica 93 = Vero. Extra Saccios Tim senza nome di battesimo noto: Ga 24, MORDECAI 6. Senza maglia in elenco: Chiara 81. Ritratti: DiceBear **Toon Head** (Johan Melin, CC BY 4.0) con maglia casa/trasferta e artigli rosa; PNG in `public/players/{slug}.png` resta un override opzionale. Niente filtro né campo presenze.
+Colonne Sheet (IT): Nome, Soprannome, Numero, Squadra, Sesso, Ruolo, Velocità, Salto, Intercetto, Scalpo, Finalizzazione, Parate, Capelli, Capelli dietro, Colore capelli, Carnagione, Barba. Nickname = nome maglia dove il numero coincide con la rosa. Giorgia F (pappagiorgia); Chiara 81 / Rebecca / MariaLaura F. Gianluca 9 → Saccios Tim (GB). #15 Luca = Luc'Avelli. Veronica 93 = Vero. Extra Saccios Tim senza nome di battesimo noto: Ga 24, MORDECAI 6. Senza maglia in elenco: Chiara 81. Sheet condiviso: [Sacchos Data](https://docs.google.com/spreadsheets/d/10tFgbhIPJk9l5p4w3K28GV4ez7Gh-hmUEhKh9hRYGtE/edit?gid=0#gid=0) (`src/data/roster.sheet.url`). Ritratti: DiceBear **Toon Head** (Johan Melin, CC BY 4.0) con maglia casa/trasferta e artigli rosa; PNG in `public/players/{slug}.png` resta un override opzionale. Niente filtro né campo presenze.
 
-Grafica rosa (rev. 4): stesso chrome FUT, ritratto Toon Head a piena larghezza su canvas 3:4. Kit forzato (bianco Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 + Saccho's sul petto e artigli rosa del kit reale. Personalizzazione viso in `src/data/portraits.csv` (condivisibile con la squadra) e/o colonne opzionali sullo Sheet (`hair`, `rearHair`, `hairColor`, `skinColor`, `eyes`, `eyebrows`, `mouth`, `beard`; alias IT: capelli, capelliDietro, coloreCapelli, carnagione, occhi, sopracciglia, bocca, barba). Celle vuote = seed dallo slug + sesso. `hairColor`/`skinColor` accettano 5 preset (black/brown/auburn/blonde/gold e deep/tan/medium/warm/light) o hex. Occhi/sopracciglia/bocca vuoti restano casuali-stabili dallo slug a runtime. `none` nasconde barba/capelli dietro. Lo Sheet vince sul file se entrambi settano lo stesso tratto.
+Grafica rosa (rev. 4): stesso chrome FUT, ritratto Toon Head a piena larghezza su canvas 3:4. Kit forzato (bianco Saccho's, navy Saccios Tim) con stemmi AGESCI Pesaro 1 + Saccho's sul petto e artigli rosa del kit reale. Personalizzazione viso sullo Sheet (menu IT) e fallback `src/data/portraits.csv`: capelli (`crocchia` / `pettinati di lato` / `a punte` / `lati rasati` / `nessuno`), capelli dietro (`lunghi lisci` / `lunghi mossi` / `alla nuca` / `alle spalle` / `nessuno`), barba, colore capelli (`nero`/`castano`/`biondo`), carnagione (`scura`/`media`/`chiara`). Occhi, sopracciglia e bocca non sono editabili: seed dello slug a runtime. Look e stats vengono dallo Sheet, senza default a ingest. Giorgia/Stefano/Guglielmo tengono il viso custom. Ruolo resta vuoto finché non lo sceglie la squadra. Lo Sheet vince sul file se entrambi settano lo stesso tratto.
+
+Equilibrio (play): la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet: colonna `Media` (`=ROUND(AVERAGE(G2:L2);0)`) e formula rosa `=IFERROR(ROUND(AVERAGE(G2:L1000);1);"")` con nota in `Equilibrio`. `pnpm ingest-roster` / build ricalibra i valori fuori fascia. Stats singole: **60–100**, cella vuota = **75**. Ruolo PAL sullo Sheet: **Palo**.

@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
-  HAIR_COLOR_PRESETS,
   KIT_LAYOUT,
-  SKIN_COLOR_PRESETS,
   kitKind,
   portraitOptions,
   portraitSvg,
   resolveHairColor,
   resolveSkinColor,
+  sheetHairColorLabel,
+  sheetSkinColorLabel,
 } from "#/lib/portrait";
 import type { Player } from "#/lib/player";
 
@@ -27,7 +27,6 @@ function sample(overrides: Partial<Player> = {}): Player {
     team: "Saccho's Team",
     sex: "F",
     number: 10,
-    birthYear: 2000,
     overall: 75,
     stats,
     ...overrides,
@@ -68,15 +67,13 @@ describe("portraitSvg", () => {
     expect(svg).toContain("kit-claws.png");
   });
 
-  it("pins CSV traits on the DiceBear options", () => {
+  it("pins CSV hair, beard and color and ignores face expressions", () => {
     const options = portraitOptions(
       sample({
         portrait: {
           hair: "spiky",
           rearHair: "none",
           beard: "none",
-          eyes: "wink",
-          mouth: "laugh",
           hairColor: "2c1b18",
         },
       }),
@@ -84,16 +81,20 @@ describe("portraitSvg", () => {
     expect(options.hairVariant).toEqual(["spiky"]);
     expect(options.rearHairProbability).toBe(0);
     expect(options.beardProbability).toBe(0);
-    expect(options.eyesVariant).toEqual(["wink"]);
-    expect(options.mouthVariant).toEqual(["laugh"]);
+    expect(options.eyesVariant).toBeUndefined();
+    expect(options.mouthVariant).toBeUndefined();
     expect(options.hairColor).toEqual(["2c1b18"]);
     expect(options.clothesVariant).toEqual(["tShirt"]);
   });
 
-  it("picks hair and skin from the 5 presets when the CSV leaves them empty", () => {
+  it("does not invent hair, beard or colors when the Sheet look is empty", () => {
     const options = portraitOptions(sample());
-    expect(options.hairColor).toEqual(Object.values(HAIR_COLOR_PRESETS));
-    expect(options.skinColor).toEqual(Object.values(SKIN_COLOR_PRESETS));
+    expect(options.hairVariant).toBeUndefined();
+    expect(options.hairProbability).toBe(0);
+    expect(options.rearHairProbability).toBe(0);
+    expect(options.beardProbability).toBe(0);
+    expect(options.hairColor).toBeUndefined();
+    expect(options.skinColor).toBeUndefined();
     expect(options.eyesVariant).toBeUndefined();
     expect(options.eyebrowsVariant).toBeUndefined();
     expect(options.mouthVariant).toBeUndefined();
@@ -104,6 +105,8 @@ describe("portraitSvg", () => {
     expect(resolveHairColor("black")).toBe("2c1b18");
     expect(resolveSkinColor("chiara")).toBe("f1c3a5");
     expect(resolveSkinColor("#f5d0b0")).toBe("f5d0b0");
+    expect(sheetHairColorLabel("2c1b18")).toBe("nero");
+    expect(sheetSkinColorLabel("chiara")).toBe("chiara");
   });
 
   it("keeps the claws below the AGESCI crest", () => {

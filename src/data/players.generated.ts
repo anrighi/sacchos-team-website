@@ -8,7 +8,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 4,
-    "birthYear": 1993,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -18,7 +17,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "PAPU"
+    "nickname": "PAPU",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "nicolo-nick",
@@ -26,7 +32,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 5,
-    "birthYear": 1993,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -36,7 +41,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Nick"
+    "nickname": "Nick",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "michele-costa",
@@ -44,7 +56,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 7,
-    "birthYear": 1998,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -54,7 +65,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Costa"
+    "nickname": "Costa",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "miriam-nonmiribecco",
@@ -62,7 +80,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "F",
     "number": 8,
-    "birthYear": 1997,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -72,7 +89,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "nonMIRibecco"
+    "nickname": "nonMIRibecco",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "giorgia-pappagiorgia",
@@ -80,7 +104,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "F",
     "number": 10,
-    "birthYear": 2002,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -94,11 +117,9 @@ export const players: Player[] = [
     "portrait": {
       "hair": "undercut",
       "rearHair": "longWavy",
-      "eyes": "happy",
-      "eyebrows": "happy",
-      "mouth": "smile",
       "beard": "none",
-      "skinColor": "f5d0b0"
+      "hairColor": "724133",
+      "skinColor": "f1c3a5"
     }
   },
   {
@@ -107,7 +128,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 13,
-    "birthYear": 2000,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -117,7 +137,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Peppinson"
+    "nickname": "Peppinson",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "alice-winx",
@@ -125,7 +152,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "F",
     "number": 14,
-    "birthYear": 1998,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -135,7 +161,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Winx"
+    "nickname": "Winx",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "andrea-mascotte",
@@ -143,7 +176,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 23,
-    "birthYear": 1998,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -153,7 +185,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Mascotte"
+    "nickname": "Mascotte",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "chiara-kia",
@@ -161,7 +200,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "F",
     "number": 29,
-    "birthYear": 1994,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -171,7 +209,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "KIA"
+    "nickname": "KIA",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "marco-mt",
@@ -179,7 +224,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 33,
-    "birthYear": 1983,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -189,7 +233,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "MT"
+    "nickname": "MT",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "moustacheTwirl",
+      "hairColor": "2c1b18",
+      "skinColor": "c68e7a"
+    }
   },
   {
     "slug": "guia-vaiana",
@@ -197,7 +248,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "F",
     "number": 42,
-    "birthYear": 2005,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -207,7 +257,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "vaiana"
+    "nickname": "vaiana",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "stefano-ragno",
@@ -215,7 +272,6 @@ export const players: Player[] = [
     "team": "Saccho's Team",
     "sex": "M",
     "number": 99,
-    "birthYear": 1981,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -229,10 +285,8 @@ export const players: Player[] = [
     "portrait": {
       "hair": "sideComed",
       "rearHair": "none",
-      "eyes": "humble",
-      "eyebrows": "neutral",
-      "mouth": "smile",
       "beard": "fullBeard",
+      "hairColor": "d6b370",
       "skinColor": "c68e7a"
     }
   },
@@ -242,7 +296,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 9,
-    "birthYear": 2005,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -252,7 +305,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "GB"
+    "nickname": "GB",
+    "portrait": {
+      "hair": "sideComed",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "alex-axel",
@@ -260,7 +320,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 11,
-    "birthYear": 2008,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -270,7 +329,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "AXEL"
+    "nickname": "AXEL",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "luca-luc-avelli",
@@ -278,7 +344,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 15,
-    "birthYear": 2006,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -288,7 +353,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Luc'Avelli"
+    "nickname": "Luc'Avelli",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "rebecca-quechua",
@@ -296,7 +368,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "F",
     "number": 18,
-    "birthYear": 2009,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -306,7 +377,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Quechua"
+    "nickname": "Quechua",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "giulio-j-tata",
@@ -314,7 +392,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 21,
-    "birthYear": 2007,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -324,7 +401,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "J-TATA"
+    "nickname": "J-TATA",
+    "portrait": {
+      "hair": "bun",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "marialaura-baguette",
@@ -332,7 +416,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "F",
     "number": 22,
-    "birthYear": 2009,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -342,7 +425,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Baguette"
+    "nickname": "Baguette",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "longStraight",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "gabriele-gabbo",
@@ -350,7 +440,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 28,
-    "birthYear": 2009,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -360,7 +449,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Gabbo"
+    "nickname": "Gabbo",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "pietro-della",
@@ -368,7 +464,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 30,
-    "birthYear": 2008,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -378,7 +473,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "DELLA"
+    "nickname": "DELLA",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "veronica-vero",
@@ -386,7 +488,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "F",
     "number": 93,
-    "birthYear": 2009,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -396,7 +497,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Vero"
+    "nickname": "Vero",
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "tommaso-tommygamer",
@@ -404,7 +512,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 67,
-    "birthYear": 2009,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -414,7 +521,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "TommyGamer"
+    "nickname": "TommyGamer",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "d6b370",
+      "skinColor": "f1c3a5"
+    }
   },
   {
     "slug": "chiara-81",
@@ -422,15 +536,21 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "F",
     "number": 81,
-    "birthYear": 2009,
-    "overall": 75,
+    "overall": 77,
     "stats": {
       "velocita": 75,
       "salto": 75,
-      "intercetto": 75,
+      "intercetto": 85,
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
+    },
+    "portrait": {
+      "hair": "undercut",
+      "rearHair": "longWavy",
+      "beard": "none",
+      "hairColor": "2c1b18",
+      "skinColor": "5c3829"
     }
   },
   {
@@ -439,7 +559,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 0,
-    "birthYear": 2008,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -453,10 +572,9 @@ export const players: Player[] = [
     "portrait": {
       "hair": "spiky",
       "rearHair": "none",
-      "eyes": "wink",
-      "eyebrows": "raised",
-      "mouth": "laugh",
-      "beard": "none"
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
     }
   },
   {
@@ -465,7 +583,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 24,
-    "birthYear": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -475,7 +592,14 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "Ga"
+    "nickname": "Ga",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "5c3829"
+    }
   },
   {
     "slug": "mordecai-mordecai",
@@ -483,7 +607,6 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "M",
     "number": 6,
-    "birthYear": 0,
     "overall": 75,
     "stats": {
       "velocita": 75,
@@ -493,6 +616,13 @@ export const players: Player[] = [
       "finalizzazione": 75,
       "gk": 75
     },
-    "nickname": "MORDECAI"
+    "nickname": "MORDECAI",
+    "portrait": {
+      "hair": "spiky",
+      "rearHair": "none",
+      "beard": "none",
+      "hairColor": "724133",
+      "skinColor": "c68e7a"
+    }
   }
 ];

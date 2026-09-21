@@ -1,35 +1,39 @@
-import { csvCell, parseCsv, slugify } from "#/lib/csv";
+import { csvCell, csvEscape, foldHeader, parseCsv, slugify } from "#/lib/csv";
 import type { Player, PortraitTraits } from "#/lib/player";
 import {
   BEARD_VARIANTS,
-  EYEBROWS_VARIANTS,
-  EYES_VARIANTS,
   HAIR_VARIANTS,
-  MOUTH_VARIANTS,
   REAR_HAIR_VARIANTS,
   resolveHairColor,
   resolveSkinColor,
+  sheetHairColorLabel,
+  sheetSkinColorLabel,
 } from "#/lib/portrait";
+import { SHEET_BEARD, SHEET_HAIR, SHEET_REAR_HAIR, variantAliasMap } from "#/lib/sheet-schema";
 
 const HEADERS = {
   hair: ["hair", "capelli"],
-  rearHair: ["rearHair", "capelliDietro"],
-  hairColor: ["hairColor", "coloreCapelli"],
+  rearHair: ["rearHair", "capelliDietro", "capelli dietro"],
+  hairColor: ["hairColor", "coloreCapelli", "colore capelli"],
   skinColor: ["skinColor", "carnagione"],
-  eyes: ["eyes", "occhi"],
-  eyebrows: ["eyebrows", "sopracciglia"],
-  mouth: ["mouth", "bocca"],
   beard: ["beard", "barba"],
 } as const;
 
+const HAIR_ALIASES = variantAliasMap(SHEET_HAIR);
+const REAR_HAIR_ALIASES = variantAliasMap(SHEET_REAR_HAIR);
+const BEARD_ALIASES = variantAliasMap(SHEET_BEARD);
+
 export function parsePortraitTraits(row: Record<string, string>): PortraitTraits | undefined {
   const traits: PortraitTraits = {};
-  assignVariant(traits, "hair", csvCell(row, ...HEADERS.hair), HAIR_VARIANTS);
-  assignVariant(traits, "rearHair", csvCell(row, ...HEADERS.rearHair), REAR_HAIR_VARIANTS);
-  assignVariant(traits, "eyes", csvCell(row, ...HEADERS.eyes), EYES_VARIANTS);
-  assignVariant(traits, "eyebrows", csvCell(row, ...HEADERS.eyebrows), EYEBROWS_VARIANTS);
-  assignVariant(traits, "mouth", csvCell(row, ...HEADERS.mouth), MOUTH_VARIANTS);
-  assignVariant(traits, "beard", csvCell(row, ...HEADERS.beard), BEARD_VARIANTS);
+  assignVariant(traits, "hair", csvCell(row, ...HEADERS.hair), HAIR_VARIANTS, HAIR_ALIASES);
+  assignVariant(
+    traits,
+    "rearHair",
+    csvCell(row, ...HEADERS.rearHair),
+    REAR_HAIR_VARIANTS,
+    REAR_HAIR_ALIASES,
+  );
+  assignVariant(traits, "beard", csvCell(row, ...HEADERS.beard), BEARD_VARIANTS, BEARD_ALIASES);
 
   const hairColor = resolveHairColor(csvCell(row, ...HEADERS.hairColor));
   if (hairColor) {
@@ -69,6 +73,30 @@ export function parsePortraitsCsv(csv: string): Map<string, PortraitTraits> {
   return byKey;
 }
 
+export function serializePortraitsCsv(players: readonly Player[]): string {
+  const header = "slug,firstName,number,team,hair,rearHair,hairColor,skinColor,beard";
+  const lines = [header];
+  for (const player of players) {
+    const traits = player.portrait ?? {};
+    lines.push(
+      [
+        player.slug,
+        player.firstName,
+        String(player.number),
+        player.team,
+        traits.hair ?? "",
+        traits.rearHair ?? "",
+        sheetHairColorLabel(traits.hairColor),
+        sheetSkinColorLabel(traits.skinColor),
+        traits.beard ?? "",
+      ]
+        .map(csvEscape)
+        .join(","),
+    );
+  }
+  return `${lines.join("\n")}\n`;
+}
+
 export function applyPortraits(players: Player[], csv: string): Player[] {
   const extras = parsePortraitsCsv(csv);
   if (extras.size === 0) {
@@ -99,20 +127,29 @@ function assignVariant(
   key: keyof PortraitTraits,
   raw: string,
   allowed: readonly string[],
+  aliases: Record<string, string>,
 ): void {
-  const value = parseVariant(raw, allowed);
+  const value = parseVariant(raw, allowed, aliases);
   if (value) {
     traits[key] = value;
   }
 }
 
-function parseVariant(raw: string, allowed: readonly string[]): string | undefined {
+function parseVariant(
+  raw: string,
+  allowed: readonly string[],
+  aliases: Record<string, string>,
+): string | undefined {
   if (!raw) {
     return undefined;
   }
-  const value = raw.trim();
-  if (/^(none|no|false|-)$/iu.test(value)) {
+  const folded = foldHeader(raw);
+  if (/^(none|no|false|nessuno)$/u.test(folded)) {
     return "none";
   }
-  return allowed.find((item) => item.toLowerCase() === value.toLowerCase());
+  const aliased = aliases[folded];
+  if (aliased) {
+    return aliased;
+  }
+  return allowed.find((item) => foldHeader(item) === folded);
 }

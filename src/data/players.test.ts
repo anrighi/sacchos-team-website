@@ -37,14 +37,44 @@ describe("players snapshot", () => {
     expect(players.find((p) => p.number === 24 && p.team === "Saccios Tim")?.nickname).toBe("Ga");
   });
 
-  it("defaults overall to 75", () => {
-    expect(players.every((p) => p.overall === 75)).toBe(true);
+  it("defaults overall to 75 unless a row has custom stats", () => {
+    const chiara = players.find((p) => p.number === 81);
+    expect(chiara?.stats.intercetto).toBe(85);
+    expect(chiara?.overall).toBe(77);
+    expect(players.filter((p) => p.overall === 75)).toHaveLength(25);
   });
 
-  it("stores Toon Head traits from portraits.csv", () => {
+  it("keeps every overall inside the 75–90 play band", () => {
+    expect(players.every((p) => p.overall >= 75 && p.overall <= 90)).toBe(true);
+  });
+
+  it("stores a complete Toon Head look for every player, without face expressions", () => {
     const giorgia = players.find((p) => p.slug === "giorgia-pappagiorgia");
     expect(giorgia?.photo).toBeUndefined();
-    expect(giorgia?.portrait?.mouth).toBe("smile");
+    expect(giorgia?.portrait?.mouth).toBeUndefined();
+    expect(giorgia?.portrait?.eyes).toBeUndefined();
+    expect(giorgia?.portrait?.hair).toBe("undercut");
     expect(giorgia?.portrait?.rearHair).toBe("longWavy");
+    expect(giorgia?.portrait?.skinColor).toBe("f1c3a5");
+    expect(giorgia?.portrait?.hairColor).toBeTruthy();
+
+    const stefano = players.find((p) => p.slug === "stefano-ragno");
+    expect(stefano?.portrait?.hair).toBe("sideComed");
+    expect(stefano?.portrait?.beard).toBe("fullBeard");
+
+    const guglielmo = players.find((p) => p.slug === "guglielmo-google");
+    expect(guglielmo?.portrait?.hair).toBe("spiky");
+    expect(guglielmo?.portrait?.beard).toBe("none");
+
+    expect(
+      players.every(
+        (player) =>
+          Boolean(player.portrait?.hair) &&
+          Boolean(player.portrait?.rearHair) &&
+          Boolean(player.portrait?.beard) &&
+          Boolean(player.portrait?.hairColor) &&
+          Boolean(player.portrait?.skinColor),
+      ),
+    ).toBe(true);
   });
 });

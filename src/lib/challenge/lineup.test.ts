@@ -20,7 +20,6 @@ function player(slug: string, sex: Sex, firstName = slug, number = 1): Player {
     team: "Saccho's Team",
     sex,
     number,
-    birthYear: 2000,
     overall: 75,
     stats: {
       velocita: 75,

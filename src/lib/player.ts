@@ -24,9 +24,6 @@ export type PortraitTraits = {
   rearHair?: string;
   hairColor?: string;
   skinColor?: string;
-  eyes?: string;
-  eyebrows?: string;
-  mouth?: string;
   beard?: string;
 };
 
@@ -38,7 +35,6 @@ export type Player = {
   role?: Role;
   sex: Sex;
   number: number;
-  birthYear: number;
   photo?: string;
   portrait?: PortraitTraits;
   overall: number;
@@ -65,7 +61,7 @@ export const STAT_NAMES: Record<StatKey, string> = {
 
 export const ROLE_LABELS: Record<Role, string> = {
   POR: "Portiere",
-  PAL: "Palleggiatore",
+  PAL: "Palo",
   CEN: "Centrale",
   ALA: "Ala",
   PUN: "Punta",

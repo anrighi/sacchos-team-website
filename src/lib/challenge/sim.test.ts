@@ -39,7 +39,6 @@ function player(
     role: extras.role,
     sex,
     number: extras.number ?? 1,
-    birthYear: 2000,
     overall: 75,
     stats: extras.stats ?? {
       velocita: 75,

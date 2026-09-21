@@ -21,7 +21,7 @@
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Google Sheet
-- **Open blockers:** nel seed rosa `role` e le sei stat sono vuote (tutti 75, nessun ruolo): la sfida gira ma i giocatori si equivalgono; F6 richiede un runtime server, Pages è statico
+- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F6 richiede un runtime server, Pages è statico
 
 ## Feature index
 
@@ -57,6 +57,13 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Look solo dallo Sheet (niente default slug/anno); colonna Anno tolta | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Menu capelli in italiano chiaro (crocchia, pettinati di lato, a punte, lati rasati; dietro alla nuca / alle spalle) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Ruolo PAL = Palo; stats singole 60–100 (vuoto=75) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Fascia overall 75–90: formula Sheet + ricalibro in ingest | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Default look + stats 75 su ogni riga (visi custom Giorgia/Stefano/Guglielmo) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
+| 2026-09-20 | Cursor | 1 | Sheet rosa in italiano con menu a tendina; niente occhi/sopracciglia/bocca; colori 3/5 | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti (stats 75); F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 polish | Merge visual su `main`: Archivio fuori nav, MrAlex ovunque, `/rosa` senza conteggio carte | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 2 | Merge F3+F4 su `main` (sfida 3-2-1, sim 2×15′, silver/gold meta) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
 | 2026-09-19 | Cursor | 2 | F4: extras copy silver/gold meta; niente box score a fine partita | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |

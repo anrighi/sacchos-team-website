@@ -1,7 +1,7 @@
 import { Avatar, Style } from "@dicebear/core";
 import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
-import type { Player, PortraitTraits, TeamName } from "#/lib/player";
+import type { Player, TeamName } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
 
 const toonHead = new Style(definition);
@@ -28,9 +28,6 @@ export const REAR_HAIR_VARIANTS = [
   "neckHigh",
   "shoulderHigh",
 ] as const;
-export const EYES_VARIANTS = ["bow", "happy", "humble", "wide", "wink"] as const;
-export const EYEBROWS_VARIANTS = ["angry", "happy", "neutral", "raised", "sad"] as const;
-export const MOUTH_VARIANTS = ["agape", "angry", "laugh", "sad", "smile"] as const;
 export const BEARD_VARIANTS = [
   "chin",
   "chinMoustache",
@@ -73,12 +70,17 @@ const SKIN_COLOR_ALIASES: Record<string, keyof typeof SKIN_COLOR_PRESETS> = {
   chiara: "light",
 };
 
-export type HairVariant = (typeof HAIR_VARIANTS)[number];
-export type RearHairVariant = (typeof REAR_HAIR_VARIANTS)[number];
-export type EyesVariant = (typeof EYES_VARIANTS)[number];
-export type EyebrowsVariant = (typeof EYEBROWS_VARIANTS)[number];
-export type MouthVariant = (typeof MOUTH_VARIANTS)[number];
-export type BeardVariant = (typeof BEARD_VARIANTS)[number];
+const HAIR_COLOR_LABELS: Record<string, string> = {
+  [HAIR_COLOR_PRESETS.black]: "nero",
+  [HAIR_COLOR_PRESETS.brown]: "castano",
+  [HAIR_COLOR_PRESETS.blonde]: "biondo",
+};
+
+const SKIN_COLOR_LABELS: Record<string, string> = {
+  [SKIN_COLOR_PRESETS.deep]: "scura",
+  [SKIN_COLOR_PRESETS.medium]: "media",
+  [SKIN_COLOR_PRESETS.light]: "chiara",
+};
 
 export type KitKind = "home" | "away";
 
@@ -95,7 +97,7 @@ export function portraitSvg(
 ): string {
   const kit = options.kit ?? kitKind(player.team);
   const backdrop = options.backdrop !== false;
-  const key = `${player.slug}:${kit}:${backdrop}:${player.sex}:${player.birthYear}:${JSON.stringify(player.portrait ?? {})}`;
+  const key = `${player.slug}:${kit}:${backdrop}:${JSON.stringify(player.portrait ?? {})}`;
   const cached = portraitCache.get(key);
   if (cached) {
     return cached;
@@ -112,7 +114,6 @@ export function portraitOptions(
   backdrop = true,
 ): Record<string, unknown> {
   const traits = player.portrait ?? {};
-  const older = player.birthYear > 0 && player.birthYear <= 1986;
 
   return {
     seed: player.slug,
@@ -129,46 +130,12 @@ export function portraitOptions(
           backgroundColor: ["00000000"],
           backgroundColorFill: ["solid"],
         }),
-    ...variantOption("hair", traits.hair, HAIR_VARIANTS),
-    ...variantOption(
-      "rearHair",
-      traits.rearHair,
-      REAR_HAIR_VARIANTS,
-      defaultRearHairProbability(player, traits),
-    ),
-    ...variantOption(
-      "beard",
-      traits.beard,
-      BEARD_VARIANTS,
-      defaultBeardProbability(player, traits, older),
-    ),
-    ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
-    ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
-    ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
-    ...colorOption("hair", traits.hairColor, Object.values(HAIR_COLOR_PRESETS)),
-    ...colorOption("skin", traits.skinColor, Object.values(SKIN_COLOR_PRESETS)),
+    ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
+    ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
+    ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
+    ...colorOption("hair", traits.hairColor),
+    ...colorOption("skin", traits.skinColor),
   };
-}
-
-function defaultRearHairProbability(player: Player, traits: PortraitTraits): number {
-  if (traits.rearHair) {
-    return 100;
-  }
-  return player.sex === "F" ? 100 : 12;
-}
-
-function defaultBeardProbability(
-  player: Player,
-  traits: PortraitTraits,
-  older: boolean,
-): number {
-  if (traits.beard) {
-    return 100;
-  }
-  if (player.sex === "F") {
-    return 0;
-  }
-  return older ? 70 : 22;
 }
 
 function variantOption(
@@ -192,14 +159,13 @@ function variantOption(
   return { [`${name}Probability`]: fallbackProbability };
 }
 
-function colorOption(
-  name: "hair" | "skin",
-  value: string | undefined,
-  fallback: readonly string[],
-): Record<string, unknown> {
+function colorOption(name: "hair" | "skin", value: string | undefined): Record<string, unknown> {
   const hex = name === "hair" ? resolveHairColor(value) : resolveSkinColor(value);
+  if (!hex) {
+    return {};
+  }
   return {
-    [`${name}Color`]: hex ? [hex] : [...fallback],
+    [`${name}Color`]: [hex],
     [`${name}ColorFill`]: ["solid"],
   };
 }
@@ -210,6 +176,22 @@ export function resolveHairColor(value: string | undefined): string | undefined 
 
 export function resolveSkinColor(value: string | undefined): string | undefined {
   return resolvePresetColor(value, SKIN_COLOR_PRESETS, SKIN_COLOR_ALIASES);
+}
+
+export function sheetHairColorLabel(value: string | undefined): string {
+  const hex = resolveHairColor(value);
+  if (!hex) {
+    return "";
+  }
+  return HAIR_COLOR_LABELS[hex] ?? "";
+}
+
+export function sheetSkinColorLabel(value: string | undefined): string {
+  const hex = resolveSkinColor(value);
+  if (!hex) {
+    return "";
+  }
+  return SKIN_COLOR_LABELS[hex] ?? "";
 }
 
 function resolvePresetColor<T extends Record<string, string>>(
@@ -231,7 +213,7 @@ function resolvePresetColor<T extends Record<string, string>>(
   return normalizeHex(value);
 }
 
-export function normalizeHex(value: string | undefined): string | undefined {
+function normalizeHex(value: string | undefined): string | undefined {
   if (!value) {
     return undefined;
   }
