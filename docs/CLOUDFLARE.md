@@ -6,6 +6,8 @@ Partite (F6): Workers KV sullo stesso Worker.
 
 Piano **Free** basta: Custom Domain, 100k req/giorno Workers, KV 100k read / 1k write / giorno.
 
+`compatibility_date` in `wrangler.jsonc` è `2026-09-10` (massimo supportato dal workerd del lockfile). Non alzarlo senza aggiornare `wrangler` / `workerd`.
+
 ## Cosa non fare
 
 - Non cambiare i nameserver di `agescipesaro1.it` (l’apex è già live su Cloudflare).
