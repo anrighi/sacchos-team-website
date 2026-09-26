@@ -1,6 +1,6 @@
 # Feature registry
 
-> Last updated: 2026-09-20 | Active phase: 2 | Agent: Cursor
+> Last updated: 2026-09-26 | Active phase: 2 | Agent: Cursor
 
 **Collaboration:** GitHub Issues (`label:feature`) · branch `cursor/phase-<n>-f<id>-<slug>-91b9` · PR with `Closes #N` · CI syncs manifest → issues on `main`. Workflow: `.cursor/rules/github-workflow.mdc`
 
@@ -11,7 +11,7 @@
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
 | 2 | Sfida | in_progress | 50% |
-| 0+ | Dopo | deferred | — |
+| 0+ | Dopo | in_progress | — |
 
 ## Active phase — what to do now
 
@@ -20,8 +20,8 @@
   - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
-  - [ ] [F6](features/F6-archive.md) Archivio partite su Google Sheet
-- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F6 richiede un runtime server, Pages è statico
+  - [ ] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
+- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9 in PR: servono `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` per il primo deploy live
 
 ## Feature index
 
@@ -33,19 +33,21 @@
 | F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
 | F4 | Simulazione 2×15′ in 90s | 2 | done | [F4-sim.md](features/F4-sim.md) |
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
-| F6 | Archivio partite su Google Sheet | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
+| F6 | Archivio partite su Cloudflare KV | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
+| F9 | Deploy Cloudflare Workers e dominio club | 0+ | in_progress | [F9-cloudflare.md](features/F9-cloudflare.md) |
 
 ## Architecture decisions (light ADR)
 
 | Date | Decision | Rationale | Rejected alternative |
 |------|----------|-----------|---------------------|
 | 2026-09-04 | Estendere `anrighi/agent-repo-template` (merge git, non copia file) | Banner GitHub *generated from* solo se il remote GitHub nasce dal template | Copiare i file a mano |
-| 2026-09-04 | TanStack Start statico su GitHub Pages | Niente token Cloudflare ora; SSR/Workers dopo | Deploy Wrangler da F0 |
-| 2026-09-05 | Stage per branch su GitHub Pages (`/preview/<slug>/`) | Vedere il sito fuori casa prima del merge | Solo `main`, preview Cloudflare |
-| 2026-09-04 | TanStack Start + Cloudflare Workers (poi) | SSR e dominio club quando l’account CF è pronto | Next.js / Pages come stack definitivo |
+| 2026-09-04 | TanStack Start statico su GitHub Pages | Niente token Cloudflare allora; sostituito da F9 | Deploy Wrangler da F0 |
+| 2026-09-05 | Stage per branch su GitHub Pages (`/preview/<slug>/`) | Vedere il sito fuori casa prima del merge; sostituito da preview Workers | Solo `main` |
+| 2026-09-04 | TanStack Start + Cloudflare Workers | SSR e dominio club; F9 attua | Next.js / Pages come stack definitivo |
 | 2026-09-04 | Node 26 + pnpm | Current LTS-adjacent del template alzato; lockfile unico | Node 22 del template |
-| 2026-09-04 | Rosa da Google Sheet a build, partite su Sheet in append | I giocatori editano senza DB; niente PII in repo | Postgres / JSON editato a mano |
+| 2026-09-04 | Rosa da Google Sheet a build | I giocatori editano senza DB; niente PII in repo | Postgres / JSON editato a mano |
+| 2026-09-26 | Deploy Workers + `sacchos.agescipesaro1.it`; partite su KV | Account CF free pronto; zona già su Cloudflare; Pages è statico | Restare su GitHub Pages; secondo Sheet per le partite |
 | 2026-09-04 | Solo brand Saccho's Team; Saccios Tim = filtro | Un'identità visiva, due rose | Due loghi in nav |
 | 2026-09-04 | Nickname o nome, mai cognomi/foto | Privacy scout | Foto reali, cognomi |
 | 2026-09-04 | F7 album `deferred` | Fuori slice | Album in F0–F6 |
@@ -57,6 +59,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Aggiungere secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Look solo dallo Sheet (niente default slug/anno); colonna Anno tolta | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Menu capelli in italiano chiaro (crocchia, pettinati di lato, a punte, lati rasati; dietro alla nuca / alle spalle) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
@@ -81,6 +84,7 @@ pnpm install          # Node 26 (nvm use / .nvmrc)
 pnpm test
 pnpm dev              # http://127.0.0.1:43123
 pnpm build
+pnpm deploy           # wrangler (docs/CLOUDFLARE.md)
 pnpm run sync:github-tasks:dry-run
 pnpm run sync:github-tasks
 ```

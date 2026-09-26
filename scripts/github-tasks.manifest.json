@@ -72,10 +72,17 @@
     },
     {
       "id": "F6",
-      "title": "Archivio partite su Google Sheet",
+      "title": "Archivio partite su Cloudflare KV",
       "phase": "2",
       "status": "todo",
       "spec": "docs/features/F6-archive.md"
+    },
+    {
+      "id": "F9",
+      "title": "Deploy Cloudflare Workers e dominio club",
+      "phase": "0+",
+      "status": "todo",
+      "spec": "docs/features/F9-cloudflare.md"
     },
     {
       "id": "F7",

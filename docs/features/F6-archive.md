@@ -1,32 +1,34 @@
-# F6 — Archivio partite su Google Sheet
+# F6 — Archivio partite su Cloudflare KV
 
 | Field | Value |
 |-------|-------|
 | Status | not_started |
 | Phase | 2 |
-| Files | `src/routes/sfide.tsx`, `src/routes/api.matches.ts` (o equivalente Worker) |
-| Tests | append payload shape; `/sfide` vuoto senza CSV |
+| Files | `src/routes/sfide.tsx`, `src/routes/api.matches.ts` (o server function Worker) |
+| Tests | append payload shape; `/sfide` vuoto senza KV |
 
 ## Goal
 
-Fine partita: `POST` webhook Apps Script → riga ricca sullo Sheet. `/sfide` legge CSV pubblicato.
+Fine partita: `POST` sul Worker → riga su Workers KV. `/sfide` elenca le partite. La rosa resta sullo Sheet Google.
 
 ## Prerequisites
 
 - F5 recap URL
+- F9 Worker in produzione (binding `MATCHES`)
 
 ## Acceptance criteria
 
 - [ ] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
-- [ ] Senza webhook: toast, link recap resta valido, archivio vuoto
-- [ ] `/sfide` lista da CSV
+- [ ] Senza KV/binding: toast, link recap resta valido, archivio vuoto
+- [ ] `/sfide` lista da KV
 - [ ] Spec + manifest `done` e PR con `Closes #N`
 
 ## Deliverables
 
-- Worker append, pagina archivio, README webhook
+- Server function append, pagina archivio, binding `MATCHES` in `wrangler.jsonc`
 
 ## Notes
 
-Niente S3. Winrate/utilizzo: pivot successivi o sullo Sheet, non obbligatori in F6.
+Niente secondo Google Sheet, niente Apps Script, niente S3. Winrate/utilizzo: pivot successivi, non obbligatori in F6.
 La voce **Archivio** resta fuori dalla nav (`src/lib/nav.ts`) finché questa feature non è pronta: `/sfide` esiste ma non è linkata.
+Creare il namespace: `pnpm wrangler kv namespace create MATCHES` (vedi `docs/CLOUDFLARE.md`).

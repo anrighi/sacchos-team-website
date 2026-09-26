@@ -4,7 +4,7 @@
 |-------|-------|
 | Status | done |
 | Phase | 0 |
-| Files | `package.json`, `src/`, `.github/workflows/ci.yml`, `docs/`, `wrangler.jsonc` (CF dopo) |
+| Files | `package.json`, `src/`, `.github/workflows/ci.yml`, `docs/` |
 | Tests | `pnpm test` (Node ≥26 + club brand); `pnpm build` |
 
 ## Goal
@@ -35,4 +35,4 @@ App TanStack Start eseguibile, identità Saccho's Team, pipeline Vitest + build,
 
 ## Notes
 
-F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Deploy: GitHub Pages dal branch `gh-pages` (`main` in root, gli altri in `/preview/<slug>/`). Non usare l’environment `github-pages` (protetto, solo `main`). Cloudflare Workers e `sacchos.agescipesaro1.it` arrivano dopo.
+F1 legge lo Sheet. Senza `ROSTER_SHEET_CSV_URL` la build non deve fallire (snapshot/empty). Deploy Pages (F0) è stato sostituito da Workers in [F9](F9-cloudflare.md).

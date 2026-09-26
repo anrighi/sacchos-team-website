@@ -40,7 +40,7 @@ export function CareerEfficiency({ slug }: { slug: string }) {
         ) : null}
       </dl>
       <p className="mt-3 text-[12px] text-white/40">
-        Dalle sfide su questo dispositivo. L’archivio Sheet arriverà dopo.
+        Dalle sfide su questo dispositivo. L’archivio su Cloudflare arriverà dopo.
       </p>
     </div>
   );

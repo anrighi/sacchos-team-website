@@ -38,6 +38,7 @@ Project: **Saccho's Team** (Scoutball, AGESCI Pesaro 1).
 pnpm install
 pnpm test
 pnpm build
+pnpm deploy
 pnpm dev
 pnpm run sync:github-tasks:dry-run
 pnpm run sync:github-tasks

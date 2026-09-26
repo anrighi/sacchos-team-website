@@ -1,31 +1,19 @@
 import { defineConfig } from "vite";
+import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-function pagesBase() {
-  const fromEnv = process.env.PAGES_BASE;
-  if (fromEnv) {
-    return fromEnv.endsWith("/") ? fromEnv : `${fromEnv}/`;
-  }
-  if (process.env.GITHUB_PAGES === "true") {
-    return "/sacchos-team-website/";
-  }
-  return "/";
-}
-
 export default defineConfig({
-  base: pagesBase(),
+  server: {
+    port: 43123,
+    host: "127.0.0.1",
+  },
   resolve: { tsconfigPaths: true },
   plugins: [
     tailwindcss(),
-    tanstackStart({
-      spa: { enabled: true },
-      prerender: {
-        enabled: true,
-        crawlLinks: true,
-      },
-    }),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
+    tanstackStart(),
     viteReact(),
   ],
 });

@@ -2,8 +2,8 @@
 
 Sito della squadra di **Scoutball 7 vs 7** dei **Saccho's Team** (AGESCI Pesaro 1, since 2016).
 
-Produzione provvisoria: [https://anrighi.github.io/sacchos-team-website/](https://anrighi.github.io/sacchos-team-website/)  
-Dominio club (più avanti, Cloudflare): [https://sacchos.agescipesaro1.it](https://sacchos.agescipesaro1.it)
+Produzione: [https://sacchos.agescipesaro1.it](https://sacchos.agescipesaro1.it)  
+(fino al primo deploy Workers resta anche [GitHub Pages](https://anrighi.github.io/sacchos-team-website/))
 
 Repo: [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-website), generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-repo-template).
 
@@ -13,7 +13,7 @@ Repo: [anrighi/sacchos-team-website](https://github.com/anrighi/sacchos-team-web
 - [TanStack Start](https://tanstack.com/start) (React, Vite, file router)
 - Tailwind v4, shadcn/ui per le primitive
 - Vitest sulla logica (ingest, sfida)
-- Deploy: **GitHub Pages** (static). Cloudflare Workers + `sacchos.agescipesaro1.it` arrivano dopo.
+- Deploy: **Cloudflare Workers** + `sacchos.agescipesaro1.it` ([docs/CLOUDFLARE.md](docs/CLOUDFLARE.md))
 
 ## Avvio locale
 
@@ -24,7 +24,7 @@ pnpm test
 pnpm dev       # http://127.0.0.1:43123
 ```
 
-Copia `.env.example` in `.env` quando hai gli URL degli Sheet.
+Copia `.env.example` in `.env` se vuoi sovrascrivere lo Sheet rosa.
 
 ## Pagine
 
@@ -35,7 +35,7 @@ Copia `.env.example` in `.env` quando hai gli URL degli Sheet.
 | `/giocatori/$slug` | Scheda (F1) |
 | `/sfida` | Schieramento e link (F3–F4) |
 | `/sfida/partita` | Tabellino (F5) |
-| `/sfide` | Archivio Sheet (F6) — nascosto dalla nav finché F6 non è pronto |
+| `/sfide` | Archivio KV (F6) — nascosto dalla nav finché F6 non è pronto |
 
 UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa. Skin e asset: [docs/VISUAL.md](docs/VISUAL.md).
 
@@ -43,10 +43,8 @@ Privacy: nickname se c’è, altrimenti nome. Niente cognomi, niente foto reali 
 
 ## Dati
 
-Due Google Sheet:
-
-1. **Rosa** — lettura a **build** dallo Sheet condiviso (`src/data/roster.sheet.url`, override `ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 60–100 (vuoto = 75). `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; Sheet vuoto o irraggiungibile → seed `src/data/roster.seed.csv`.
-2. **Partite** — append a runtime (webhook Apps Script). Senza webhook la sfida resta nel link.
+1. **Rosa** (resta su Google Drive) — lettura a **build** dallo Sheet condiviso (`src/data/roster.sheet.url`, override `ROSTER_SHEET_CSV_URL`). I giocatori editano nickname, ruolo, stats 60–100 (vuoto = 75). `pnpm ingest-roster` / `pnpm build` / CI fanno ingest; Sheet vuoto o irraggiungibile → seed `src/data/roster.seed.csv`.
+2. **Partite** (F6) — append a runtime su **Workers KV**. Senza KV la sfida resta nel link.
 
 Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete, foto.
 
@@ -54,16 +52,13 @@ Non mettere nello Sheet: cognomi, allergie, censimento, date di nascita complete
 
 `.github/workflows/ci.yml`:
 
-- **pull_request:** `pnpm test` + `pnpm run build:pages` (base dello stage del branch)
-- **push su qualsiasi branch** (tranne `gh-pages`): stesso, poi publish su **GitHub Pages**
-  - `main` → https://anrighi.github.io/sacchos-team-website/
-  - altri branch → `https://anrighi.github.io/sacchos-team-website/preview/<branch>/`
+- **pull_request / push:** `pnpm test` + `pnpm build`
+- **push `main`:** `wrangler deploy` → `https://sacchos.agescipesaro1.it`
+- **push altri branch:** `wrangler versions upload --preview-alias <slug>` → URL `*.workers.dev` nel commento PR
 
-Esempio F0: https://anrighi.github.io/sacchos-team-website/preview/cursor-phase-0-f0-bootstrap-91b9/
+Secret: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` (e opzionale `ROSTER_SHEET_CSV_URL`). Guida: [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md).
 
-In Settings → Pages: **Deploy from a branch** → `gh-pages` / `/(root)`. Non usare source “GitHub Actions”: quell’environment è protetto e accetta solo `main`, quindi lo stage dei branch veniva rifiutato.
-
-Nessun secret Cloudflare per ora.
+`agescipesaro1.it` è già su nameserver Cloudflare: non cambiarli. Il Custom Domain `sacchos` si crea al primo deploy dallo stesso account della zona.
 
 ## Sheet rosa
 
@@ -94,8 +89,6 @@ Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). L
 Occhi, sopracciglia e bocca non sono colonne: espressione dal seed dello slug a runtime, stabile per giocatore. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
 
 Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
-
-Cloudflare Workers (`wrangler.jsonc`) e il dominio `sacchos.agescipesaro1.it` sono rimandati: niente token, niente DNS in questo slice.
 
 ## Identità git
 
