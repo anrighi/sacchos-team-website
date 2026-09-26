@@ -91,7 +91,7 @@ Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). L
 | `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5) |
 | `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5) |
 
-Occhi, sopracciglia e bocca non sono colonne: espressione dal seed dello slug a runtime, stabile per giocatore. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
+Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Occhi, sopracciglia e bocca non sono colonne: a ogni reload il client estrae un’espressione casuale. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.
 
 Per rigenerare lo snapshot dal seed di repo: `pnpm ingest-roster:seed`.
 

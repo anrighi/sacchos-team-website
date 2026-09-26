@@ -25,6 +25,7 @@ Generated from [anrighi/agent-repo-template](https://github.com/anrighi/agent-re
 2. Handoff log row in `docs/FEATURES.md`
 3. PR `[Fx] …` with `Closes #N` when issues exist
 4. Git author: **anrighi** / `anrighi@users.noreply.github.com`
+5. Always include the Pages stage URL in the chat reply (`.cursor/rules/staging-link.mdc`): `https://anrighi.github.io/sacchos-team-website/preview/<slug>/`
 
 ## Commands
 

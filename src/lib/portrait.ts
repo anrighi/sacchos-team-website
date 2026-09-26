@@ -1,7 +1,7 @@
 import { Avatar, Style } from "@dicebear/core";
 import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
-import type { Player, TeamName } from "#/lib/player";
+import type { Player, PortraitTraits, TeamName } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
 
 const toonHead = new Style(definition);
@@ -28,6 +28,9 @@ export const REAR_HAIR_VARIANTS = [
   "neckHigh",
   "shoulderHigh",
 ] as const;
+export const EYES_VARIANTS = ["bow", "happy", "humble", "wide", "wink"] as const;
+export const EYEBROWS_VARIANTS = ["angry", "happy", "neutral", "raised", "sad"] as const;
+export const MOUTH_VARIANTS = ["agape", "angry", "laugh", "sad", "smile"] as const;
 export const BEARD_VARIANTS = [
   "chin",
   "chinMoustache",
@@ -108,6 +111,32 @@ export function portraitSvg(
   return svg;
 }
 
+export function rollUnsetExpression(
+  traits: PortraitTraits | undefined,
+  random: () => number = Math.random,
+): PortraitTraits {
+  const next: PortraitTraits = { ...traits };
+  if (!next.eyes) {
+    next.eyes = pickVariant(EYES_VARIANTS, random());
+  }
+  if (!next.eyebrows) {
+    next.eyebrows = pickVariant(EYEBROWS_VARIANTS, random());
+  }
+  if (!next.mouth) {
+    next.mouth = pickVariant(MOUTH_VARIANTS, random());
+  }
+  return next;
+}
+
+function pickVariant<T extends string>(items: readonly T[], unit: number): T {
+  if (items.length === 0) {
+    throw new Error("empty variant list");
+  }
+  const clamped = Number.isFinite(unit) ? Math.min(1, Math.max(0, unit)) : 0;
+  const index = Math.min(items.length - 1, Math.floor(clamped * items.length));
+  return items[index]!;
+}
+
 export function portraitOptions(
   player: Player,
   kit: KitKind = kitKind(player.team),
@@ -133,6 +162,9 @@ export function portraitOptions(
     ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
     ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
     ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
+    ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
+    ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
+    ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
     ...colorOption("hair", traits.hairColor),
     ...colorOption("skin", traits.skinColor),
   };
