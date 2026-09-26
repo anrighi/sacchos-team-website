@@ -20,7 +20,7 @@ Sito su Cloudflare Workers (piano free), dominio `https://sacchos.agescipesaro1.
 ## Acceptance criteria
 
 - [x] `vite.config.ts` usa `@cloudflare/vite-plugin` (niente base `/sacchos-team-website/`)
-- [x] `wrangler.jsonc`: Worker `sacchos`, `workers.dev` + custom domain `sacchos.agescipesaro1.it`
+- [x] `wrangler.jsonc`: Worker `sacchos`, `workers.dev` + custom domain `sacchos.agescipesaro1.it` (`compatibility_date` ≤ workerd locale)
 - [x] CI: test+build; push `main` → `wrangler deploy`; altri branch → preview `versions upload`
 - [x] `club.productionUrl` = `https://sacchos.agescipesaro1.it`
 - [x] Rosa: ingest Sheet invariato (`ROSTER_SHEET_CSV_URL` / `roster.sheet.url`)
