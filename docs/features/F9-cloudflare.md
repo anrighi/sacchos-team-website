@@ -26,7 +26,8 @@ Sito su Cloudflare Workers (piano free), dominio `https://sacchos.agescipesaro1.
 - [x] Rosa: ingest Sheet invariato (`ROSTER_SHEET_CSV_URL` / `roster.sheet.url`)
 - [x] F6 ritargettata su KV; niente webhook Apps Script
 - [x] DNS documentato in `docs/CLOUDFLARE.md` (niente cambio NS dell’apex)
-- [ ] Primo deploy live (serve il token sull’account CF del gruppo)
+- [x] Primo deploy live su `https://sacchos.webmaster-add.workers.dev`
+- [ ] Custom domain `sacchos.agescipesaro1.it` (Worker e zona sullo stesso account CF)
 
 ## Deliverables
 
@@ -36,6 +37,6 @@ Sito su Cloudflare Workers (piano free), dominio `https://sacchos.agescipesaro1.
 
 ## Notes
 
-Custom Domain Workers richiede la zona nello **stesso** account del Worker. `agescipesaro1.it` è già su nameserver Cloudflare (`rosa` / `lakas`); non spostare l’apex. Se il Worker vive su un altro account, invitare quell’account sulla zona oppure deployare dal account che possiede la zona.
+Custom Domain Workers richiede la zona nello **stesso** account del Worker. `agescipesaro1.it` è già su nameserver Cloudflare (`rosa` / `lakas`); non spostare l’apex. CI risolve l’account dalla zona; `CLOUDFLARE_ACCOUNT_ID` è solo fallback. Se il Worker è su `*.webmaster-add.workers.dev`, il secret punta a un account diverso dalla zona.
 
 Preview: `*.workers.dev` (alias di versione), non più `/preview/<slug>/` su Pages.

@@ -10,11 +10,23 @@ describe("cloudflare deploy", () => {
   it("binds the Worker custom domain", () => {
     const wrangler = JSON.parse(readFileSync("wrangler.jsonc", "utf8")) as {
       name: string;
-      routes: Array<{ pattern: string; custom_domain: boolean }>;
+      routes: Array<{ pattern: string; zone_name: string; custom_domain: boolean }>;
     };
     expect(wrangler.name).toBe("sacchos");
     expect(wrangler.routes).toEqual([
-      { pattern: "sacchos.agescipesaro1.it", custom_domain: true },
+      {
+        pattern: "sacchos.agescipesaro1.it",
+        zone_name: "agescipesaro1.it",
+        custom_domain: true,
+      },
     ]);
+  });
+
+  it("resolves the zone account before CLOUDFLARE_ACCOUNT_ID", () => {
+    const script = readFileSync("scripts/ci-resolve-cloudflare-account.sh", "utf8");
+    const zoneLookup = script.indexOf("zones?name=agescipesaro1.it");
+    const secretFallback = script.indexOf("Using CLOUDFLARE_ACCOUNT_ID secret");
+    expect(zoneLookup).toBeGreaterThan(-1);
+    expect(secretFallback).toBeGreaterThan(zoneLookup);
   });
 });

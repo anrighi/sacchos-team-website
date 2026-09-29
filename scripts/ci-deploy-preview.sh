@@ -4,6 +4,8 @@ set -euo pipefail
 ALIAS="${PREVIEW_ALIAS:?}"
 LOG="$(mktemp)"
 trap 'rm -f "$LOG"' EXIT
+URL=""
+STATUS=0
 
 write_output() {
   local key="$1" value="$2"
@@ -16,33 +18,61 @@ plain() {
   sed 's/\x1b\[[0-9;]*[A-Za-z]//g' "$LOG"
 }
 
-preview_url() {
-  local url=""
-  url="$(plain | sed -nE 's/.*Version Preview Alias URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
-  if [[ -z "${url}" ]]; then
-    url="$(plain | sed -nE 's/.*Version Preview URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
+capture_url() {
+  local found=""
+  found="$(plain | sed -nE 's/.*Version Preview Alias URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
+  if [[ -z "${found}" ]]; then
+    found="$(plain | sed -nE 's/.*Version Preview URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
   fi
-  if [[ -z "${url}" ]]; then
-    url="$(plain | grep -oE 'https://[a-zA-Z0-9._-]+\.workers\.dev' | tail -1)"
+  if [[ -z "${found}" ]]; then
+    found="$(plain | grep -oE 'https://[a-zA-Z0-9._-]+\.workers\.dev' | tail -1)"
   fi
-  printf '%s' "${url}"
+  if [[ -n "${found}" ]]; then
+    URL="${found}"
+  fi
 }
 
-set +e
-pnpm exec wrangler versions upload --preview-alias "${ALIAS}" 2>&1 | tee "$LOG"
-STATUS="${PIPESTATUS[0]}"
-set -e
+worker_is_live() {
+  plain | grep -qiE 'Uploaded sacchos|Deployed sacchos|Success! Uploaded'
+}
 
-if [[ "${STATUS}" -ne 0 ]]; then
-  if ! plain | grep -qiE 'does not yet exist|run the .deploy. command first'; then
-    exit "${STATUS}"
+accept_partial_domain() {
+  if [[ "${STATUS}" -eq 0 ]]; then
+    return 0
   fi
+  if worker_is_live && [[ -n "${URL}" ]]; then
+    echo "::warning::Worker pubblicato su workers.dev; custom domain non applicato (zona non nello stesso account)."
+    STATUS=0
+    return 0
+  fi
+  return "${STATUS}"
+}
+
+run_wrangler() {
+  local append="$1"
+  shift
+  set +e
+  if [[ "${append}" == "append" ]]; then
+    pnpm exec wrangler "$@" 2>&1 | tee -a "$LOG"
+  else
+    pnpm exec wrangler "$@" 2>&1 | tee "$LOG"
+  fi
+  STATUS="${PIPESTATUS[0]}"
+  set -e
+  capture_url
+}
+
+run_wrangler overwrite versions upload --preview-alias "${ALIAS}"
+
+if [[ "${STATUS}" -ne 0 ]] && plain | grep -qiE 'does not yet exist|run the .deploy. command first'; then
   echo "Worker sacchos assente: primo wrangler deploy."
-  pnpm exec wrangler deploy 2>&1 | tee "$LOG"
-  pnpm exec wrangler versions upload --preview-alias "${ALIAS}" 2>&1 | tee "$LOG"
+  run_wrangler overwrite deploy
+  accept_partial_domain || exit "${STATUS}"
+  run_wrangler append versions upload --preview-alias "${ALIAS}"
 fi
 
-URL="$(preview_url)"
+accept_partial_domain || exit "${STATUS}"
+
 write_output deployment-url "${URL}"
 if [[ -n "${URL}" ]]; then
   echo "Preview URL: ${URL}"

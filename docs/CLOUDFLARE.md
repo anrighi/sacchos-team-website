@@ -21,10 +21,10 @@ Repo → Settings → Secrets and variables → Actions:
 | Secret | Dove |
 |--------|------|
 | `CLOUDFLARE_API_TOKEN` | Dashboard CF → My Profile → API Tokens. Template precompilato in questa guida |
-| `CLOUDFLARE_ACCOUNT_ID` | Opzionale se il token vede un solo account. Altrimenti: [Workers Overview](https://dash.cloudflare.com/?to=/:account/workers) → Account ID nella barra laterale (o nell’URL `dash.cloudflare.com/<id>/…`) |
+| `CLOUDFLARE_ACCOUNT_ID` | Fallback se il token non vede la zona. Deve essere l’account con **Websites → agescipesaro1.it**, non un account Workers isolato. [Workers Overview](https://dash.cloudflare.com/?to=/:account/workers) |
 | `ROSTER_SHEET_CSV_URL` | già usato per l’ingest (opzionale se c’è `src/data/roster.sheet.url`) |
 
-Senza `CLOUDFLARE_API_TOKEN`, CI testa e builda ma **non pubblica**. Se il token vede più account Cloudflare, CI risolve l’account dalla zona `agescipesaro1.it`; altrimenti imposta `CLOUDFLARE_ACCOUNT_ID`.
+Senza `CLOUDFLARE_API_TOKEN`, CI testa e builda ma **non pubblica**. Se il token elenca la zona `agescipesaro1.it`, CI usa **quell’account** (ignora un `CLOUDFLARE_ACCOUNT_ID` di un altro login). Altrimenti usa il secret.
 
 Token precompilato (Workers Scripts + KV + Account Settings read + Routes + DNS):
 
@@ -36,10 +36,10 @@ https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%
 
 Se hai creato un account Free nuovo e la zona è su un altro login (webmaster del gruppo):
 
-1. Invita l’email del Worker come membro della zona, **oppure**
-2. Fai il deploy con il token dell’account che possiede `agescipesaro1.it`.
+1. CI preferisce l’account che possiede la zona `agescipesaro1.it` (Dashboard → **Websites**). `CLOUDFLARE_ACCOUNT_ID` serve solo se il token non vede quella zona.
+2. Invita l’email del Worker come membro di quell’account, **oppure** crea token e deploy da quell’account.
 
-Non aggiungere la zona di nuovo: cambieresti i NS e butteresti giù il sito apex.
+Finché la zona non è sullo stesso account del Worker, il sito resta su `https://sacchos.<sottodominio>.workers.dev`. Non aggiungere la zona di nuovo: cambieresti i NS e butteresti giù il sito apex.
 
 ## 3. Primo deploy
 

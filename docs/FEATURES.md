@@ -21,7 +21,7 @@
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
-- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9: `CLOUDFLARE_API_TOKEN` c’è, manca `CLOUDFLARE_ACCOUNT_ID` (opzionale se il token vede un solo account)
+- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9: Worker live su `sacchos.webmaster-add.workers.dev`, custom domain in attesa dell’account della zona `agescipesaro1.it`
 
 ## Feature index
 
@@ -59,7 +59,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-29 | Cursor | 0+ | Secret `CLOUDFLARE_API_TOKEN` in Actions | Aggiungere `CLOUDFLARE_ACCOUNT_ID` se wrangler lo chiede; merge F9 | Account ID assente; ruoli Sheet ancora vuoti |
+| 2026-09-29 | Cursor | 0+ | Secret `CLOUDFLARE_ACCOUNT_ID` + Worker su workers.dev | Merge F9 dopo CI verde; custom domain se CI usa l’account della zona | Zona e Worker su account CF diversi; ruoli Sheet vuoti |
 | 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |

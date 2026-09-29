@@ -12,6 +12,7 @@
   "routes": [
     {
       "pattern": "sacchos.agescipesaro1.it",
+      "zone_name": "agescipesaro1.it",
       "custom_domain": true
     }
   ]
