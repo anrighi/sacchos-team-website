@@ -4,12 +4,12 @@
 |-------|-------|
 | Status | done |
 | Phase | 2 |
-| Files | `src/routes/sfide.tsx`, `src/lib/challenge/archive.ts`, `src/lib/challenge/cloud.ts` |
-| Tests | append payload shape; `/sfide` vuoto senza KV; seed duplicato ignorato |
+| Files | `src/lib/challenge/archive.ts`, `src/lib/challenge/cloud.ts`, `src/routes/sfide.tsx` |
+| Tests | append payload shape; seed duplicato ignorato; nav senza Archivio |
 
 ## Goal
 
-Fine partita: `POST` sul Worker → riga su Workers KV. `/sfide` elenca le partite. La rosa resta sullo Sheet Google.
+Fine partita: `POST` sul Worker → riga su Workers KV. **Niente pagina pubblica.** La rosa resta sullo Sheet Google.
 
 ## Prerequisites
 
@@ -19,13 +19,13 @@ Fine partita: `POST` sul Worker → riga su Workers KV. `/sfide` elenca le parti
 ## Acceptance criteria
 
 - [x] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
-- [x] Senza KV/binding: messaggio, link recap resta valido, archivio vuoto
-- [x] `/sfide` lista da KV
+- [x] Senza KV/binding: messaggio in partita, link recap resta valido
+- [x] Nessuna lista pubblica: `/sfide` redirige a `/`, Archivio fuori nav, niente RPC di elenco
 - [x] Spec + manifest `done`
 
 ## Deliverables
 
-- Server function append, pagina archivio, binding `MATCHES` in `wrangler.jsonc`
+- Server function append, binding `MATCHES` in `wrangler.jsonc`
 
 ## Notes
 

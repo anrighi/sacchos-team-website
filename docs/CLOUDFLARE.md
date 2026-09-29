@@ -64,7 +64,7 @@ Ogni push fuori da `main` fa `wrangler versions upload --preview-alias <slug>`. 
 
 ## 5. KV partite e link corti
 
-CI crea il namespace `sacchos-MATCHES` al deploy (binding `MATCHES`) se manca. Locale: `pnpm deploy` fa lo stesso dopo il build.
+CI crea il namespace `sacchos-MATCHES` al deploy (binding `MATCHES`) se manca. Locale: `pnpm deploy` fa lo stesso dopo il build. L’archivio partite **non è una pagina pubblica** (`/sfide` redirige a `/`).
 
 Chiavi:
 

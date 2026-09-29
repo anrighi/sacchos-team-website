@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { appendMatch, listMatchSummaries, type MatchRecord } from "#/lib/challenge/archive";
+import { appendMatch, type MatchRecord } from "#/lib/challenge/archive";
 import { decodeLineup } from "#/lib/challenge/link";
 import { mintLineup, resolveLineup } from "#/lib/challenge/shortlink";
 import type { ChallengeStore } from "#/lib/challenge/store";
@@ -60,11 +60,3 @@ export const saveMatchFn = createServerFn({ method: "POST" })
     const result = await appendMatch(store, data);
     return { ok: true as const, duplicate: result.duplicate };
   });
-
-export const listMatchesFn = createServerFn({ method: "GET" }).handler(async () => {
-  const store = await kvStore();
-  if (!store) {
-    return [];
-  }
-  return listMatchSummaries(store);
-});

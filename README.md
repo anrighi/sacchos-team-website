@@ -35,7 +35,8 @@ Copia `.env.example` in `.env` se vuoi sovrascrivere lo Sheet rosa.
 | `/giocatori/$slug` | Scheda (F1) |
 | `/sfida` | Schieramento e link (F3–F4) |
 | `/sfida/partita` | Tabellino (F5) |
-| `/sfide` | Archivio KV (F6) — nascosto dalla nav finché F6 non è pronto |
+| `/s/$id` | Link corto formazione (F8) |
+| `/s/$host/$guest` | Link corto partita (F8) |
 
 UI in italiano, mobile-first, tema dark. **Saccho's Team** è l’unica brand; *Saccios Tim* è solo un filtro della rosa. Skin e asset: [docs/VISUAL.md](docs/VISUAL.md).
 

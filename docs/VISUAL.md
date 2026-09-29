@@ -44,7 +44,7 @@ Logo e kit: `object-contain` e altezza/larghezza esplicite. Non `rounded-full` +
 3. Un blocco visivo (kit, ventaglio ritratti, campo) senza didascalie lunghe
 4. Chiusura con headline corta + CTA, `border-t border-white/10`
 
-Poco testo. Headline da due parole con punto (`Le carte.`, `In campo.`). Non duplicare la stessa cutout in due sezioni.
+Poco testo. Headline da due parole con punto (`La squadra.`, `In campo.`). Non duplicare la stessa cutout in due sezioni.
 
 CTA (tap ≥ 44px / `min-h-11`):
 
@@ -70,7 +70,7 @@ Niente bounce, loop veloci, o parallax. Drift lento (~6s).
 
 ## Altre superfici
 
-- **Nav:** logo PNG `h-9 w-auto object-contain`, non cerchio ritagliato dal JPG. Voci: Home, Rosa, Sfida, Archivio
+- **Nav:** logo PNG `h-9 w-auto object-contain`, non cerchio ritagliato dal JPG. Voci: Home, Rosa, Sfida. Archivio solo su KV, non in pagina
 - **Rosa / scheda:** hero compatto come la home (`La rosa.` + CTA, niente conteggio carte). Filtri a pillola `min-h-11`. `PlayerCard` con backdrop in carta, logo contain (niente `rounded-full`). Intestazioni squadra e chip: PNG contain
 - **Sfida (F3+):** stesso hero scuro, MrAlex, pillole, eventuali kit PNG come cutout sul campo, non JPG
 

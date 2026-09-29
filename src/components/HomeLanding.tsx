@@ -96,7 +96,7 @@ function CardsChapter() {
     <section className="px-5 py-20 md:px-8 md:py-28">
       <Reveal className="text-center">
         <h2 className="font-display text-[clamp(2.4rem,7vw,5rem)] leading-[0.92] tracking-tight">
-          Le carte.
+          La squadra.
         </h2>
       </Reveal>
       <ul className="mx-auto mt-12 flex max-w-xl items-end justify-center sm:mt-16">

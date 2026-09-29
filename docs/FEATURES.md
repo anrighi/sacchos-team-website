@@ -60,7 +60,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-29 | Cursor | 2 | F6 archivio KV + F8 link corti `/s/:id` | Merge F9+F6; F5 tabellino | Custom domain zona/account; ruoli Sheet vuoti |
+| 2026-09-29 | Cursor | 2 | F6 KV privato (no pagina/nav), home «La squadra.» | Merge F9+F6; F5 tabellino | Ruoli Sheet vuoti |
 | 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
