@@ -1,0 +1,23 @@
+---
+description: Always send the GitHub Pages stage URL to the user
+alwaysApply: true
+---
+
+# Staging link
+
+After the first push of a branch (and again if the URL slug changes), put the **stage URL in the user-facing reply**. Do not wait for the user to ask. Do not rely only on the GitHub PR comment.
+
+## URL
+
+- `main` → https://anrighi.github.io/sacchos-team-website/
+- other branches → `https://anrighi.github.io/sacchos-team-website/preview/<slug>/`
+
+Slug: branch name, replace every character that is not `a-zA-Z0-9._-` with `-` (so `cursor/foo-6b46` → `cursor-foo-6b46`). Trailing slash required.
+
+CI publishes on **push** to the branch (`deploy-staging`). Wait until that job is green before treating the link as live; still include the URL as soon as the branch is pushed.
+
+## Example
+
+Branch `cursor/reload-expressions-6b46`:
+
+https://anrighi.github.io/sacchos-team-website/preview/cursor-reload-expressions-6b46/

@@ -1,6 +1,6 @@
 # Feature registry
 
-> Last updated: 2026-09-26 | Active phase: 2 | Agent: Cursor
+> Last updated: 2026-09-29 | Active phase: 2 | Agent: Cursor
 
 **Collaboration:** GitHub Issues (`label:feature`) · branch `cursor/phase-<n>-f<id>-<slug>-91b9` · PR with `Closes #N` · CI syncs manifest → issues on `main`. Workflow: `.cursor/rules/github-workflow.mdc`
 
@@ -21,7 +21,7 @@
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [ ] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
-- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9 in PR: servono `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` per il primo deploy live
+- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9: `CLOUDFLARE_API_TOKEN` c’è, manca `CLOUDFLARE_ACCOUNT_ID` (opzionale se il token vede un solo account)
 
 ## Feature index
 
@@ -59,7 +59,9 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Aggiungere secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
+| 2026-09-29 | Cursor | 0+ | Secret `CLOUDFLARE_API_TOKEN` in Actions | Aggiungere `CLOUDFLARE_ACCOUNT_ID` se wrangler lo chiede; merge F9 | Account ID assente; ruoli Sheet ancora vuoti |
+| 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
+| 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Look solo dallo Sheet (niente default slug/anno); colonna Anno tolta | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Menu capelli in italiano chiaro (crocchia, pettinati di lato, a punte, lati rasati; dietro alla nuca / alle spalle) | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
@@ -69,10 +71,6 @@
 | 2026-09-20 | Cursor | 1 | Sheet rosa in italiano con menu a tendina; niente occhi/sopracciglia/bocca; colori 3/5 | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti (stats 75); F6 senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 polish | Merge visual su `main`: Archivio fuori nav, MrAlex ovunque, `/rosa` senza conteggio carte | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 2 | Merge F3+F4 su `main` (sfida 3-2-1, sim 2×15′, silver/gold meta) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
-| 2026-09-19 | Cursor | 2 | F4: extras copy silver/gold meta; niente box score a fine partita | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 Sheet per lo store |
-| 2026-09-19 | Cursor | 1 | Merge nomi maglia su `main` (rosa 26, Saccios +Ga 24 +MORDECAI 6) | F3/F4 merged here | Nomi di battesimo ignoti per Ga/MORDECAI; Chiara 81 senza maglia |
-| 2026-09-19 | Cursor | 1 | Merge Toon Head + kit su `main` (PNG e linee guida visuali) | F5 | Loghi SVG originali ancora in 0+ |
-| 2026-09-19 | Cursor | 1 polish | Rosa: Toon Head + kit, `portraits.csv` per la squadra | F5 | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-19 | Cursor | 1→2 | Chiusa fase 1 (F1 rosa rifatta graficamente, F2 landing a capitoli); fasi 0 e 1 unite su `main` | F3: `src/lib/challenge/` + campo 3-2-1 su `/sfida` | Loghi PNG/SVG rinviati a fase 0+ |
 | 2026-09-05 | Cursor | 1 | F1: ingest CSV, snapshot 24, carte FUT, filtri `/rosa`, schede `/giocatori/$slug` | F2 solo con reference visive; pubblicare Sheet CSV (`ROSTER_SHEET_CSV_URL`) | URL CSV rosa assente |
 | 2026-09-05 | Cursor | 0 | Stage Pages via branch `gh-pages` (niente env github-pages) | Impostare Pages su branch `gh-pages`; F1 | Pages source GitHub Actions era protetto |

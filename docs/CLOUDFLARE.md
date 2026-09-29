@@ -20,11 +20,15 @@ Repo → Settings → Secrets and variables → Actions:
 
 | Secret | Dove |
 |--------|------|
-| `CLOUDFLARE_API_TOKEN` | Dashboard CF → My Profile → API Tokens → Create. Permessi: *Account / Cloudflare Workers Scripts / Edit*, *Account / Workers KV Storage / Edit*, *Account / Account Settings / Read*, *Zone / Workers Routes / Edit*, *Zone / DNS / Edit* sulla zona `agescipesaro1.it` |
-| `CLOUDFLARE_ACCOUNT_ID` | Dashboard → Workers & Pages → Overview (barra laterale destra) |
+| `CLOUDFLARE_API_TOKEN` | Dashboard CF → My Profile → API Tokens. Template precompilato in questa guida |
+| `CLOUDFLARE_ACCOUNT_ID` | Opzionale se il token vede un solo account. Altrimenti: [Workers Overview](https://dash.cloudflare.com/?to=/:account/workers) → Account ID nella barra laterale (o nell’URL `dash.cloudflare.com/<id>/…`) |
 | `ROSTER_SHEET_CSV_URL` | già usato per l’ingest (opzionale se c’è `src/data/roster.sheet.url`) |
 
-Senza i primi due, CI testa e builda ma **non pubblica**.
+Senza `CLOUDFLARE_API_TOKEN`, CI testa e builda ma **non pubblica**. `CLOUDFLARE_ACCOUNT_ID` serve solo se wrangler non riesce a scegliere l’account dal token.
+
+Token precompilato (Workers Scripts + KV + Account Settings read + Routes + DNS):
+
+https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_routes%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22dns%22%2C%22type%22%3A%22edit%22%7D%5D&accountId=%2A&zoneId=all&name=Sacchos%20GitHub%20deploy
 
 ## 2. Stesso account della zona
 

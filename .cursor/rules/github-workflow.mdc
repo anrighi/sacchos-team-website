@@ -35,6 +35,13 @@ In this repo (Cursor cloud agents) use:
 - Short slug: lowercase, hyphens, matches feature id (e.g. `f0-bootstrap`)
 - PR title: `[F0] …` (plus conventional body)
 
+## Staging URL (always send)
+
+After a push, include the Pages stage link in the chat reply (CI also comments it on the PR):
+
+- `main` → https://anrighi.github.io/sacchos-team-website/
+- other branches → `https://anrighi.github.io/sacchos-team-website/preview/<slug>/` (`/` in the branch name becomes `-`)
+
 ## Pull requests
 
 1. **Target branch:** `main`
