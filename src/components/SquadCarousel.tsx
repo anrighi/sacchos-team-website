@@ -216,15 +216,16 @@ export function SquadCarousel({ players }: { players: readonly Player[] }) {
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
-        <ul
-          ref={scrollerRef}
-          className="home-carousel flex snap-x snap-mandatory items-end overflow-x-auto pt-4 pb-2 select-none touch-pan-x"
-          onScroll={syncActiveFromScroll}
-          onPointerDown={onScrollerPointerDown}
-          onPointerMove={onScrollerPointerMove}
-          onPointerUp={onScrollerPointerUp}
-          onPointerCancel={onScrollerPointerUp}
-        >
+        <div className="home-carousel-frame">
+          <ul
+            ref={scrollerRef}
+            className="home-carousel flex snap-x snap-mandatory items-end overflow-x-auto pt-4 pb-2 select-none touch-pan-x"
+            onScroll={syncActiveFromScroll}
+            onPointerDown={onScrollerPointerDown}
+            onPointerMove={onScrollerPointerMove}
+            onPointerUp={onScrollerPointerUp}
+            onPointerCancel={onScrollerPointerUp}
+          >
           {players.map((player, index) => (
             <li
               key={player.slug}
@@ -246,7 +247,8 @@ export function SquadCarousel({ players }: { players: readonly Player[] }) {
               />
             </li>
           ))}
-        </ul>
+          </ul>
+        </div>
       </div>
       <div className="mt-6 flex items-center justify-center gap-3">
         <button

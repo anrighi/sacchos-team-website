@@ -310,8 +310,13 @@ body {
   animation: float-drift 6.2s ease-in-out infinite;
 }
 
+.home-carousel-frame {
+  container-type: inline-size;
+  width: 100%;
+}
+
 .home-carousel {
-  --slide: min(12.5rem, 70vw);
+  --slide: min(12.5rem, 70cqi);
   width: 100%;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
@@ -325,7 +330,7 @@ body {
 .home-carousel::before,
 .home-carousel::after {
   content: "";
-  flex: 0 0 max(0px, calc(50% - var(--slide) / 2));
+  flex: 0 0 max(0px, calc(50cqi - var(--slide) / 2));
   scroll-snap-align: none;
   pointer-events: none;
 }
