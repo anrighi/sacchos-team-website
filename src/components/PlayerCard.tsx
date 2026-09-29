@@ -45,31 +45,33 @@ export function PlayerCard({
         />
         <PlayerPortrait player={player} className="relative" />
         <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2.5">
-          <div className="rounded-xl bg-black/45 px-2 py-1 backdrop-blur-md">
-            {SHOW_PLAYER_STATS ? (
+          {SHOW_PLAYER_STATS || player.role ? (
+            <div className="rounded-xl bg-black/45 px-2 py-1 backdrop-blur-md">
+              {SHOW_PLAYER_STATS ? (
+                <p
+                  className={cn(
+                    "font-display leading-none text-pink",
+                    hero ? "text-4xl md:text-5xl" : "text-2xl",
+                  )}
+                >
+                  {player.overall}
+                </p>
+              ) : null}
               <p
                 className={cn(
-                  "font-display leading-none text-pink",
-                  hero ? "text-4xl md:text-5xl" : "text-2xl",
+                  "font-display uppercase tracking-[0.2em] text-white/65",
+                  hero ? "text-[11px]" : "text-[9px]",
+                  SHOW_PLAYER_STATS && "mt-0.5",
                 )}
               >
-                {player.overall}
+                {player.role ? ROLE_LABELS[player.role] : "—"}
               </p>
-            ) : null}
-            <p
-              className={cn(
-                "font-display uppercase tracking-[0.2em] text-white/65",
-                hero ? "text-[11px]" : "text-[9px]",
-                SHOW_PLAYER_STATS && "mt-0.5",
-              )}
-            >
-              {player.role ? ROLE_LABELS[player.role] : "—"}
-            </p>
-          </div>
+            </div>
+          ) : null}
           <img
             src={publicUrl("/brand/logo-sacchos.png")}
             alt="Saccho's Team"
-            className={cn("w-auto object-contain", hero ? "h-11" : "h-7")}
+            className={cn("ml-auto w-auto object-contain", hero ? "h-11" : "h-7")}
           />
         </div>
         <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/88 via-black/25 to-transparent px-3 pb-2.5 pt-8">
