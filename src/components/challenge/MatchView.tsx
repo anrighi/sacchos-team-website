@@ -7,9 +7,12 @@ import { MatchBoard } from "#/components/challenge/MatchBoard";
 import { ShareChallenge } from "#/components/challenge/ShareChallenge";
 import { Button } from "#/components/ui/button";
 import { players } from "#/data/players.generated";
+import { matchRecordFrom } from "#/lib/challenge/archive";
 import { boardAt } from "#/lib/challenge/board";
+import { mintLineupFn, saveMatchFn } from "#/lib/challenge/cloud";
 import { recordMatchIn, shotsFrom } from "#/lib/challenge/efficiency";
 import type { Lineup } from "#/lib/challenge/lineup";
+import { shortPath } from "#/lib/challenge/shortlink";
 import {
   nextPeriodT,
   playbackAt,
@@ -19,6 +22,7 @@ import {
   type MatchSim,
   type SimEvent,
 } from "#/lib/challenge/sim";
+import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
 export function MatchView({
@@ -51,10 +55,19 @@ export function MatchView({
   });
   const happened = match.events.slice(0, Math.max(frame.index + 1, 1));
   const newestFirst = happened.toReversed();
+  const [archiveHint, setArchiveHint] = useState<string | null>(null);
 
   useEffect(() => {
     recordMatchIn(window.localStorage, seed, shotsFrom(match.events));
-  }, [match, seed]);
+    const recapUrl = `${window.location.origin}${publicUrl("/sfida")}?host=${encodeURIComponent(hostParam).replace(/%7E/g, "~")}&guest=${encodeURIComponent(guestParam).replace(/%7E/g, "~")}&seed=${encodeURIComponent(seed)}`;
+    void saveMatchFn({
+      data: matchRecordFrom({ match, host, guest, recapUrl }),
+    }).then((result) => {
+      if (!result.ok) {
+        setArchiveHint("Archivio non raggiungibile. Il link della partita resta valido.");
+      }
+    });
+  }, [guest, guestParam, host, hostParam, match, seed]);
 
   return (
     <section className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-hidden px-4 md:px-8">
@@ -93,6 +106,7 @@ export function MatchView({
               <ShareChallenge
                 ready
                 search={{ host: hostParam, guest: guestParam, seed }}
+                onMint={() => mintMatchLink(hostParam, guestParam, seed)}
                 title={`${match.hostName} ${match.score.host}–${match.score.guest} ${match.guestName}`}
                 cta="Copia il link della partita"
                 hint={
@@ -102,6 +116,9 @@ export function MatchView({
                 }
                 waiting=""
               />
+              {archiveHint ? (
+                <p className="text-center text-[15px] text-white/50">{archiveHint}</p>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -315,4 +332,13 @@ function useReducedMotion(): boolean {
   }, []);
 
   return reduced;
+}
+
+async function mintMatchLink(hostEncoded: string, guestEncoded: string, seed: string): Promise<string | null> {
+  const hostMint = await mintLineupFn({ data: { encoded: hostEncoded } });
+  const guestMint = await mintLineupFn({ data: { encoded: guestEncoded } });
+  if (!hostMint.id || !guestMint.id) {
+    return null;
+  }
+  return `${window.location.origin}${publicUrl(shortPath(hostMint.id, guestMint.id, seed))}`;
 }

@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set Pages base
-        run: bash scripts/ci-set-pages-env.sh
       - uses: pnpm/action-setup@v6
         with:
           version: 10.12.4
@@ -26,7 +24,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
-      - run: pnpm run build:pages
+      - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
 
@@ -34,15 +32,8 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    concurrency:
-      group: github-pages-tree
-      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v6
-      - name: Set Pages base
-        run: bash scripts/ci-set-pages-env.sh
       - uses: pnpm/action-setup@v6
         with:
           version: 10.12.4
@@ -51,31 +42,34 @@ jobs:
           node-version: "26"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build:pages
+      - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
-      - uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/client
-          keep_files: true
-          user_name: anrighi
-          user_email: anrighi@users.noreply.github.com
+      - name: Resolve Cloudflare account
+        id: cf
+        run: bash scripts/ci-resolve-cloudflare-account.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy production
+        if: steps.cf.outputs.has_token == 'true'
+        run: bash scripts/ci-deploy-production.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+          WRANGLER_SEND_METRICS: "false"
 
-  deploy-staging:
+  deploy-preview:
     needs: test
     if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       pull-requests: write
-    concurrency:
-      group: github-pages-tree
-      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v6
-      - name: Set Pages base
-        run: bash scripts/ci-set-pages-env.sh
+      - name: Set preview alias
+        run: bash scripts/ci-set-preview-env.sh
       - uses: pnpm/action-setup@v6
         with:
           version: 10.12.4
@@ -84,51 +78,43 @@ jobs:
           node-version: "26"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build:pages
+      - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
-      - uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/client
-          destination_dir: ${{ env.PAGES_DEST }}
-          keep_files: true
-          user_name: anrighi
-          user_email: anrighi@users.noreply.github.com
+      - name: Resolve Cloudflare account
+        id: cf
+        run: bash scripts/ci-resolve-cloudflare-account.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy preview
+        if: steps.cf.outputs.has_token == 'true'
+        id: deploy
+        run: bash scripts/ci-deploy-preview.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+          PREVIEW_ALIAS: ${{ env.PREVIEW_ALIAS }}
+          WRANGLER_SEND_METRICS: "false"
       - name: Comment staging URL on PR
+        if: steps.cf.outputs.has_token == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: |
           PR="$(gh pr list --head "$GITHUB_REF_NAME" --json number --jq '.[0].number' || true)"
           if [[ -z "${PR}" || "${PR}" == "null" ]]; then
             echo "No open PR for $GITHUB_REF_NAME"
             exit 0
           fi
-          BODY="$(printf '<!-- staging-url -->\n**Stage di questo branch:** %s\n\nSi aggiorna a ogni push (non aspetta il merge).\n\nPages deve pubblicare il branch `gh-pages` (Settings → Pages → Deploy from a branch).' "$STAGE_URL")"
+          URL="${DEPLOY_URL:-}"
+          if [[ -z "${URL}" ]]; then
+            URL="(wrangler non ha emesso deployment-url; vedi i log del job)"
+          fi
+          BODY="$(printf '<!-- staging-url -->\n**Preview Cloudflare di questo branch:** %s\n\nSi aggiorna a ogni push (non aspetta il merge).\n\nProduzione: https://sacchos.agescipesaro1.it' "$URL")"
           EXISTING="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments" --jq '.[] | select(.user.login=="github-actions[bot]" and (.body|contains("<!-- staging-url -->"))) | .id' | head -n1 || true)"
           if [[ -n "${EXISTING}" ]]; then
             gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING}" -f body="${BODY}"
           else
             gh pr comment "${PR}" --body "${BODY}"
-          fi
-
-  preview-comment:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v6
-      - name: Set Pages base
-        run: bash scripts/ci-set-pages-env.sh
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          BODY="$(printf '<!-- staging-url -->\n**Stage di questo branch:** %s\n\nSi aggiorna a ogni push sul branch (non aspetta il merge).' "$STAGE_URL")"
-          EXISTING="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --jq '.[] | select(.user.login=="github-actions[bot]" and (.body|contains("<!-- staging-url -->"))) | .id' | head -n1 || true)"
-          if [[ -n "${EXISTING}" ]]; then
-            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${EXISTING}" -f body="${BODY}"
-          else
-            gh pr comment "${PR_NUMBER}" --body "${BODY}"
           fi

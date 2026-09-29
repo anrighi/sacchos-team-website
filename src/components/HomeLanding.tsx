@@ -3,7 +3,7 @@ import { PlayerPortrait } from "#/components/PlayerPortrait";
 import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
 import { club } from "#/lib/club";
-import type { Player } from "#/lib/player";
+import { SHOW_PLAYER_STATS, type Player } from "#/lib/player";
 import { displayName } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
@@ -96,7 +96,7 @@ function CardsChapter() {
     <section className="px-5 py-20 md:px-8 md:py-28">
       <Reveal className="text-center">
         <h2 className="font-display text-[clamp(2.4rem,7vw,5rem)] leading-[0.92] tracking-tight">
-          Le carte.
+          La squadra.
         </h2>
       </Reveal>
       <ul className="mx-auto mt-12 flex max-w-xl items-end justify-center sm:mt-16">
@@ -110,22 +110,20 @@ function CardsChapter() {
             )}
             style={{ zIndex: index === 1 ? 20 : 10 }}
           >
-            <Link
-              to="/giocatori/$slug"
-              params={{ slug: player.slug }}
-              className="block text-center outline-none focus-visible:ring-2 focus-visible:ring-pink"
-              aria-label={displayName(player)}
-            >
-              <div
-                className="float-drift aspect-3/4 w-full drop-shadow-[0_18px_28px_rgba(248,103,165,0.18)]"
-                style={{ animationDelay: `${index * -1.6}s` }}
+            {SHOW_PLAYER_STATS ? (
+              <Link
+                to="/giocatori/$slug"
+                params={{ slug: player.slug }}
+                className="block text-center outline-none focus-visible:ring-2 focus-visible:ring-pink"
+                aria-label={displayName(player)}
               >
-                <PlayerPortrait player={player} backdrop={false} />
+                <FeaturedPortrait player={player} delay={`${index * -1.6}s`} />
+              </Link>
+            ) : (
+              <div className="text-center">
+                <FeaturedPortrait player={player} delay={`${index * -1.6}s`} />
               </div>
-              <span className="mt-3 block font-display text-lg uppercase tracking-tight text-white sm:text-xl">
-                {displayName(player)}
-              </span>
-            </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -138,6 +136,28 @@ function CardsChapter() {
         </Link>
       </div>
     </section>
+  );
+}
+
+function FeaturedPortrait({
+  player,
+  delay,
+}: {
+  player: Player;
+  delay: string;
+}) {
+  return (
+    <>
+      <div
+        className="float-drift aspect-3/4 w-full drop-shadow-[0_18px_28px_rgba(248,103,165,0.18)]"
+        style={{ animationDelay: delay }}
+      >
+        <PlayerPortrait player={player} backdrop={false} />
+      </div>
+      <span className="mt-3 block font-display text-lg uppercase tracking-tight text-white sm:text-xl">
+        {displayName(player)}
+      </span>
+    </>
   );
 }
 

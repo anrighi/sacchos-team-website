@@ -1,32 +1,33 @@
-# F6 — Archivio partite su Google Sheet
+# F6 — Archivio partite su Cloudflare KV
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | done |
 | Phase | 2 |
-| Files | `src/routes/sfide.tsx`, `src/routes/api.matches.ts` (o equivalente Worker) |
-| Tests | append payload shape; `/sfide` vuoto senza CSV |
+| Files | `src/lib/challenge/archive.ts`, `src/lib/challenge/cloud.ts`, `src/routes/sfide.tsx` |
+| Tests | append payload shape; seed duplicato ignorato; nav senza Archivio |
 
 ## Goal
 
-Fine partita: `POST` webhook Apps Script → riga ricca sullo Sheet. `/sfide` legge CSV pubblicato.
+Fine partita: `POST` sul Worker → riga su Workers KV. **Niente pagina pubblica.** La rosa resta sullo Sheet Google.
 
 ## Prerequisites
 
-- F5 recap URL
+- F4 sim (tabellino F5 può arrivare dopo: il recap URL è il link della partita)
+- F9 Worker in produzione (binding `MATCHES`)
 
 ## Acceptance criteria
 
-- [ ] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
-- [ ] Senza webhook: toast, link recap resta valido, archivio vuoto
-- [ ] `/sfide` lista da CSV
-- [ ] Spec + manifest `done` e PR con `Closes #N`
+- [x] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
+- [x] Senza KV/binding: messaggio in partita, link recap resta valido
+- [x] Nessuna lista pubblica: `/sfide` redirige a `/`, Archivio fuori nav, niente RPC di elenco
+- [x] Spec + manifest `done`
 
 ## Deliverables
 
-- Worker append, pagina archivio, README webhook
+- Server function append, binding `MATCHES` in `wrangler.jsonc`
 
 ## Notes
 
-Niente S3. Winrate/utilizzo: pivot successivi o sullo Sheet, non obbligatori in F6.
-La voce **Archivio** resta fuori dalla nav (`src/lib/nav.ts`) finché questa feature non è pronta: `/sfide` esiste ma non è linkata.
+Niente secondo Google Sheet, niente Apps Script, niente S3. Winrate/utilizzo: pivot successivi, non obbligatori in F6.
+CI crea il namespace `sacchos-MATCHES` al deploy se manca.
