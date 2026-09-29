@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| Status | in_progress |
+| Status | done |
 | Phase | 0+ |
 | Files | `wrangler.jsonc`, `vite.config.ts`, `.github/workflows/ci.yml`, `src/lib/club.ts`, `docs/CLOUDFLARE.md` |
 | Tests | `pnpm test`; `pnpm build` con plugin Cloudflare; URL canonico `sacchos.agescipesaro1.it` |
@@ -27,7 +27,7 @@ Sito su Cloudflare Workers (piano free), dominio `https://sacchos.agescipesaro1.
 - [x] F6 ritargettata su KV; niente webhook Apps Script
 - [x] DNS documentato in `docs/CLOUDFLARE.md` (niente cambio NS dell’apex)
 - [x] Primo deploy live su `https://sacchos.webmaster-add.workers.dev`
-- [ ] Custom domain `sacchos.agescipesaro1.it` (Worker e zona sullo stesso account CF)
+- [x] Custom domain `sacchos.agescipesaro1.it` (Worker e zona sullo stesso account CF)
 
 ## Deliverables
 

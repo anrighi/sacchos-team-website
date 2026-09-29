@@ -21,7 +21,7 @@
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
   - [x] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
-- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9: Worker live su `sacchos.webmaster-add.workers.dev`, custom domain in attesa dell’account della zona `agescipesaro1.it`
+- **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; stats e schede giocatore restano nascoste (`SHOW_PLAYER_STATS`)
 
 ## Feature index
 
@@ -36,7 +36,7 @@
 | F6 | Archivio partite su Cloudflare KV | 2 | done | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
 | F8 | Link corti per la sfida | 0+ | done | [F8-shortlink.md](features/F8-shortlink.md) |
-| F9 | Deploy Cloudflare Workers e dominio club | 0+ | in_progress | [F9-cloudflare.md](features/F9-cloudflare.md) |
+| F9 | Deploy Cloudflare Workers e dominio club | 0+ | done | [F9-cloudflare.md](features/F9-cloudflare.md) |
 
 ## Architecture decisions (light ADR)
 
@@ -60,7 +60,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-29 | Cursor | 2 | Stats e scheda giocatore nascoste (`SHOW_PLAYER_STATS`) | Compilare ruoli/stats Sheet; F5; merge F9+F6 | Ruoli/stats Sheet ancora vuoti |
+| 2026-09-29 | Cursor | 2 | Merge F9+F8+F6 su `main` (Workers, link corti, KV privato, stats/schede nascoste) | F5 tabellino; compilare ruoli/stats Sheet | Ruoli/stats Sheet ancora vuoti |
 | 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |
