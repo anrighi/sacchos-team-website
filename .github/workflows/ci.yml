@@ -89,15 +89,14 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - uses: cloudflare/wrangler-action@v3
+      - name: Deploy preview
         if: steps.cf.outputs.has_token == 'true'
         id: deploy
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ steps.cf.outputs.account_id }}
-          command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }}
-          packageManager: pnpm
+        run: bash scripts/ci-deploy-preview.sh
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+          PREVIEW_ALIAS: ${{ env.PREVIEW_ALIAS }}
           WRANGLER_SEND_METRICS: "false"
       - name: Comment staging URL on PR
         if: steps.cf.outputs.has_token == 'true'
