@@ -20,12 +20,12 @@ plain() {
 
 capture_url() {
   local found=""
-  found="$(plain | sed -nE 's/.*Version Preview Alias URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
+  found="$(plain | sed -nE 's/.*Version Preview Alias URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1 || true)"
   if [[ -z "${found}" ]]; then
-    found="$(plain | sed -nE 's/.*Version Preview URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1)"
+    found="$(plain | sed -nE 's/.*Version Preview URL:[[:space:]]*(https:\/\/[^[:space:]]+).*/\1/p' | tail -1 || true)"
   fi
   if [[ -z "${found}" ]]; then
-    found="$(plain | grep -oE 'https://[a-zA-Z0-9._-]+\.workers\.dev' | tail -1)"
+    found="$(plain | sed -nE 's/.*(https:\/\/[a-zA-Z0-9._-]+\.workers\.dev).*/\1/p' | tail -1 || true)"
   fi
   if [[ -n "${found}" ]]; then
     URL="${found}"
