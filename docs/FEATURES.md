@@ -60,6 +60,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-09-29 | Cursor | 1 polish | Home: carousel di tutta la rosa al posto dei 3 ritratti fissi | F5 tabellino; compilare ruoli/stats Sheet | Ruoli/stats Sheet ancora vuoti |
 | 2026-09-29 | Cursor | 2 | Merge F9+F8+F6 su `main` (Workers, link corti, KV privato, stats/schede nascoste) | F5 tabellino; compilare ruoli/stats Sheet | Ruoli/stats Sheet ancora vuoti |
 | 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |

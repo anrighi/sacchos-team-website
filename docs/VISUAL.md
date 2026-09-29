@@ -41,7 +41,7 @@ Logo e kit: `object-contain` e altezza/larghezza esplicite. Non `rounded-full` +
 
 1. `main` con `bg-black text-white`
 2. Hero compatto: `landing-hero-glow`, titolo MrAlex, **una** riga di claim, una o due CTA a pillola
-3. Un blocco visivo (kit, ventaglio ritratti, campo) senza didascalie lunghe
+3. Un blocco visivo (kit, carousel ritratti, campo) senza didascalie lunghe
 4. Chiusura con headline corta + CTA, `border-t border-white/10`
 
 Poco testo. Headline da due parole con punto (`La squadra.`, `In campo.`). Non duplicare la stessa cutout in due sezioni.
@@ -71,6 +71,7 @@ Niente bounce, loop veloci, o parallax. Drift lento (~6s).
 ## Altre superfici
 
 - **Nav:** logo PNG `h-9 w-auto object-contain`, non cerchio ritagliato dal JPG. Voci: Home, Rosa, Sfida. Archivio solo su KV, non in pagina
+- **Home:** carousel orizzontale su tutta la rosa (ritratti cutout, nome del giocatore attivo, frecce a pillola). Autoplay lento; in pausa su hover/focus; spento con `prefers-reduced-motion`
 - **Rosa / scheda:** hero compatto come la home (`La rosa.` + CTA, niente conteggio carte). Filtri a pillola `min-h-11`. `PlayerCard` con backdrop in carta, logo contain (niente `rounded-full`). Intestazioni squadra e chip: PNG contain. Overall, barre stats e scheda `/giocatori/$slug` nascosti finché i valori sullo Sheet non sono differenziati (`SHOW_PLAYER_STATS`)
 - **Sfida (F3+):** stesso hero scuro, MrAlex, pillole, eventuali kit PNG come cutout sul campo, non JPG
 

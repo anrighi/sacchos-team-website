@@ -47,6 +47,18 @@ export function displayName(player: Pick<Player, "firstName" | "nickname">) {
   return player.firstName;
 }
 
+export function sortRoster(list: readonly Player[]): Player[] {
+  return [...list].sort((a, b) => {
+    if (a.team !== b.team) {
+      return a.team === "Saccho's Team" ? -1 : 1;
+    }
+    if (a.number !== b.number) {
+      return a.number - b.number;
+    }
+    return displayName(a).localeCompare(displayName(b), "it");
+  });
+}
+
 export function clampStat(value: unknown): number {
   if (value === "" || value == null) {
     return STAT_DEFAULT;

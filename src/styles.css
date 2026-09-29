@@ -310,6 +310,15 @@ body {
   animation: float-drift 6.2s ease-in-out infinite;
 }
 
+.home-carousel {
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.home-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes float-drift {
   0%,
   100% {

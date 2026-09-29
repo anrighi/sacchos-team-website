@@ -15,6 +15,7 @@ import {
   SHEET_BALANCE_FORMULA,
   SHEET_BALANCE_NOTE,
   slugify,
+  sortRoster,
 } from "#/lib/roster";
 import type { Player, PlayerStats } from "#/lib/player";
 
@@ -227,6 +228,15 @@ describe("playerSlug", () => {
 
   it("slugifies italian letters", () => {
     expect(slugify("Nicolò")).toBe("nicolo");
+  });
+});
+
+describe("sortRoster", () => {
+  it("puts Saccho's first, then shirt number", () => {
+    const ga = { ...player("ga", "Saccios Tim", undefined), number: 24, nickname: "Ga" };
+    const papu = { ...player("papu", "Saccho's Team", undefined), number: 4, nickname: "PAPU" };
+    const nick = { ...player("nick", "Saccho's Team", undefined), number: 5, nickname: "Nick" };
+    expect(sortRoster([ga, nick, papu]).map((row) => row.slug)).toEqual(["papu", "nick", "ga"]);
   });
 });
 

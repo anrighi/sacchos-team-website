@@ -28,9 +28,19 @@ describe("public UI", () => {
   it("hides player detail pages until stats are filled", () => {
     const page = readFileSync("src/routes/giocatori.$slug.tsx", "utf8");
     const card = readFileSync("src/components/PlayerCard.tsx", "utf8");
-    const home = readFileSync("src/components/HomeLanding.tsx", "utf8");
+    const carousel = readFileSync("src/components/SquadCarousel.tsx", "utf8");
     expect(page).toContain('redirect({ to: "/rosa" })');
     expect(card).toContain("linked = SHOW_PLAYER_STATS");
-    expect(home).toContain("SHOW_PLAYER_STATS");
+    expect(carousel).toContain("SHOW_PLAYER_STATS");
+  });
+
+  it("carousels the full roster on the home", () => {
+    const home = readFileSync("src/components/HomeLanding.tsx", "utf8");
+    const carousel = readFileSync("src/components/SquadCarousel.tsx", "utf8");
+    expect(home).toContain("SquadCarousel");
+    expect(home).toContain("sortRoster(players)");
+    expect(home).not.toContain("giorgia-pappagiorgia");
+    expect(carousel).toContain("Giocatore precedente");
+    expect(carousel).toContain("Giocatore successivo");
   });
 });
