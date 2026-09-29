@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { slideCenterOffset, stepIndex, wrapIndex } from "#/lib/carousel";
+import { closestSlideIndex, slideCenterOffset, stepIndex, wrapIndex } from "#/lib/carousel";
 
 describe("wrapIndex", () => {
   it("returns 0 for an empty list", () => {
@@ -28,5 +28,13 @@ describe("slideCenterOffset", () => {
   it("centers a slide in the viewport", () => {
     expect(slideCenterOffset(0, 200, 400)).toBe(-100);
     expect(slideCenterOffset(400, 200, 400)).toBe(300);
+  });
+});
+
+describe("closestSlideIndex", () => {
+  it("picks the slide nearest the viewport center", () => {
+    expect(closestSlideIndex([100, 300, 500], 310)).toBe(1);
+    expect(closestSlideIndex([100, 300, 500], 40)).toBe(0);
+    expect(closestSlideIndex([], 0)).toBe(0);
   });
 });
