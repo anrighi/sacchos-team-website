@@ -14,6 +14,8 @@ import { Route as RosaRouteImport } from './routes/rosa'
 import { Route as SfidaRouteImport } from './routes/sfida'
 import { Route as SfideRouteImport } from './routes/sfide'
 import { Route as GiocatoriSlugRouteImport } from './routes/giocatori.$slug'
+import { Route as SIdRouteImport } from './routes/s.$id'
+import { Route as SHostGuestRouteImport } from './routes/s.$host.$guest'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +42,16 @@ const GiocatoriSlugRoute = GiocatoriSlugRouteImport.update({
   path: '/giocatori/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SIdRoute = SIdRouteImport.update({
+  id: '/s/$id',
+  path: '/s/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SHostGuestRoute = SHostGuestRouteImport.update({
+  id: '/s/$host/$guest',
+  path: '/s/$host/$guest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
+  '/s/$id': typeof SIdRoute
+  '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
+  '/s/$id': typeof SIdRoute
+  '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
+  '/s/$id': typeof SIdRoute
+  '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
+  fullPaths:
+    | '/'
+    | '/rosa'
+    | '/sfida'
+    | '/sfide'
+    | '/giocatori/$slug'
+    | '/s/$id'
+    | '/s/$host/$guest'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
-  id: '__root__' | '/' | '/rosa' | '/sfida' | '/sfide' | '/giocatori/$slug'
+  to:
+    | '/'
+    | '/rosa'
+    | '/sfida'
+    | '/sfide'
+    | '/giocatori/$slug'
+    | '/s/$id'
+    | '/s/$host/$guest'
+  id:
+    | '__root__'
+    | '/'
+    | '/rosa'
+    | '/sfida'
+    | '/sfide'
+    | '/giocatori/$slug'
+    | '/s/$id'
+    | '/s/$host/$guest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +117,8 @@ export interface RootRouteChildren {
   SfidaRoute: typeof SfidaRoute
   SfideRoute: typeof SfideRoute
   GiocatoriSlugRoute: typeof GiocatoriSlugRoute
+  SIdRoute: typeof SIdRoute
+  SHostGuestRoute: typeof SHostGuestRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +158,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GiocatoriSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s/$id': {
+      id: '/s/$id'
+      path: '/s/$id'
+      fullPath: '/s/$id'
+      preLoaderRoute: typeof SIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$host/$guest': {
+      id: '/s/$host/$guest'
+      path: '/s/$host/$guest'
+      fullPath: '/s/$host/$guest'
+      preLoaderRoute: typeof SHostGuestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,16 +181,9 @@ const rootRouteChildren: RootRouteChildren = {
   SfidaRoute: SfidaRoute,
   SfideRoute: SfideRoute,
   GiocatoriSlugRoute: GiocatoriSlugRoute,
+  SIdRoute: SIdRoute,
+  SHostGuestRoute: SHostGuestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

@@ -62,13 +62,13 @@ Fino al primo deploy il hostname risponde su `https://sacchos.<sottodominio-acco
 
 Ogni push fuori da `main` fa `wrangler versions upload --preview-alias <slug>`. L’URL finisce nel commento della PR. Non usa più `anrighi.github.io/.../preview/`.
 
-## 5. KV partite (F6)
+## 5. KV partite e link corti
 
-Quando si implementa F6:
+CI crea il namespace `sacchos-MATCHES` al deploy (binding `MATCHES`) se manca. Locale: `pnpm deploy` fa lo stesso dopo il build.
 
-```bash
-pnpm wrangler kv namespace create MATCHES
-pnpm wrangler kv namespace create MATCHES --preview
-```
+Chiavi:
 
-Incolla gli `id` in `wrangler.jsonc` sotto `kv_namespaces` (binding `MATCHES`). Nessun Sheet, nessun Apps Script.
+- `s:{id}` formazione
+- `n:{nome}` mapping del primo nome unico
+- `m:{seed}` tabellino
+- `m:index` elenco

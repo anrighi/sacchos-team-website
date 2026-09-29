@@ -20,6 +20,7 @@ export function ShareChallenge({
   cta,
   hint,
   waiting,
+  onMint,
 }: {
   ready: boolean;
   search: Record<string, string>;
@@ -27,9 +28,11 @@ export function ShareChallenge({
   cta: string;
   hint: string;
   waiting: string;
+  onMint?: () => Promise<string | null>;
 }) {
   const [copied, setCopied] = useState(false);
   const [origin, setOrigin] = useState("");
+  const [href, setHref] = useState("");
 
   useEffect(() => {
     setOrigin(window.location.origin);
@@ -43,24 +46,49 @@ export function ShareChallenge({
     return () => window.clearTimeout(timer);
   }, [copied]);
 
-  const url = `${origin}${publicUrl("/sfida")}?${queryString(search)}`;
+  const longUrl = `${origin}${publicUrl("/sfida")}?${queryString(search)}`;
+  const url = href || longUrl;
   const canShare = typeof navigator !== "undefined" && "share" in navigator;
 
+  const resolveUrl = async () => {
+    if (href) {
+      return href;
+    }
+    if (!onMint) {
+      return longUrl;
+    }
+    try {
+      const minted = await onMint();
+      if (minted) {
+        setHref(minted);
+        return minted;
+      }
+    } catch {
+      return longUrl;
+    }
+    return longUrl;
+  };
+
   const share = async () => {
+    const next = await resolveUrl();
     if (canShare) {
       try {
-        await navigator.share({ title, url });
+        await navigator.share({ title, url: next });
         return;
       } catch {
         // l'utente ha annullato: si ripiega sulla copia
       }
     }
-    await copy();
+    await write(next);
   };
 
   const copy = async () => {
+    await write(await resolveUrl());
+  };
+
+  const write = async (value: string) => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(value);
       setCopied(true);
     } catch {
       setCopied(false);

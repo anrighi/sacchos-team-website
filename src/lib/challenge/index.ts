@@ -4,3 +4,5 @@ export * from "#/lib/challenge/link";
 export * from "#/lib/challenge/sim";
 export * from "#/lib/challenge/board";
 export * from "#/lib/challenge/efficiency";
+export * from "#/lib/challenge/shortlink";
+export * from "#/lib/challenge/archive";

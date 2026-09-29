@@ -2,10 +2,10 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | done |
 | Phase | 2 |
-| Files | `src/routes/sfide.tsx`, `src/routes/api.matches.ts` (o server function Worker) |
-| Tests | append payload shape; `/sfide` vuoto senza KV |
+| Files | `src/routes/sfide.tsx`, `src/lib/challenge/archive.ts`, `src/lib/challenge/cloud.ts` |
+| Tests | append payload shape; `/sfide` vuoto senza KV; seed duplicato ignorato |
 
 ## Goal
 
@@ -13,15 +13,15 @@ Fine partita: `POST` sul Worker → riga su Workers KV. `/sfide` elenca le parti
 
 ## Prerequisites
 
-- F5 recap URL
+- F4 sim (tabellino F5 può arrivare dopo: il recap URL è il link della partita)
 - F9 Worker in produzione (binding `MATCHES`)
 
 ## Acceptance criteria
 
-- [ ] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
-- [ ] Senza KV/binding: toast, link recap resta valido, archivio vuoto
-- [ ] `/sfide` lista da KV
-- [ ] Spec + manifest `done` e PR con `Closes #N`
+- [x] Riga: timestamp, sim version, seed, displayName, winner, mete, MVP, 7 slug/lato, box score (efficienza tiri in porta), log JSON, URL tabellino
+- [x] Senza KV/binding: messaggio, link recap resta valido, archivio vuoto
+- [x] `/sfide` lista da KV
+- [x] Spec + manifest `done`
 
 ## Deliverables
 
@@ -30,5 +30,4 @@ Fine partita: `POST` sul Worker → riga su Workers KV. `/sfide` elenca le parti
 ## Notes
 
 Niente secondo Google Sheet, niente Apps Script, niente S3. Winrate/utilizzo: pivot successivi, non obbligatori in F6.
-La voce **Archivio** resta fuori dalla nav (`src/lib/nav.ts`) finché questa feature non è pronta: `/sfide` esiste ma non è linkata.
-Creare il namespace: `pnpm wrangler kv namespace create MATCHES` (vedi `docs/CLOUDFLARE.md`).
+CI crea il namespace `sacchos-MATCHES` al deploy se manca.

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+bash scripts/ci-ensure-kv.sh
+
 LOG="$(mktemp)"
 trap 'rm -f "$LOG"' EXIT
 

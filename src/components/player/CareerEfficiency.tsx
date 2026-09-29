@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   careerOf,
   formatPct,
@@ -40,7 +41,10 @@ export function CareerEfficiency({ slug }: { slug: string }) {
         ) : null}
       </dl>
       <p className="mt-3 text-[12px] text-white/40">
-        Dalle sfide su questo dispositivo. L’archivio su Cloudflare arriverà dopo.
+        Dalle sfide su questo dispositivo.{" "}
+        <Link to="/sfide" className="text-pink">
+          Archivio
+        </Link>
       </p>
     </div>
   );

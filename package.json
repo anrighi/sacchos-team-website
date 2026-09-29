@@ -18,7 +18,7 @@
     "ingest-roster:seed": "tsx scripts/ingest-roster.ts --from src/data/roster.seed.csv",
     "build": "pnpm ingest-roster && vite build",
     "preview": "vite preview --port 43123 --host 127.0.0.1",
-    "deploy": "pnpm build && wrangler deploy",
+    "deploy": "pnpm build && bash scripts/ci-ensure-kv.sh && wrangler deploy",
     "cf-typegen": "wrangler types",
     "test": "vitest run",
     "test:watch": "vitest",

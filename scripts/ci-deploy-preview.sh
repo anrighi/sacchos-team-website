@@ -7,6 +7,8 @@ trap 'rm -f "$LOG"' EXIT
 URL=""
 STATUS=0
 
+bash scripts/ci-ensure-kv.sh
+
 write_output() {
   local key="$1" value="$2"
   if [[ -n "${GITHUB_OUTPUT:-}" ]]; then

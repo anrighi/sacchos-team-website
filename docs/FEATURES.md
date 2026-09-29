@@ -10,7 +10,7 @@
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
-| 2 | Sfida | in_progress | 50% |
+| 2 | Sfida | in_progress | 75% |
 | 0+ | Dopo | in_progress | — |
 
 ## Active phase — what to do now
@@ -20,7 +20,7 @@
   - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
   - [ ] [F5](features/F5-recap.md) Tabellino social e recap
-  - [ ] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
+  - [x] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
 - **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; F9: Worker live su `sacchos.webmaster-add.workers.dev`, custom domain in attesa dell’account della zona `agescipesaro1.it`
 
 ## Feature index
@@ -33,8 +33,9 @@
 | F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
 | F4 | Simulazione 2×15′ in 90s | 2 | done | [F4-sim.md](features/F4-sim.md) |
 | F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
-| F6 | Archivio partite su Cloudflare KV | 2 | not_started | [F6-archive.md](features/F6-archive.md) |
+| F6 | Archivio partite su Cloudflare KV | 2 | done | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
+| F8 | Link corti per la sfida | 0+ | done | [F8-shortlink.md](features/F8-shortlink.md) |
 | F9 | Deploy Cloudflare Workers e dominio club | 0+ | in_progress | [F9-cloudflare.md](features/F9-cloudflare.md) |
 
 ## Architecture decisions (light ADR)
@@ -59,7 +60,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
-| 2026-09-29 | Cursor | 0+ | Secret `CLOUDFLARE_ACCOUNT_ID` + Worker su workers.dev | Merge F9 dopo CI verde; custom domain se CI usa l’account della zona | Zona e Worker su account CF diversi; ruoli Sheet vuoti |
+| 2026-09-29 | Cursor | 2 | F6 archivio KV + F8 link corti `/s/:id` | Merge F9+F6; F5 tabellino | Custom domain zona/account; ruoli Sheet vuoti |
 | 2026-09-26 | Cursor | 0+ | F9: pipeline Workers, URL club, F6 ritargettata su KV | Secret CF; merge F9; poi F5 tabellino | Token CF assente in CI; ruoli Sheet ancora vuoti |
 | 2026-09-21 | Cursor | 1 polish | Merge espressioni Toon Head a ogni reload + rule stage URL su `main` (look resta dallo Sheet) | F5: tabellino `/sfida/partita` con OG e share | Ruoli/stat del seed ancora vuoti (tutti 75); F6 resta senza nav fino al runtime server |
 | 2026-09-20 | Cursor | 1 | Rifinitura look: niente helper di default, viso solo seed slug | Compilare ruoli sullo Sheet; F5 tabellino | Ruoli ancora vuoti; F6 senza nav fino al runtime server |

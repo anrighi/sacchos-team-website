@@ -15,6 +15,7 @@ export const MATCH_SECONDS = HALF_SECONDS * HALF_COUNT;
 export const EXTRA_SECONDS = 5 * 60;
 export const SILVER_END = MATCH_SECONDS + EXTRA_SECONDS;
 export const GOLDEN_END = SILVER_END + EXTRA_SECONDS;
+export const SIM_VERSION = 1;
 export const PLAYBACK_SCALE = 20;
 export const MS_PER_GAME_SECOND = 1000 / PLAYBACK_SCALE;
 export const MIN_PAUSE_MS = 1000;
