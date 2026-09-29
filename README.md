@@ -69,7 +69,7 @@ Lo Sheet condiviso (chiunque con il link) è la fonte della rosa a build:
 
 L’URL sta in `src/data/roster.sheet.url`. `pnpm ingest-roster` lo converte in export CSV; non serve “Pubblica sul web”. Override: `ROSTER_SHEET_CSV_URL` in `.env` o secret CI.
 
-Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo`. Carnagione: `scura` / `media` / `chiara`. Look e stats vengono dallo Sheet, senza default a ingest. Il ruolo resta vuoto finché non lo sceglie la squadra. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
+Colonne (italiano, con menu a tendina): `Nome`, `Soprannome`, `Numero`, `Squadra`, `Sesso`, `Ruolo`, `Velocità`, `Salto`, `Intercetto`, `Scalpo`, `Finalizzazione`, `Parate`, `Capelli`, `Capelli dietro`, `Colore capelli`, `Carnagione`, `Barba`, più `Media` (formula). Occhi, sopracciglia e bocca non si editano: restano dal seed dello slug a runtime. Colore capelli: `nero` / `castano` / `biondo` / `biondo cenere` / `roscio`. Carnagione: `scura` / `media` / `chiara`. I menu a tendina stanno nel tab `valori` dello Sheet: aggiungere lì le etichette nuove perché il dropdown le mostri. Look e stats vengono dallo Sheet, senza default a ingest. Il ruolo resta vuoto finché non lo sceglie la squadra. Righe senza nome o numero scartate. Sheet vuoto → seed `src/data/roster.seed.csv`.
 
 Equilibrio: la media delle sei stats di ogni giocatore deve stare tra **75 e 90**. Nello Sheet la formula `=IFERROR(ROUND(AVERAGE(G2:L1000);1);"")` mostra la media rosa; se un overall è fuori fascia, `pnpm ingest-roster` lo ricalibra. Stats singole: **60–100**, cella vuota = **75**. Ruolo PAL = **Palo**.
 
@@ -81,10 +81,10 @@ Il file `src/data/portraits.csv` è il fallback look in repo (lo Sheet vince). L
 
 | Colonna | Valori (IT sullo Sheet) |
 |---------|--------|
-| `hair` / Capelli | `crocchia`, `pettinati di lato`, `a punte`, `lati rasati`, `nessuno` |
+| `hair` / Capelli | `crocchia`, `pettinati di lato`, `a punte`, `lati rasati`, `riccio`, `nessuno` |
 | `rearHair` / Capelli dietro | `lunghi lisci`, `lunghi mossi`, `alla nuca`, `alle spalle`, `nessuno` |
 | `beard` / Barba | `pizzo`, `pizzo e baffi`, `barba`, `barba lunga`, `baffi`, `nessuno` |
-| `hairColor` / Colore capelli | `nero`, `castano`, `biondo` (3/5) |
+| `hairColor` / Colore capelli | `nero`, `castano`, `biondo`, `biondo cenere`, `roscio` |
 | `skinColor` / Carnagione | `scura`, `media`, `chiara` (3/5) |
 
 Si può matchare per `slug` oppure `firstName`+`number` (+ `team` se due omonimi). Occhi, sopracciglia e bocca non sono colonne: a ogni reload il client estrae un’espressione casuale. Alias inglesi (`bun`, `spiky`, `none`, …) restano validi nel CSV di repo. Poi `pnpm ingest-roster`.

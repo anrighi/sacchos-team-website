@@ -28,8 +28,14 @@ describe("sheet enums", () => {
     expect(parseSheetSex("maschio")).toBe("M");
   });
 
-  it("offers 3 of 5 hair and skin colors", () => {
-    expect(SHEET_HAIR_COLORS).toEqual(["nero", "castano", "biondo"]);
+  it("offers sheet hair colors including ash blonde and ginger", () => {
+    expect(SHEET_HAIR_COLORS).toEqual([
+      "nero",
+      "castano",
+      "biondo",
+      "biondo cenere",
+      "roscio",
+    ]);
     expect(SHEET_SKIN_COLORS).toEqual(["scura", "media", "chiara"]);
   });
 
@@ -38,6 +44,7 @@ describe("sheet enums", () => {
     expect(sheetTraitLabel(SHEET_HAIR, "sideComed")).toBe("pettinati di lato");
     expect(sheetTraitLabel(SHEET_HAIR, "spiky")).toBe("a punte");
     expect(sheetTraitLabel(SHEET_HAIR, "undercut")).toBe("lati rasati");
+    expect(sheetTraitLabel(SHEET_HAIR, "curly")).toBe("riccio");
     expect(sheetTraitLabel(SHEET_REAR_HAIR, "neckHigh")).toBe("alla nuca");
     expect(sheetTraitLabel(SHEET_REAR_HAIR, "shoulderHigh")).toBe("alle spalle");
     expect(sheetTraitLabel(SHEET_BEARD, "none")).toBe("nessuno");

@@ -3,6 +3,7 @@ import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
 import type { Player, PortraitTraits, TeamName } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
+import { CURLY_HAIR } from "#/lib/sheet-schema";
 
 const toonHead = new Style(definition);
 const portraitCache = new Map<string, string>();
@@ -45,6 +46,8 @@ export const HAIR_COLOR_PRESETS = {
   auburn: "a55728",
   blonde: "d6b370",
   gold: "b58143",
+  ash: "c6bf9a",
+  ginger: "c45c26",
 } as const;
 
 export const SKIN_COLOR_PRESETS = {
@@ -58,10 +61,16 @@ export const SKIN_COLOR_PRESETS = {
 const HAIR_COLOR_ALIASES: Record<string, keyof typeof HAIR_COLOR_PRESETS> = {
   nero: "black",
   castano: "brown",
-  ramato: "auburn",
+  ramato: "ginger",
   biondo: "blonde",
   miele: "gold",
   lightbrown: "gold",
+  biondocenere: "ash",
+  cenere: "ash",
+  ashblonde: "ash",
+  roscio: "ginger",
+  rosso: "ginger",
+  ginger: "ginger",
 };
 
 const SKIN_COLOR_ALIASES: Record<string, keyof typeof SKIN_COLOR_PRESETS> = {
@@ -77,6 +86,9 @@ const HAIR_COLOR_LABELS: Record<string, string> = {
   [HAIR_COLOR_PRESETS.black]: "nero",
   [HAIR_COLOR_PRESETS.brown]: "castano",
   [HAIR_COLOR_PRESETS.blonde]: "biondo",
+  [HAIR_COLOR_PRESETS.ash]: "biondo cenere",
+  [HAIR_COLOR_PRESETS.ginger]: "roscio",
+  [HAIR_COLOR_PRESETS.auburn]: "roscio",
 };
 
 const SKIN_COLOR_LABELS: Record<string, string> = {
@@ -159,14 +171,30 @@ export function portraitOptions(
           backgroundColor: ["00000000"],
           backgroundColorFill: ["solid"],
         }),
-    ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
-    ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
+    ...hairLook(traits),
     ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
     ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
     ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
     ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
     ...colorOption("hair", traits.hairColor),
     ...colorOption("skin", traits.skinColor),
+  };
+}
+
+function hairLook(traits: PortraitTraits): Record<string, unknown> {
+  if (traits.hair !== CURLY_HAIR) {
+    return {
+      ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
+      ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
+    };
+  }
+  const rear =
+    traits.rearHair === "neckHigh" || traits.rearHair === "shoulderHigh"
+      ? traits.rearHair
+      : "longWavy";
+  return {
+    ...variantOption("hair", "sideComed", HAIR_VARIANTS, 0),
+    ...variantOption("rearHair", rear, REAR_HAIR_VARIANTS, 0),
   };
 }
 

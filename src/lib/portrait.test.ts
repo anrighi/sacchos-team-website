@@ -69,6 +69,20 @@ describe("portraitSvg", () => {
     expect(svg).toContain("kit-claws.png");
   });
 
+  it("paints ash blonde and ginger into the Toon Head SVG", () => {
+    const ash = portraitSvg(
+      sample({ portrait: { hair: "curly", hairColor: "c6bf9a" } }),
+    );
+    const ginger = portraitSvg(
+      sample({
+        slug: "nico-11",
+        portrait: { hair: "spiky", hairColor: "c45c26" },
+      }),
+    );
+    expect(ash).toContain("#c6bf9a");
+    expect(ginger).toContain("#c45c26");
+  });
+
   it("pins CSV hair, beard and color and ignores face expressions", () => {
     const options = portraitOptions(
       sample({
@@ -104,11 +118,36 @@ describe("portraitSvg", () => {
 
   it("resolves named color presets and custom hex", () => {
     expect(resolveHairColor("biondo")).toBe("d6b370");
+    expect(resolveHairColor("biondo cenere")).toBe("c6bf9a");
+    expect(resolveHairColor("roscio")).toBe("c45c26");
     expect(resolveHairColor("black")).toBe("2c1b18");
     expect(resolveSkinColor("chiara")).toBe("f1c3a5");
     expect(resolveSkinColor("#f5d0b0")).toBe("f5d0b0");
     expect(sheetHairColorLabel("2c1b18")).toBe("nero");
+    expect(sheetHairColorLabel("c6bf9a")).toBe("biondo cenere");
+    expect(sheetHairColorLabel("c45c26")).toBe("roscio");
     expect(sheetSkinColorLabel("chiara")).toBe("chiara");
+  });
+
+  it("renders riccio as side hair plus wavy rear hair", () => {
+    const options = portraitOptions(
+      sample({
+        portrait: { hair: "curly", rearHair: "none", hairColor: "c45c26" },
+      }),
+    );
+    expect(options.hairVariant).toEqual(["sideComed"]);
+    expect(options.hairProbability).toBe(100);
+    expect(options.rearHairVariant).toEqual(["longWavy"]);
+    expect(options.rearHairProbability).toBe(100);
+    expect(options.hairColor).toEqual(["c45c26"]);
+  });
+
+  it("keeps nuca and spalle length when riccio is set", () => {
+    const options = portraitOptions(
+      sample({ portrait: { hair: "curly", rearHair: "neckHigh" } }),
+    );
+    expect(options.hairVariant).toEqual(["sideComed"]);
+    expect(options.rearHairVariant).toEqual(["neckHigh"]);
   });
 
   it("keeps the claws below the AGESCI crest", () => {
