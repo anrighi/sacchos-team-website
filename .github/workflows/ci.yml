@@ -42,7 +42,7 @@ jobs:
           node-version: "26"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm ingest-roster
+      - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
       - name: Need Cloudflare token
@@ -85,7 +85,7 @@ jobs:
           node-version: "26"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm ingest-roster
+      - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
       - name: Skip without Cloudflare token
