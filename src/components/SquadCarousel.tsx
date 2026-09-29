@@ -111,7 +111,6 @@ export function SquadCarousel({ players }: { players: readonly Player[] }) {
       startScroll: scroller.scrollLeft,
       moved: false,
     };
-    scroller.setPointerCapture(event.pointerId);
   }
 
   function onScrollerPointerMove(event: PointerEvent<HTMLUListElement>) {
@@ -124,7 +123,10 @@ export function SquadCarousel({ players }: { players: readonly Player[] }) {
     if (Math.abs(dx) < 8 && !state.moved) {
       return;
     }
-    state.moved = true;
+    if (!state.moved) {
+      state.moved = true;
+      scroller.setPointerCapture(event.pointerId);
+    }
     programmatic.current = true;
     scroller.scrollLeft = state.startScroll - dx;
   }
@@ -299,7 +301,7 @@ function Slide({
 
   if (!SHOW_PLAYER_STATS) {
     return (
-      <button type="button" className="block w-full text-center" aria-label={name} aria-current={active} onClick={onSelect}>
+      <button type="button" className="block w-full text-center outline-none focus-visible:ring-2 focus-visible:ring-pink" aria-label={name} aria-current={active} onClick={onSelect}>
         {portrait}
       </button>
     );

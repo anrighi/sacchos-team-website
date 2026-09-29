@@ -313,7 +313,6 @@ body {
 .home-carousel {
   --slide: min(12.5rem, 70vw);
   width: 100%;
-  padding-inline: max(1.25rem, calc(50% - var(--slide) / 2));
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   cursor: grab;
@@ -321,6 +320,14 @@ body {
 
 .home-carousel:active {
   cursor: grabbing;
+}
+
+.home-carousel::before,
+.home-carousel::after {
+  content: "";
+  flex: 0 0 max(0px, calc(50% - var(--slide) / 2));
+  scroll-snap-align: none;
+  pointer-events: none;
 }
 
 .home-carousel > li {
