@@ -1,4 +1,4 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { Link, createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { CareerEfficiency } from "#/components/player/CareerEfficiency";
 import { PlayerCard } from "#/components/PlayerCard";
@@ -9,6 +9,11 @@ import { kitKind } from "#/lib/portrait";
 import { displayName } from "#/lib/roster";
 
 export const Route = createFileRoute("/giocatori/$slug")({
+  beforeLoad: () => {
+    if (!SHOW_PLAYER_STATS) {
+      throw redirect({ to: "/rosa" });
+    }
+  },
   loader: ({ params }) => {
     const player = players.find((item) => item.slug === params.slug);
     if (!player) {

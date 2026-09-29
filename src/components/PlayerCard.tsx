@@ -18,7 +18,7 @@ type CardSize = "grid" | "hero";
 export function PlayerCard({
   player,
   size = "grid",
-  linked = true,
+  linked = SHOW_PLAYER_STATS,
 }: {
   player: Player;
   size?: CardSize;

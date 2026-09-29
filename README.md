@@ -32,7 +32,7 @@ Copia `.env.example` in `.env` se vuoi sovrascrivere lo Sheet rosa.
 |------|-----------|
 | `/` | Home club |
 | `/rosa` | Carte (F1) |
-| `/giocatori/$slug` | Scheda (F1) |
+| `/giocatori/$slug` | Scheda (F1; nascosta finché `SHOW_PLAYER_STATS`) |
 | `/sfida` | Schieramento e link (F3–F4) |
 | `/sfida/partita` | Tabellino (F5) |
 | `/s/$id` | Link corto formazione (F8) |

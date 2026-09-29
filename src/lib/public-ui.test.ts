@@ -20,10 +20,17 @@ describe("public UI", () => {
     const player = readFileSync("src/lib/player.ts", "utf8");
     const card = readFileSync("src/components/PlayerCard.tsx", "utf8");
     const picker = readFileSync("src/components/challenge/RosterPicker.tsx", "utf8");
-    const page = readFileSync("src/routes/giocatori.$slug.tsx", "utf8");
     expect(player).toContain("export const SHOW_PLAYER_STATS = false");
     expect(card).toContain("SHOW_PLAYER_STATS");
     expect(picker).toContain("SHOW_PLAYER_STATS");
-    expect(page).toContain("SHOW_PLAYER_STATS");
+  });
+
+  it("hides player detail pages until stats are filled", () => {
+    const page = readFileSync("src/routes/giocatori.$slug.tsx", "utf8");
+    const card = readFileSync("src/components/PlayerCard.tsx", "utf8");
+    const home = readFileSync("src/components/HomeLanding.tsx", "utf8");
+    expect(page).toContain('redirect({ to: "/rosa" })');
+    expect(card).toContain("linked = SHOW_PLAYER_STATS");
+    expect(home).toContain("SHOW_PLAYER_STATS");
   });
 });
