@@ -316,7 +316,7 @@ body {
 }
 
 .home-carousel {
-  --slide: min(12.5rem, 70cqi);
+  --home-portrait: min(12.5rem, 70cqi);
   width: 100%;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
@@ -330,25 +330,25 @@ body {
 .home-carousel::before,
 .home-carousel::after {
   content: "";
-  flex: 0 0 max(0px, calc(50cqi - var(--slide) / 2));
+  flex: 0 0 max(0px, calc(50cqi - var(--home-portrait) / 2));
   scroll-snap-align: none;
   pointer-events: none;
 }
 
 .home-carousel > li {
-  flex: 0 0 var(--slide);
-  width: var(--slide);
+  flex: 0 0 var(--home-portrait);
+  width: var(--home-portrait);
 }
 
 @media (min-width: 640px) {
   .home-carousel {
-    --slide: 13.75rem;
+    --home-portrait: 13.75rem;
   }
 }
 
 @media (min-width: 768px) {
   .home-carousel {
-    --slide: 15rem;
+    --home-portrait: 15rem;
   }
 }
 
