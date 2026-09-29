@@ -11,7 +11,7 @@ import {
 } from "#/components/ui/dialog";
 import { PlayerPortrait } from "#/components/PlayerPortrait";
 import type { Player } from "#/lib/player";
-import { ROLE_LABELS } from "#/lib/player";
+import { ROLE_LABELS, SHOW_PLAYER_STATS } from "#/lib/player";
 import type { KitKind } from "#/lib/portrait";
 import { playerLabel } from "#/lib/challenge/lineup";
 import { slugify } from "#/lib/roster";
@@ -135,7 +135,9 @@ export function RosterPicker({
                         {busy ? " · già in campo" : ""}
                       </span>
                     </span>
-                    <span className="font-display text-xl text-pink">{player.overall}</span>
+                    {SHOW_PLAYER_STATS ? (
+                      <span className="font-display text-xl text-pink">{player.overall}</span>
+                    ) : null}
                   </button>
                 </li>
               );

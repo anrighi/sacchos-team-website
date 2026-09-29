@@ -3,7 +3,7 @@ import { ChevronLeft } from "lucide-react";
 import { CareerEfficiency } from "#/components/player/CareerEfficiency";
 import { PlayerCard } from "#/components/PlayerCard";
 import { players } from "#/data/players.generated";
-import { ROLE_LABELS, STAT_KEYS, STAT_NAMES } from "#/lib/player";
+import { ROLE_LABELS, SHOW_PLAYER_STATS, STAT_KEYS, STAT_NAMES } from "#/lib/player";
 import { club } from "#/lib/club";
 import { kitKind } from "#/lib/portrait";
 import { displayName } from "#/lib/roster";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/giocatori/$slug")({
         { title: `${name} — ${club.name}` },
         {
           name: "description",
-          content: `Carta di ${name}, numero ${player.number}, overall ${player.overall}.`,
+          content: `Carta di ${name}, numero ${player.number}.`,
         },
       ],
     };
@@ -67,40 +67,42 @@ function PlayerPage() {
               {` · maglia ${kit === "home" ? "casa" : "trasferta"}`}
             </p>
 
-            <div className="mt-10">
-              <h2 className="font-display text-2xl tracking-tight text-white">
-                Statistiche
-              </h2>
-              <dl className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-                {STAT_KEYS.map((key) => (
-                  <div key={key}>
-                    <div className="flex items-baseline justify-between gap-3">
-                      <dt className="text-[15px] text-white/60">
-                        {STAT_NAMES[key]}
-                      </dt>
-                      <dd className="font-display text-2xl leading-none text-white">
-                        {player.stats[key]}
-                      </dd>
+            {SHOW_PLAYER_STATS ? (
+              <div className="mt-10">
+                <h2 className="font-display text-2xl tracking-tight text-white">
+                  Statistiche
+                </h2>
+                <dl className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                  {STAT_KEYS.map((key) => (
+                    <div key={key}>
+                      <div className="flex items-baseline justify-between gap-3">
+                        <dt className="text-[15px] text-white/60">
+                          {STAT_NAMES[key]}
+                        </dt>
+                        <dd className="font-display text-2xl leading-none text-white">
+                          {player.stats[key]}
+                        </dd>
+                      </div>
+                      <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
+                        <div
+                          className="h-full rounded-full bg-pink"
+                          style={{ width: `${player.stats[key]}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
-                      <div
-                        className="h-full rounded-full bg-pink"
-                        style={{ width: `${player.stats[key]}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </dl>
-              <div className="mt-8 flex items-baseline justify-between gap-3 border-t border-white/10 pt-6">
-                <p className="text-sm uppercase tracking-[0.2em] text-white/45">
-                  Overall
-                </p>
-                <p className="font-display text-5xl leading-none text-pink">
-                  {player.overall}
-                </p>
+                  ))}
+                </dl>
+                <div className="mt-8 flex items-baseline justify-between gap-3 border-t border-white/10 pt-6">
+                  <p className="text-sm uppercase tracking-[0.2em] text-white/45">
+                    Overall
+                  </p>
+                  <p className="font-display text-5xl leading-none text-pink">
+                    {player.overall}
+                  </p>
+                </div>
+                <CareerEfficiency slug={player.slug} />
               </div>
-              <CareerEfficiency slug={player.slug} />
-            </div>
+            ) : null}
           </div>
         </div>
       </div>

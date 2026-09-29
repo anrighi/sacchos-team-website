@@ -6,6 +6,8 @@ export type TeamName = (typeof TEAMS)[number];
 
 export type Sex = "F" | "M";
 
+export const SHOW_PLAYER_STATS = false;
+
 export const STAT_KEYS = [
   "velocita",
   "salto",

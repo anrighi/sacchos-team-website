@@ -15,4 +15,15 @@ describe("public UI", () => {
     expect(api).not.toContain("listMatchesFn");
     expect(api).not.toContain("listMatchSummaries");
   });
+
+  it("hides player stats in the UI until the Sheet is filled", () => {
+    const player = readFileSync("src/lib/player.ts", "utf8");
+    const card = readFileSync("src/components/PlayerCard.tsx", "utf8");
+    const picker = readFileSync("src/components/challenge/RosterPicker.tsx", "utf8");
+    const page = readFileSync("src/routes/giocatori.$slug.tsx", "utf8");
+    expect(player).toContain("export const SHOW_PLAYER_STATS = false");
+    expect(card).toContain("SHOW_PLAYER_STATS");
+    expect(picker).toContain("SHOW_PLAYER_STATS");
+    expect(page).toContain("SHOW_PLAYER_STATS");
+  });
 });
