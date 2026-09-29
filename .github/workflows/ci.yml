@@ -45,22 +45,17 @@ jobs:
       - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
-      - name: Need Cloudflare token
+      - name: Resolve Cloudflare account
         id: cf
-        run: |
-          if [[ -z "${CLOUDFLARE_API_TOKEN}" ]]; then
-            echo "has_token=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Aggiungi CLOUDFLARE_API_TOKEN e CLOUDFLARE_ACCOUNT_ID (docs/CLOUDFLARE.md)."
-            exit 0
-          fi
-          echo "has_token=true" >> "$GITHUB_OUTPUT"
+        run: bash scripts/ci-resolve-cloudflare-account.sh
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - uses: cloudflare/wrangler-action@v3
         if: steps.cf.outputs.has_token == 'true'
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ steps.cf.outputs.account_id }}
           command: deploy
           packageManager: pnpm
         env:
@@ -88,23 +83,18 @@ jobs:
       - run: pnpm build
         env:
           ROSTER_SHEET_CSV_URL: ${{ secrets.ROSTER_SHEET_CSV_URL }}
-      - name: Skip without Cloudflare token
+      - name: Resolve Cloudflare account
         id: cf
-        run: |
-          if [[ -z "${CLOUDFLARE_API_TOKEN}" ]]; then
-            echo "has_token=false" >> "$GITHUB_OUTPUT"
-            echo "Niente CLOUDFLARE_API_TOKEN: skip preview deploy."
-            exit 0
-          fi
-          echo "has_token=true" >> "$GITHUB_OUTPUT"
+        run: bash scripts/ci-resolve-cloudflare-account.sh
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - uses: cloudflare/wrangler-action@v3
         if: steps.cf.outputs.has_token == 'true'
         id: deploy
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ steps.cf.outputs.account_id }}
           command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }}
           packageManager: pnpm
         env:

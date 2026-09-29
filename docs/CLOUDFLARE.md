@@ -24,7 +24,7 @@ Repo → Settings → Secrets and variables → Actions:
 | `CLOUDFLARE_ACCOUNT_ID` | Opzionale se il token vede un solo account. Altrimenti: [Workers Overview](https://dash.cloudflare.com/?to=/:account/workers) → Account ID nella barra laterale (o nell’URL `dash.cloudflare.com/<id>/…`) |
 | `ROSTER_SHEET_CSV_URL` | già usato per l’ingest (opzionale se c’è `src/data/roster.sheet.url`) |
 
-Senza `CLOUDFLARE_API_TOKEN`, CI testa e builda ma **non pubblica**. `CLOUDFLARE_ACCOUNT_ID` serve solo se wrangler non riesce a scegliere l’account dal token.
+Senza `CLOUDFLARE_API_TOKEN`, CI testa e builda ma **non pubblica**. Se il token vede più account Cloudflare, CI risolve l’account dalla zona `agescipesaro1.it`; altrimenti imposta `CLOUDFLARE_ACCOUNT_ID`.
 
 Token precompilato (Workers Scripts + KV + Account Settings read + Routes + DNS):
 
