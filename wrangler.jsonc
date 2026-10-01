@@ -9,6 +9,12 @@
   "observability": {
     "enabled": true
   },
+  "kv_namespaces": [
+    {
+      "binding": "MATCHES",
+      "id": "00000000000000000000000000000000"
+    }
+  ],
   "routes": [
     {
       "pattern": "sacchos.agescipesaro1.it",

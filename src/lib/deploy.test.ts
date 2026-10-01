@@ -10,11 +10,13 @@ describe("cloudflare deploy", () => {
   it("binds the Worker custom domain", () => {
     const wrangler = JSON.parse(readFileSync("wrangler.jsonc", "utf8")) as {
       name: string;
-      kv_namespaces?: Array<{ binding: string; id: string }>;
+      kv_namespaces: Array<{ binding: string; id: string }>;
       routes: Array<{ pattern: string; zone_name: string; custom_domain: boolean }>;
     };
     expect(wrangler.name).toBe("sacchos");
-    expect(wrangler.kv_namespaces).toBeUndefined();
+    expect(wrangler.kv_namespaces).toEqual([
+      { binding: "MATCHES", id: "00000000000000000000000000000000" },
+    ]);
     expect(wrangler.routes).toEqual([
       {
         pattern: "sacchos.agescipesaro1.it",
