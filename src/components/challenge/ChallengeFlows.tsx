@@ -138,9 +138,9 @@ export function GuestFlow({
                 search: { host: hostParam, guest: guestParam, seed },
               })
             }
-            className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-pink text-sm font-medium text-navy-deep hover:bg-pink/90"
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-pink text-[15px] font-semibold text-navy-deep transition-all hover:bg-pink/90 active:scale-[0.97]"
           >
-            Fai partire la partita
+            Fai partire la partita →
           </button>
         ) : null}
       </section>
