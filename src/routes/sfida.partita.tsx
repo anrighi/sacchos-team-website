@@ -75,18 +75,26 @@ export const Route = createFileRoute("/sfida/partita")({
     };
   },
   head: ({ loaderData }) => {
+    const ogImage = `${club.productionUrl}/brand/og-match.svg`;
     if (!loaderData) {
-      return { meta: [{ title: `Tabellino — ${club.name}` }] };
+      return {
+        meta: [
+          { title: `Tabellino — ${club.name}` },
+          { property: "og:image", content: ogImage },
+        ],
+      };
     }
     const { hostName, guestName, score } = loaderData;
-    const title = `${hostName} ${score.host}–${score.guest} ${guestName} — tabellino`;
+    const ogTitle = `${hostName} vs ${guestName} — tabellino`;
     const description = `Mete ${score.host}–${score.guest} · scalpi e MVP. Sfida ${club.name} Scoutball 7v7.`;
     return {
       meta: [
-        { title },
+        { title: ogTitle },
         { name: "description", content: description },
-        { property: "og:title", content: title },
+        { property: "og:title", content: ogTitle },
         { property: "og:description", content: description },
+        { property: "og:image", content: ogImage },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },

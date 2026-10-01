@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MatchKickoff } from "#/components/challenge/ChallengeFlows";
-import { encodeLineup } from "#/lib/challenge";
+import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
+import { club } from "#/lib/club";
 
 type MatchSearch = { seed?: string };
 
@@ -17,6 +18,20 @@ export const Route = createFileRoute("/s/$host/$guest")({
       guestId: params.guest,
       host: host.lineup,
       guest: guest.lineup,
+    };
+  },
+  head: ({ loaderData }) => {
+    const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
+    const guestName = loaderData?.guest ? lineupLabel(loaderData.guest) : null;
+    if (!hostName || !guestName) return { meta: [{ title: `Partita — ${club.name}` }] };
+    const title = `${hostName} vs ${guestName} — ${club.name}`;
+    return {
+      meta: [
+        { title },
+        { property: "og:title", content: title },
+        { property: "og:image", content: `${club.productionUrl}/brand/og-match.svg` },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
     };
   },
   component: ShortMatchPage,

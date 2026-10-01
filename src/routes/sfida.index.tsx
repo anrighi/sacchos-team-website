@@ -4,8 +4,9 @@ import {
   HostFlow,
   MatchKickoff,
 } from "#/components/challenge/ChallengeFlows";
-import { clashingSlugs, decodeLineup, isLineupReady } from "#/lib/challenge";
+import { clashingSlugs, decodeLineup, isLineupReady, lineupLabel } from "#/lib/challenge";
 import { players } from "#/data/players.generated";
+import { club } from "#/lib/club";
 
 type ChallengeSearch = {
   host?: string;
@@ -19,6 +20,44 @@ export const Route = createFileRoute("/sfida/")({
     guest: typeof raw.guest === "string" ? raw.guest : undefined,
     seed: typeof raw.seed === "string" ? raw.seed : undefined,
   }),
+  loaderDeps: ({ search }) => ({
+    host: search.host,
+    guest: search.guest,
+  }),
+  loader: ({ deps }) => {
+    const host = decodeLineup(deps.host);
+    const guest = decodeLineup(deps.guest);
+    return {
+      hostName: host ? lineupLabel(host) : null,
+      guestName: guest ? lineupLabel(guest) : null,
+    };
+  },
+  head: ({ loaderData }) => {
+    const { hostName, guestName } = loaderData ?? {};
+    if (hostName && guestName) {
+      const title = `${hostName} vs ${guestName} — ${club.name}`;
+      return {
+        meta: [
+          { title },
+          { property: "og:title", content: title },
+          { property: "og:image", content: `${club.productionUrl}/brand/og-match.svg` },
+          { name: "twitter:card", content: "summary_large_image" },
+        ],
+      };
+    }
+    if (hostName) {
+      const title = `${hostName} ti sfida — ${club.name}`;
+      return {
+        meta: [
+          { title },
+          { property: "og:title", content: title },
+          { property: "og:image", content: `${club.productionUrl}/brand/og-sfida.svg` },
+          { name: "twitter:card", content: "summary_large_image" },
+        ],
+      };
+    }
+    return { meta: [{ title: `Sfida — ${club.name}` }] };
+  },
   component: SfidaPage,
 });
 

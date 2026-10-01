@@ -1,12 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GuestFlow } from "#/components/challenge/ChallengeFlows";
-import { encodeLineup } from "#/lib/challenge";
+import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
+import { club } from "#/lib/club";
 
 export const Route = createFileRoute("/s/$id")({
   loader: async ({ params }) => {
     const resolved = await resolveLineupFn({ data: { id: params.id } });
     return { id: params.id, host: resolved.lineup };
+  },
+  head: ({ loaderData }) => {
+    const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
+    if (!hostName) return { meta: [{ title: `Sfida — ${club.name}` }] };
+    const title = `${hostName} ti sfida — ${club.name}`;
+    return {
+      meta: [
+        { title },
+        { property: "og:title", content: title },
+        { property: "og:image", content: `${club.productionUrl}/brand/og-sfida.svg` },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
   },
   component: ShortHostPage,
 });
