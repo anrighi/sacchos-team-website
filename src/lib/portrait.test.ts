@@ -71,7 +71,7 @@ describe("portraitSvg", () => {
 
   it("paints ash blonde and ginger into the Toon Head SVG", () => {
     const ash = portraitSvg(
-      sample({ portrait: { hair: "curly", hairColor: "c6bf9a" } }),
+      sample({ portrait: { hair: "bun", hairColor: "c6bf9a" } }),
     );
     const ginger = portraitSvg(
       sample({
@@ -127,27 +127,6 @@ describe("portraitSvg", () => {
     expect(sheetHairColorLabel("c6bf9a")).toBe("biondo cenere");
     expect(sheetHairColorLabel("c45c26")).toBe("roscio");
     expect(sheetSkinColorLabel("chiara")).toBe("chiara");
-  });
-
-  it("renders riccio as side hair plus wavy rear hair", () => {
-    const options = portraitOptions(
-      sample({
-        portrait: { hair: "curly", rearHair: "none", hairColor: "c45c26" },
-      }),
-    );
-    expect(options.hairVariant).toEqual(["sideComed"]);
-    expect(options.hairProbability).toBe(100);
-    expect(options.rearHairVariant).toEqual(["longWavy"]);
-    expect(options.rearHairProbability).toBe(100);
-    expect(options.hairColor).toEqual(["c45c26"]);
-  });
-
-  it("keeps nuca and spalle length when riccio is set", () => {
-    const options = portraitOptions(
-      sample({ portrait: { hair: "curly", rearHair: "neckHigh" } }),
-    );
-    expect(options.hairVariant).toEqual(["sideComed"]);
-    expect(options.rearHairVariant).toEqual(["neckHigh"]);
   });
 
   it("keeps the claws below the AGESCI crest", () => {

@@ -3,7 +3,6 @@ import definition from "@dicebear/styles/toon-head.json" with { type: "json" };
 import { club } from "#/lib/club";
 import type { Player, PortraitTraits, TeamName } from "#/lib/player";
 import { publicUrl } from "#/lib/public-url";
-import { CURLY_HAIR } from "#/lib/sheet-schema";
 
 const toonHead = new Style(definition);
 const portraitCache = new Map<string, string>();
@@ -171,30 +170,14 @@ export function portraitOptions(
           backgroundColor: ["00000000"],
           backgroundColorFill: ["solid"],
         }),
-    ...hairLook(traits),
+    ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
+    ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
     ...variantOption("beard", traits.beard, BEARD_VARIANTS, 0),
     ...variantOption("eyes", traits.eyes, EYES_VARIANTS),
     ...variantOption("eyebrows", traits.eyebrows, EYEBROWS_VARIANTS),
     ...variantOption("mouth", traits.mouth, MOUTH_VARIANTS),
     ...colorOption("hair", traits.hairColor),
     ...colorOption("skin", traits.skinColor),
-  };
-}
-
-function hairLook(traits: PortraitTraits): Record<string, unknown> {
-  if (traits.hair !== CURLY_HAIR) {
-    return {
-      ...variantOption("hair", traits.hair, HAIR_VARIANTS, 0),
-      ...variantOption("rearHair", traits.rearHair, REAR_HAIR_VARIANTS, 0),
-    };
-  }
-  const rear =
-    traits.rearHair === "neckHigh" || traits.rearHair === "shoulderHigh"
-      ? traits.rearHair
-      : "longWavy";
-  return {
-    ...variantOption("hair", "sideComed", HAIR_VARIANTS, 0),
-    ...variantOption("rearHair", rear, REAR_HAIR_VARIANTS, 0),
   };
 }
 

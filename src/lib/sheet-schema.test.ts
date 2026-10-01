@@ -44,7 +44,6 @@ describe("sheet enums", () => {
     expect(sheetTraitLabel(SHEET_HAIR, "sideComed")).toBe("pettinati di lato");
     expect(sheetTraitLabel(SHEET_HAIR, "spiky")).toBe("a punte");
     expect(sheetTraitLabel(SHEET_HAIR, "undercut")).toBe("lati rasati");
-    expect(sheetTraitLabel(SHEET_HAIR, "curly")).toBe("riccio");
     expect(sheetTraitLabel(SHEET_REAR_HAIR, "neckHigh")).toBe("alla nuca");
     expect(sheetTraitLabel(SHEET_REAR_HAIR, "shoulderHigh")).toBe("alle spalle");
     expect(sheetTraitLabel(SHEET_BEARD, "none")).toBe("nessuno");

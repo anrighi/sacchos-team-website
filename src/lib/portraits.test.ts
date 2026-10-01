@@ -42,7 +42,6 @@ describe("parsePortraitTraits", () => {
     });
     expect(parsePortraitTraits({ capelli: "irti" })).toEqual({ hair: "spiky" });
     expect(parsePortraitTraits({ capelli: "piegata" })).toEqual({ hair: "sideComed" });
-    expect(parsePortraitTraits({ capelli: "riccio" })).toEqual({ hair: "curly" });
   });
 });
 
@@ -101,10 +100,10 @@ describe("serializePortraitsCsv", () => {
     expect(serializePortraitsCsv([sample()])).toContain("ada-10,Ada,10,Saccho's Team,,,,,");
   });
 
-  it("writes riccio, biondo cenere and roscio back to the portraits CSV", () => {
+  it("writes biondo cenere and roscio back to the portraits CSV", () => {
     const csv = serializePortraitsCsv([
       sample({
-        portrait: { hair: "curly", rearHair: "none", hairColor: "c6bf9a" },
+        portrait: { hair: "bun", rearHair: "none", hairColor: "c6bf9a" },
       }),
       sample({
         slug: "nico-11",
@@ -114,7 +113,7 @@ describe("serializePortraitsCsv", () => {
         portrait: { hair: "spiky", hairColor: "c45c26" },
       }),
     ]);
-    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,curly,none,biondo cenere,,");
+    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,bun,none,biondo cenere,,");
     expect(csv).toContain("nico-11,Nico,11,Saccios Tim,spiky,,roscio,,");
   });
 });

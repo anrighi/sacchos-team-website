@@ -21,20 +21,17 @@ export const SHEET_HEADERS = [
   "Barba",
 ] as const;
 
-export const CURLY_HAIR = "curly";
-
 export const SHEET_HAIR = [
   { value: "crocchia", trait: "bun", aliases: ["chignon"] },
   { value: "pettinati di lato", trait: "sideComed", aliases: ["piegata"] },
   { value: "a punte", trait: "spiky", aliases: ["irti"] },
   { value: "lati rasati", trait: "undercut" },
-  { value: "riccio", trait: CURLY_HAIR, aliases: ["ricci", "curl"] },
   { value: "nessuno", trait: "none" },
 ] as const;
 
 export const SHEET_REAR_HAIR = [
   { value: "lunghi lisci", trait: "longStraight" },
-  { value: "lunghi mossi", trait: "longWavy", aliases: ["riccio", "ricci"] },
+  { value: "lunghi mossi", trait: "longWavy" },
   { value: "alla nuca", trait: "neckHigh", aliases: ["nuca"] },
   { value: "alle spalle", trait: "shoulderHigh", aliases: ["spalle"] },
   { value: "nessuno", trait: "none" },
