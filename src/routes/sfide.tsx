@@ -1,11 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import type { MatchSummary } from "#/lib/challenge/archive";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Swords } from "lucide-react";
+import type { MatchSide, MatchSummary } from "#/lib/challenge/archive";
+import { DEFAULT_FORMATION, SQUAD_SIZE } from "#/lib/challenge/formation";
+import { encodeLineup } from "#/lib/challenge/link";
 import { listMatchesFn } from "#/lib/challenge/cloud";
 
 export const Route = createFileRoute("/sfide")({
   loader: () => listMatchesFn(),
   component: SfidePage,
 });
+
+function lineupParam(side: MatchSide): string {
+  const slots = Array.from({ length: SQUAD_SIZE }, (_, i) => side.slugs[i] ?? null);
+  return encodeLineup({ name: side.name, formation: DEFAULT_FORMATION, slots });
+}
 
 function SfidePage() {
   const { matches } = Route.useLoaderData();
@@ -37,21 +45,36 @@ function MatchRow({ match }: { match: MatchSummary }) {
   });
 
   return (
-    <li>
-      <a
-        href={match.recapUrl}
-        className="group flex items-center gap-3 py-3 hover:bg-white/4 -mx-3 px-3 rounded-xl transition-colors"
-      >
-        <span className="w-24 shrink-0 text-[13px] tabular-nums text-white/40">{date}</span>
-        <span className="flex min-w-0 flex-1 items-center gap-2">
-          <span className="truncate text-[15px] font-medium text-white">{match.host.name}</span>
-          <span className="shrink-0 font-display text-xl text-pink">
-            {match.mete.host}–{match.mete.guest}
-          </span>
-          <span className="truncate text-[15px] font-medium text-white">{match.guest.name}</span>
-        </span>
-        <span className="text-[13px] text-white/30 transition-colors group-hover:text-white/60">→</span>
-      </a>
+    <li className="flex items-center gap-3 py-3">
+      <span className="w-24 shrink-0 text-[13px] tabular-nums text-white/40">{date}</span>
+
+      <div className="flex min-w-0 flex-1 items-center gap-2">
+        <ChallengeLink side={match.host} />
+        <a
+          href={match.recapUrl}
+          title="Rivedi la partita"
+          className="shrink-0 font-display text-xl text-pink hover:text-pink/80"
+        >
+          {match.mete.host}–{match.mete.guest}
+        </a>
+        <ChallengeLink side={match.guest} align="left" />
+      </div>
     </li>
+  );
+}
+
+function ChallengeLink({ side, align = "right" }: { side: MatchSide; align?: "left" | "right" }) {
+  return (
+    <Link
+      to="/sfida"
+      search={{ host: lineupParam(side) }}
+      title={`Sfida ${side.name}`}
+      className={`group flex min-w-0 items-center gap-1.5 rounded-lg px-2 py-1 hover:bg-white/8 ${align === "right" ? "flex-row-reverse" : ""}`}
+    >
+      <span className="truncate text-[15px] font-medium text-white group-hover:text-pink">
+        {side.name}
+      </span>
+      <Swords className="size-3.5 shrink-0 text-white/0 transition-colors group-hover:text-pink" aria-hidden />
+    </Link>
   );
 }
