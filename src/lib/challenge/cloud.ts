@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { appendMatch, listMatchSummaries, type MatchRecord, type MatchSummary } from "#/lib/challenge/archive";
+import { appendMatch, listMatchSummaries, MATCH_KEY, MATCH_INDEX_KEY, type MatchRecord, type MatchSummary } from "#/lib/challenge/archive";
 import { decodeLineup } from "#/lib/challenge/link";
 import { mintLineup, resolveLineup } from "#/lib/challenge/shortlink";
 import type { ChallengeStore } from "#/lib/challenge/store";
@@ -7,22 +7,29 @@ import type { ChallengeStore } from "#/lib/challenge/store";
 type KvNamespace = {
   get(key: string): Promise<string | null>;
   put(key: string, value: string): Promise<void>;
+  delete(key: string): Promise<void>;
+  list(opts?: { prefix?: string; cursor?: string; limit?: number }): Promise<{
+    keys: Array<{ name: string }>;
+    list_complete: boolean;
+    cursor?: string;
+  }>;
 };
 
-async function kvStore(): Promise<ChallengeStore | null> {
+async function kvNamespace(): Promise<KvNamespace | null> {
   try {
     const { env } = await import("cloudflare:workers");
     const ns = (env as { MATCHES?: KvNamespace }).MATCHES;
-    if (!ns?.get || !ns.put) {
-      return null;
-    }
-    return {
-      get: (key) => ns.get(key),
-      put: (key, value) => ns.put(key, value),
-    };
+    if (!ns?.get || !ns.put) return null;
+    return ns;
   } catch {
     return null;
   }
+}
+
+async function kvStore(): Promise<ChallengeStore | null> {
+  const ns = await kvNamespace();
+  if (!ns) return null;
+  return { get: (k) => ns.get(k), put: (k, v) => ns.put(k, v) };
 }
 
 export const mintLineupFn = createServerFn({ method: "POST" })
@@ -70,4 +77,23 @@ export const saveMatchFn = createServerFn({ method: "POST" })
     }
     const result = await appendMatch(store, data);
     return { ok: true as const, duplicate: result.duplicate };
+  });
+
+export const resetArchiveFn = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const ns = await kvNamespace();
+    if (!ns) return { ok: false as const, reason: "kv" as const };
+    let deleted = 0;
+    let cursor: string | undefined;
+    do {
+      const page = await ns.list({ prefix: MATCH_KEY, ...(cursor ? { cursor } : {}) });
+      for (const { name } of page.keys) {
+        await ns.delete(name);
+        deleted++;
+      }
+      cursor = page.list_complete ? undefined : page.cursor;
+    } while (cursor);
+    await ns.delete(MATCH_INDEX_KEY);
+    deleted++;
+    return { ok: true as const, deleted };
   });
