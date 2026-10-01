@@ -4,7 +4,7 @@ import { PlayerCard } from "#/components/PlayerCard";
 import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
 import { ROLE_LABELS, ROLES, TEAMS, type Role, type TeamName } from "#/lib/player";
-import { displayName, filterPlayers, type RosterFilters } from "#/lib/roster";
+import { displayName, filterPlayers, sortRoster, type RosterFilters } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
@@ -27,7 +27,7 @@ function validateRosaSearch(raw: Record<string, unknown>): RosterFilters {
 
 function RosaPage() {
   const search = Route.useSearch();
-  const filtered = filterPlayers(sortedPlayers(players), search);
+  const filtered = filterPlayers(sortRoster(players), search);
 
   return (
     <main className="bg-black text-white">
@@ -283,14 +283,3 @@ function isRole(value: unknown): value is Role {
   );
 }
 
-function sortedPlayers(list: typeof players) {
-  return [...list].sort((a, b) => {
-    if (a.team !== b.team) {
-      return a.team === "Saccho's Team" ? -1 : 1;
-    }
-    if (a.number !== b.number) {
-      return a.number - b.number;
-    }
-    return displayName(a).localeCompare(displayName(b), "it");
-  });
-}

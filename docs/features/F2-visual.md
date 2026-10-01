@@ -4,12 +4,12 @@
 |-------|-------|
 | Status | done |
 | Phase | 1 |
-| Files | `src/routes/index.tsx`, `src/components/HomeLanding.tsx`, `src/components/Reveal.tsx`, `src/components/SiteNav.tsx`, `src/styles.css`, `src/lib/portrait.ts`, `public/brand/*.png` |
-| Tests | visivo + `prefers-reduced-motion` (fade only) |
+| Files | `src/routes/index.tsx`, `src/components/HomeLanding.tsx`, `src/components/SquadCarousel.tsx`, `src/components/Reveal.tsx`, `src/components/SiteNav.tsx`, `src/styles.css`, `src/lib/portrait.ts`, `src/lib/carousel.ts`, `public/brand/*.png` |
+| Tests | visivo + `prefers-reduced-motion` (fade only, no autoplay) · `src/lib/carousel.test.ts` |
 
 ## Goal
 
-Home cinematografica: logo Saccho's, kit bianca/navy, ventaglio carte, motion allineata al drago. Rosa e sfida con hero dedicati.
+Home cinematografica: logo Saccho's, kit bianca/navy, carousel di tutta la rosa, motion allineata al drago. Rosa e sfida con hero dedicati.
 
 ## Prerequisites
 
@@ -34,6 +34,6 @@ Home cinematografica: logo Saccho's, kit bianca/navy, ventaglio carte, motion al
 
 Niente restyling palette. Rosso marker solo sul chip Saccios Tim.
 JPG di reference restano in `public/brand/`; la UI usa PNG ritagliati (sfondo rimosso). Ridisegnare i loghi in SVG resta una chore di grafica in fase 0+.
-Home: tre blocchi (hero, carte, chiusura), poco testo, kit e ritratti fluttuanti, `prefers-reduced-motion` = niente drift.
+Home: tre blocchi (hero, carousel rosa, chiusura), poco testo, kit e ritratti fluttuanti, `prefers-reduced-motion` = niente drift né autoplay. Il capitolo *La squadra.* scorre tutta la rosa (Saccho's prima, poi Saccios Tim), non tre ritratti fissi.
 Reference home: landing prodotto Apple (iPhone 17 Pro) — capitoli a tutto schermo, headline grandi, CTA a pillola, niente copia Apple.
 Linee guida per le altre pagine: `docs/VISUAL.md` e `.cursor/rules/visual.mdc`.

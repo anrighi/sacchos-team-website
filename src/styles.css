@@ -310,6 +310,52 @@ body {
   animation: float-drift 6.2s ease-in-out infinite;
 }
 
+.home-carousel-frame {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.home-carousel {
+  --home-portrait: min(12.5rem, 70cqi);
+  width: 100%;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+}
+
+.home-carousel:active {
+  cursor: grabbing;
+}
+
+.home-carousel::before,
+.home-carousel::after {
+  content: "";
+  flex: 0 0 max(0px, calc(50cqi - var(--home-portrait) / 2));
+  scroll-snap-align: none;
+  pointer-events: none;
+}
+
+.home-carousel > li {
+  flex: 0 0 var(--home-portrait);
+  width: var(--home-portrait);
+}
+
+@media (min-width: 640px) {
+  .home-carousel {
+    --home-portrait: 13.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-carousel {
+    --home-portrait: 15rem;
+  }
+}
+
+.home-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes float-drift {
   0%,
   100% {
