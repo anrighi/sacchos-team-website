@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| Status | not_started |
+| Status | done |
 | Phase | 2 |
 | Files | `src/routes/sfida.partita.tsx`, OG meta |
 | Tests | `host`+`guest`+`seed` → stesso tabellino e stesso `og:title`; URL senza seed non è un risultato chiuso |

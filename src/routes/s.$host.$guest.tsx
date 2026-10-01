@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MatchKickoff } from "#/components/challenge/ChallengeFlows";
-import { encodeLineup } from "#/lib/challenge";
+import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
+import { club } from "#/lib/club";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
 type MatchSearch = { seed?: string; rematch?: boolean };
 
@@ -11,13 +13,34 @@ export const Route = createFileRoute("/s/$host/$guest")({
     rematch: raw.rematch === true || raw.rematch === "true",
   }),
   loader: async ({ params }) => {
-    const host = await resolveLineupFn({ data: { id: params.host } });
-    const guest = await resolveLineupFn({ data: { id: params.guest } });
+    const [host, guest, origin] = await Promise.all([
+      resolveLineupFn({ data: { id: params.host } }),
+      resolveLineupFn({ data: { id: params.guest } }),
+      getRequestOriginFn(),
+    ]);
     return {
       hostId: params.host,
       guestId: params.guest,
       host: host.lineup,
       guest: guest.lineup,
+      origin,
+    };
+  },
+  head: ({ loaderData }) => {
+    const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
+    const guestName = loaderData?.guest ? lineupLabel(loaderData.guest) : null;
+    const origin = loaderData?.origin ?? club.productionUrl;
+    const imgMeta = ogImageMeta(origin, "match");
+    if (!hostName || !guestName) {
+      return { meta: [{ title: `Partita — ${club.name}` }, ...imgMeta] };
+    }
+    const title = `${hostName} vs ${guestName} — ${club.name}`;
+    return {
+      meta: [
+        { title },
+        { property: "og:title", content: title },
+        ...imgMeta,
+      ],
     };
   },
   component: ShortMatchPage,

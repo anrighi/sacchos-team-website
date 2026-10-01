@@ -10,7 +10,7 @@
 |-------|------|--------|------------|
 | 0 | Bootstrap | done | 100% |
 | 1 | Rosa e UI | done | 100% |
-| 2 | Sfida | in_progress | 75% |
+| 2 | Sfida | done | 100% |
 | 0+ | Dopo | in_progress | — |
 
 ## Active phase — what to do now
@@ -19,7 +19,7 @@
 - **Remaining tasks:**
   - [x] [F3](features/F3-lineup.md) Schieramento 3-2-1 e link sfida
   - [x] [F4](features/F4-sim.md) Simulazione 2×15′ in 90s
-  - [ ] [F5](features/F5-recap.md) Tabellino social e recap
+  - [x] [F5](features/F5-recap.md) Tabellino social e recap
   - [x] [F6](features/F6-archive.md) Archivio partite su Cloudflare KV
 - **Open blockers:** ruoli ancora vuoti sullo Sheet (stats 75 per tutti): la sfida gira ma i giocatori si equivalgono; stats e schede giocatore restano nascoste (`SHOW_PLAYER_STATS`)
 
@@ -32,7 +32,7 @@
 | F2 | Hero, font, loghi e motion | 1 | done | [F2-visual.md](features/F2-visual.md) |
 | F3 | Schieramento 3-2-1 e link sfida | 2 | done | [F3-lineup.md](features/F3-lineup.md) |
 | F4 | Simulazione 2×15′ in 90s | 2 | done | [F4-sim.md](features/F4-sim.md) |
-| F5 | Tabellino social e recap | 2 | not_started | [F5-recap.md](features/F5-recap.md) |
+| F5 | Tabellino social e recap | 2 | done | [F5-recap.md](features/F5-recap.md) |
 | F6 | Archivio partite su Cloudflare KV | 2 | done | [F6-archive.md](features/F6-archive.md) |
 | F7 | Album fotografico | 0+ | deferred | [F7-album.md](features/F7-album.md) |
 | F8 | Link corti per la sfida | 0+ | done | [F8-shortlink.md](features/F8-shortlink.md) |
@@ -60,6 +60,7 @@
 
 | Date | Agent | Phase | Done | Next step | Blocker |
 |------|-------|-------|------|-----------|---------|
+| 2026-10-01 | Claude | 2 | F5: `/sfida/partita?host=&guest=&seed=` tabellino deterministico — score, scalpi, MVP, highlights, box score, share nativo, rivincita; recapUrl aggiornato | Compilare ruoli/stats Sheet; F7 album (deferred) | — |
 | 2026-09-29 | Cursor | 1 polish | Home: carousel di tutta la rosa al posto dei 3 ritratti fissi | F5 tabellino; compilare ruoli/stats Sheet | Ruoli/stats Sheet ancora vuoti |
 | 2026-09-29 | Cursor | 1 polish | Look Sheet: `biondo cenere`, `roscio`, `riccio` (lato + mossi Toon Head) | Aggiungere le etichette nel tab `valori`; F5 tabellino | Ruoli/stats Sheet ancora vuoti |
 | 2026-09-29 | Cursor | 2 | Merge F9+F8+F6 su `main` (Workers, link corti, KV privato, stats/schede nascoste) | F5 tabellino; compilare ruoli/stats Sheet | Ruoli/stats Sheet ancora vuoti |

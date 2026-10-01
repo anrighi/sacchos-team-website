@@ -67,7 +67,7 @@
       "id": "F5",
       "title": "Tabellino social e recap",
       "phase": "2",
-      "status": "todo",
+      "status": "done",
       "spec": "docs/features/F5-recap.md"
     },
     {

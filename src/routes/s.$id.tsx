@@ -1,12 +1,33 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GuestFlow } from "#/components/challenge/ChallengeFlows";
-import { encodeLineup } from "#/lib/challenge";
+import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
+import { club } from "#/lib/club";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
 export const Route = createFileRoute("/s/$id")({
   loader: async ({ params }) => {
-    const resolved = await resolveLineupFn({ data: { id: params.id } });
-    return { id: params.id, host: resolved.lineup };
+    const [resolved, origin] = await Promise.all([
+      resolveLineupFn({ data: { id: params.id } }),
+      getRequestOriginFn(),
+    ]);
+    return { id: params.id, host: resolved.lineup, origin };
+  },
+  head: ({ loaderData }) => {
+    const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
+    const origin = loaderData?.origin ?? club.productionUrl;
+    const imgMeta = ogImageMeta(origin, "sfida");
+    if (!hostName) {
+      return { meta: [{ title: `Sfida — ${club.name}` }, ...imgMeta] };
+    }
+    const title = `${hostName} ti sfida — ${club.name}`;
+    return {
+      meta: [
+        { title },
+        { property: "og:title", content: title },
+        ...imgMeta,
+      ],
+    };
   },
   component: ShortHostPage,
 });
