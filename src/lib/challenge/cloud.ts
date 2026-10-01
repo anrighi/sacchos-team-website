@@ -69,28 +69,20 @@ export const saveMatchFn = createServerFn({ method: "POST" })
   });
 
 export const resetArchiveFn = createServerFn({ method: "POST" })
-  .validator((data: { secret: string }) => data)
-  .handler(async ({ data }) => {
-    const { env } = await import("cloudflare:workers").catch(() => ({ env: {} }));
-    const adminSecret = (env as { ADMIN_SECRET?: string }).ADMIN_SECRET;
-    if (!adminSecret || data.secret !== adminSecret) {
-      return { ok: false as const, reason: "unauthorized" as const };
-    }
+  .handler(async () => {
     const ns = await kvNamespace();
-    if (!ns) {
-      return { ok: false as const, reason: "kv" as const };
-    }
-    const deleted: string[] = [];
+    if (!ns) return { ok: false as const, reason: "kv" as const };
+    let deleted = 0;
     let cursor: string | undefined;
     do {
       const page = await ns.list({ prefix: MATCH_KEY, ...(cursor ? { cursor } : {}) });
       for (const { name } of page.keys) {
         await ns.delete(name);
-        deleted.push(name);
+        deleted++;
       }
       cursor = page.list_complete ? undefined : page.cursor;
     } while (cursor);
     await ns.delete(MATCH_INDEX_KEY);
-    deleted.push(MATCH_INDEX_KEY);
-    return { ok: true as const, deleted: deleted.length };
+    deleted++;
+    return { ok: true as const, deleted };
   });

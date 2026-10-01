@@ -12,6 +12,5 @@ declare module "cloudflare:workers" {
         cursor?: string;
       }>;
     };
-    ADMIN_SECRET?: string;
   };
 }
