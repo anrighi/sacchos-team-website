@@ -1,16 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { PlayerPortrait } from "#/components/PlayerPortrait";
+import { SquadCarousel } from "#/components/SquadCarousel";
 import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
 import { club } from "#/lib/club";
-import { SHOW_PLAYER_STATS, type Player } from "#/lib/player";
-import { displayName } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
-const featured = ["giorgia-pappagiorgia", "stefano-ragno", "guglielmo-google"]
-  .map((slug) => players.find((player) => player.slug === slug))
-  .filter((player): player is Player => player != null);
+const squad = [...players].sort(() => Math.random() - 0.5);
 
 const kitFan = [
   {
@@ -29,17 +25,11 @@ const kitFan = [
   },
 ] as const;
 
-const portraitFan = [
-  "-rotate-8 translate-x-3 sm:-rotate-12 sm:translate-x-0",
-  "-translate-y-5 sm:-translate-y-8",
-  "rotate-8 -translate-x-3 sm:rotate-12 sm:translate-x-0",
-] as const;
-
 export function HomeLanding() {
   return (
     <main className="bg-black text-white">
       <Hero />
-      {featured.length > 0 ? <CardsChapter /> : null}
+      {squad.length > 0 ? <CardsChapter /> : null}
       <CloseChapter />
     </main>
   );
@@ -99,34 +89,7 @@ function CardsChapter() {
           La squadra.
         </h2>
       </Reveal>
-      <ul className="mx-auto mt-12 flex max-w-xl items-end justify-center sm:mt-16">
-        {featured.map((player, index) => (
-          <li
-            key={player.slug}
-            className={cn(
-              "w-[42%] max-w-[190px] sm:w-[38%] sm:max-w-[220px]",
-              index > 0 && "-ml-[12%]",
-              portraitFan[index],
-            )}
-            style={{ zIndex: index === 1 ? 20 : 10 }}
-          >
-            {SHOW_PLAYER_STATS ? (
-              <Link
-                to="/giocatori/$slug"
-                params={{ slug: player.slug }}
-                className="block text-center outline-none focus-visible:ring-2 focus-visible:ring-pink"
-                aria-label={displayName(player)}
-              >
-                <FeaturedPortrait player={player} delay={`${index * -1.6}s`} />
-              </Link>
-            ) : (
-              <div className="text-center">
-                <FeaturedPortrait player={player} delay={`${index * -1.6}s`} />
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <SquadCarousel players={squad} />
       <div className="mt-10 text-center">
         <Link
           to="/rosa"
@@ -136,28 +99,6 @@ function CardsChapter() {
         </Link>
       </div>
     </section>
-  );
-}
-
-function FeaturedPortrait({
-  player,
-  delay,
-}: {
-  player: Player;
-  delay: string;
-}) {
-  return (
-    <>
-      <div
-        className="float-drift aspect-3/4 w-full drop-shadow-[0_18px_28px_rgba(248,103,165,0.18)]"
-        style={{ animationDelay: delay }}
-      >
-        <PlayerPortrait player={player} backdrop={false} />
-      </div>
-      <span className="mt-3 block font-display text-lg uppercase tracking-tight text-white sm:text-xl">
-        {displayName(player)}
-      </span>
-    </>
   );
 }
 
