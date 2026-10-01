@@ -15,6 +15,8 @@ import { Route as SfidaRouteImport } from './routes/sfida'
 import { Route as SfideRouteImport } from './routes/sfide'
 import { Route as GiocatoriSlugRouteImport } from './routes/giocatori.$slug'
 import { Route as SIdRouteImport } from './routes/s.$id'
+import { Route as SfidaIndexRouteImport } from './routes/sfida.index'
+import { Route as SfidaPartitaRouteImport } from './routes/sfida.partita'
 import { Route as SHostGuestRouteImport } from './routes/s.$host.$guest'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +49,16 @@ const SIdRoute = SIdRouteImport.update({
   path: '/s/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SfidaIndexRoute = SfidaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SfidaRoute,
+} as any)
+const SfidaPartitaRoute = SfidaPartitaRouteImport.update({
+  id: '/partita',
+  path: '/partita',
+  getParentRoute: () => SfidaRoute,
+} as any)
 const SHostGuestRoute = SHostGuestRouteImport.update({
   id: '/s/$host/$guest',
   path: '/s/$host/$guest',
@@ -56,29 +68,34 @@ const SHostGuestRoute = SHostGuestRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/rosa': typeof RosaRoute
-  '/sfida': typeof SfidaRoute
+  '/sfida': typeof SfidaRouteWithChildren
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
   '/s/$id': typeof SIdRoute
+  '/sfida/partita': typeof SfidaPartitaRoute
+  '/sfida/': typeof SfidaIndexRoute
   '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/rosa': typeof RosaRoute
-  '/sfida': typeof SfidaRoute
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
   '/s/$id': typeof SIdRoute
+  '/sfida/partita': typeof SfidaPartitaRoute
+  '/sfida': typeof SfidaIndexRoute
   '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/rosa': typeof RosaRoute
-  '/sfida': typeof SfidaRoute
+  '/sfida': typeof SfidaRouteWithChildren
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
   '/s/$id': typeof SIdRoute
+  '/sfida/partita': typeof SfidaPartitaRoute
+  '/sfida/': typeof SfidaIndexRoute
   '/s/$host/$guest': typeof SHostGuestRoute
 }
 export interface FileRouteTypes {
@@ -90,15 +107,18 @@ export interface FileRouteTypes {
     | '/sfide'
     | '/giocatori/$slug'
     | '/s/$id'
+    | '/sfida/partita'
+    | '/sfida/'
     | '/s/$host/$guest'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/rosa'
-    | '/sfida'
     | '/sfide'
     | '/giocatori/$slug'
     | '/s/$id'
+    | '/sfida/partita'
+    | '/sfida'
     | '/s/$host/$guest'
   id:
     | '__root__'
@@ -108,13 +128,15 @@ export interface FileRouteTypes {
     | '/sfide'
     | '/giocatori/$slug'
     | '/s/$id'
+    | '/sfida/partita'
+    | '/sfida/'
     | '/s/$host/$guest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RosaRoute: typeof RosaRoute
-  SfidaRoute: typeof SfidaRoute
+  SfidaRoute: typeof SfidaRouteWithChildren
   SfideRoute: typeof SfideRoute
   GiocatoriSlugRoute: typeof GiocatoriSlugRoute
   SIdRoute: typeof SIdRoute
@@ -165,6 +187,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sfida/': {
+      id: '/sfida/'
+      path: '/'
+      fullPath: '/sfida/'
+      preLoaderRoute: typeof SfidaIndexRouteImport
+      parentRoute: typeof SfidaRoute
+    }
+    '/sfida/partita': {
+      id: '/sfida/partita'
+      path: '/partita'
+      fullPath: '/sfida/partita'
+      preLoaderRoute: typeof SfidaPartitaRouteImport
+      parentRoute: typeof SfidaRoute
+    }
     '/s/$host/$guest': {
       id: '/s/$host/$guest'
       path: '/s/$host/$guest'
@@ -175,10 +211,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface SfidaRouteChildren {
+  SfidaPartitaRoute: typeof SfidaPartitaRoute
+  SfidaIndexRoute: typeof SfidaIndexRoute
+}
+
+const SfidaRouteChildren: SfidaRouteChildren = {
+  SfidaPartitaRoute: SfidaPartitaRoute,
+  SfidaIndexRoute: SfidaIndexRoute,
+}
+
+const SfidaRouteWithChildren = SfidaRoute._addFileChildren(SfidaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RosaRoute: RosaRoute,
-  SfidaRoute: SfidaRoute,
+  SfidaRoute: SfidaRouteWithChildren,
   SfideRoute: SfideRoute,
   GiocatoriSlugRoute: GiocatoriSlugRoute,
   SIdRoute: SIdRoute,
@@ -187,3 +235,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

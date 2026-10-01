@@ -59,7 +59,7 @@ export function MatchView({
 
   useEffect(() => {
     recordMatchIn(window.localStorage, seed, shotsFrom(match.events));
-    const recapUrl = `${window.location.origin}${publicUrl("/sfida")}?host=${encodeURIComponent(hostParam).replace(/%7E/g, "~")}&guest=${encodeURIComponent(guestParam).replace(/%7E/g, "~")}&seed=${encodeURIComponent(seed)}`;
+    const recapUrl = `${window.location.origin}${publicUrl("/sfida/partita")}?host=${encodeURIComponent(hostParam).replace(/%7E/g, "~")}&guest=${encodeURIComponent(guestParam).replace(/%7E/g, "~")}&seed=${encodeURIComponent(seed)}`;
     void saveMatchFn({
       data: matchRecordFrom({ match, host, guest, recapUrl }),
     }).then((result) => {
