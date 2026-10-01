@@ -45,6 +45,8 @@ export const HAIR_COLOR_PRESETS = {
   auburn: "a55728",
   blonde: "d6b370",
   gold: "b58143",
+  ash: "c6bf9a",
+  ginger: "c45c26",
 } as const;
 
 export const SKIN_COLOR_PRESETS = {
@@ -58,10 +60,16 @@ export const SKIN_COLOR_PRESETS = {
 const HAIR_COLOR_ALIASES: Record<string, keyof typeof HAIR_COLOR_PRESETS> = {
   nero: "black",
   castano: "brown",
-  ramato: "auburn",
+  ramato: "ginger",
   biondo: "blonde",
   miele: "gold",
   lightbrown: "gold",
+  biondocenere: "ash",
+  cenere: "ash",
+  ashblonde: "ash",
+  roscio: "ginger",
+  rosso: "ginger",
+  ginger: "ginger",
 };
 
 const SKIN_COLOR_ALIASES: Record<string, keyof typeof SKIN_COLOR_PRESETS> = {
@@ -77,6 +85,9 @@ const HAIR_COLOR_LABELS: Record<string, string> = {
   [HAIR_COLOR_PRESETS.black]: "nero",
   [HAIR_COLOR_PRESETS.brown]: "castano",
   [HAIR_COLOR_PRESETS.blonde]: "biondo",
+  [HAIR_COLOR_PRESETS.ash]: "biondo cenere",
+  [HAIR_COLOR_PRESETS.ginger]: "roscio",
+  [HAIR_COLOR_PRESETS.auburn]: "roscio",
 };
 
 const SKIN_COLOR_LABELS: Record<string, string> = {

@@ -46,7 +46,13 @@ export const SHEET_BEARD = [
   { value: "nessuno", trait: "none" },
 ] as const;
 
-export const SHEET_HAIR_COLORS = ["nero", "castano", "biondo"] as const;
+export const SHEET_HAIR_COLORS = [
+  "nero",
+  "castano",
+  "biondo",
+  "biondo cenere",
+  "roscio",
+] as const;
 export const SHEET_SKIN_COLORS = ["scura", "media", "chiara"] as const;
 
 export const STAT_SHEET_ALIASES = {

@@ -27,6 +27,12 @@ describe("parsePortraitTraits", () => {
       hairColor: "d6b370",
       skinColor: "f1c3a5",
     });
+    expect(parsePortraitTraits({ coloreCapelli: "biondo cenere" })).toEqual({
+      hairColor: "c6bf9a",
+    });
+    expect(parsePortraitTraits({ coloreCapelli: "roscio" })).toEqual({
+      hairColor: "c45c26",
+    });
   });
 
   it("ignores unknown variants and face expressions", () => {
@@ -90,8 +96,25 @@ describe("serializePortraitsCsv", () => {
       }),
     ]);
     expect(csv).toContain("ada-10,Ada,10,Saccho's Team,undercut,longWavy,biondo,chiara,none");
-    expect(SHEET_HAIR_COLORS).toHaveLength(3);
+    expect(SHEET_HAIR_COLORS).toHaveLength(5);
     expect(serializePortraitsCsv([sample()])).toContain("ada-10,Ada,10,Saccho's Team,,,,,");
+  });
+
+  it("writes biondo cenere and roscio back to the portraits CSV", () => {
+    const csv = serializePortraitsCsv([
+      sample({
+        portrait: { hair: "bun", rearHair: "none", hairColor: "c6bf9a" },
+      }),
+      sample({
+        slug: "nico-11",
+        firstName: "Nico",
+        number: 11,
+        team: "Saccios Tim",
+        portrait: { hair: "spiky", hairColor: "c45c26" },
+      }),
+    ]);
+    expect(csv).toContain("ada-10,Ada,10,Saccho's Team,bun,none,biondo cenere,,");
+    expect(csv).toContain("nico-11,Nico,11,Saccios Tim,spiky,,roscio,,");
   });
 });
 
