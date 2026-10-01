@@ -28,8 +28,14 @@ describe("sheet enums", () => {
     expect(parseSheetSex("maschio")).toBe("M");
   });
 
-  it("offers 3 of 5 hair and skin colors", () => {
-    expect(SHEET_HAIR_COLORS).toEqual(["nero", "castano", "biondo"]);
+  it("offers sheet hair colors including ash blonde and ginger", () => {
+    expect(SHEET_HAIR_COLORS).toEqual([
+      "nero",
+      "castano",
+      "biondo",
+      "biondo cenere",
+      "roscio",
+    ]);
     expect(SHEET_SKIN_COLORS).toEqual(["scura", "media", "chiara"]);
   });
 

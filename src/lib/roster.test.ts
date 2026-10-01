@@ -206,6 +206,15 @@ Ada,Winx,14,Saccho's Team,Femmina,Ala,80,75,75,75,90,75,crocchia,lunghi mossi,bi
       beard: "none",
     });
   });
+
+  it("reads biondo cenere and roscio from the Italian sheet", () => {
+    const csv = `Nome,Numero,Squadra,Sesso,Capelli,Capelli dietro,Colore capelli,Carnagione,Barba
+Ada,14,Saccho's Team,Femmina,a punte,nessuno,biondo cenere,chiara,nessuno
+Nico,11,Saccios Tim,Maschio,a punte,nessuno,roscio,chiara,nessuno`;
+    const [ada, nico] = parseRosterCsv(csv);
+    expect(ada?.portrait?.hairColor).toBe("c6bf9a");
+    expect(nico?.portrait?.hairColor).toBe("c45c26");
+  });
 });
 
 describe("filterPlayers", () => {
