@@ -3,21 +3,35 @@ import { GuestFlow } from "#/components/challenge/ChallengeFlows";
 import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
 import { club } from "#/lib/club";
+import { getRequestOriginFn } from "#/lib/og";
 
 export const Route = createFileRoute("/s/$id")({
   loader: async ({ params }) => {
-    const resolved = await resolveLineupFn({ data: { id: params.id } });
-    return { id: params.id, host: resolved.lineup };
+    const [resolved, origin] = await Promise.all([
+      resolveLineupFn({ data: { id: params.id } }),
+      getRequestOriginFn(),
+    ]);
+    return { id: params.id, host: resolved.lineup, origin };
   },
   head: ({ loaderData }) => {
     const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
-    if (!hostName) return { meta: [{ title: `Sfida — ${club.name}` }] };
+    const origin = loaderData?.origin ?? club.productionUrl;
+    const ogImage = `${origin}/brand/og-sfida.png`;
+    if (!hostName) {
+      return {
+        meta: [
+          { title: `Sfida — ${club.name}` },
+          { property: "og:image", content: ogImage },
+          { name: "twitter:card", content: "summary_large_image" },
+        ],
+      };
+    }
     const title = `${hostName} ti sfida — ${club.name}`;
     return {
       meta: [
         { title },
         { property: "og:title", content: title },
-        { property: "og:image", content: `${club.productionUrl}/brand/og-sfida.svg` },
+        { property: "og:image", content: ogImage },
         { name: "twitter:card", content: "summary_large_image" },
       ],
     };

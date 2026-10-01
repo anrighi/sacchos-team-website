@@ -12,6 +12,7 @@ import {
 } from "#/lib/challenge/efficiency";
 import { simulateMatch, type SimEvent } from "#/lib/challenge/sim";
 import { club } from "#/lib/club";
+import { getRequestOriginFn } from "#/lib/og";
 import { displayName } from "#/lib/roster";
 import { cn } from "#/lib/utils";
 
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/sfida/partita")({
     guest: search.guest,
     seed: search.seed,
   }),
-  loader: ({ deps }) => {
+  loader: async ({ deps }) => {
     const host = decodeLineup(deps.host);
     const guest = decodeLineup(deps.guest);
     if (!host || !guest || !deps.seed) return null;
@@ -60,6 +61,7 @@ export const Route = createFileRoute("/sfida/partita")({
         e.kind === "fine",
     );
 
+    const origin = await getRequestOriginFn();
     return {
       hostName: match.hostName,
       guestName: match.guestName,
@@ -72,15 +74,18 @@ export const Route = createFileRoute("/sfida/partita")({
       hostParam: deps.host ?? "",
       guestParam: deps.guest ?? "",
       seed: deps.seed,
+      origin,
     };
   },
   head: ({ loaderData }) => {
-    const ogImage = `${club.productionUrl}/brand/og-match.svg`;
+    const origin = loaderData?.origin ?? club.productionUrl;
+    const ogImage = `${origin}/brand/og-match.png`;
     if (!loaderData) {
       return {
         meta: [
           { title: `Tabellino — ${club.name}` },
           { property: "og:image", content: ogImage },
+          { name: "twitter:card", content: "summary_large_image" },
         ],
       };
     }

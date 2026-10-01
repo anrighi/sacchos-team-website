@@ -7,6 +7,7 @@ import {
 import { clashingSlugs, decodeLineup, isLineupReady, lineupLabel } from "#/lib/challenge";
 import { players } from "#/data/players.generated";
 import { club } from "#/lib/club";
+import { getRequestOriginFn } from "#/lib/og";
 
 type ChallengeSearch = {
   host?: string;
@@ -24,23 +25,26 @@ export const Route = createFileRoute("/sfida/")({
     host: search.host,
     guest: search.guest,
   }),
-  loader: ({ deps }) => {
+  loader: async ({ deps }) => {
     const host = decodeLineup(deps.host);
     const guest = decodeLineup(deps.guest);
+    const origin = await getRequestOriginFn();
     return {
       hostName: host ? lineupLabel(host) : null,
       guestName: guest ? lineupLabel(guest) : null,
+      origin,
     };
   },
   head: ({ loaderData }) => {
     const { hostName, guestName } = loaderData ?? {};
+    const origin = loaderData?.origin ?? club.productionUrl;
     if (hostName && guestName) {
       const title = `${hostName} vs ${guestName} — ${club.name}`;
       return {
         meta: [
           { title },
           { property: "og:title", content: title },
-          { property: "og:image", content: `${club.productionUrl}/brand/og-match.svg` },
+          { property: "og:image", content: `${origin}/brand/og-match.png` },
           { name: "twitter:card", content: "summary_large_image" },
         ],
       };
@@ -51,7 +55,7 @@ export const Route = createFileRoute("/sfida/")({
         meta: [
           { title },
           { property: "og:title", content: title },
-          { property: "og:image", content: `${club.productionUrl}/brand/og-sfida.svg` },
+          { property: "og:image", content: `${origin}/brand/og-sfida.png` },
           { name: "twitter:card", content: "summary_large_image" },
         ],
       };

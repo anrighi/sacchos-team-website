@@ -3,6 +3,7 @@ import { MatchKickoff } from "#/components/challenge/ChallengeFlows";
 import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
 import { club } from "#/lib/club";
+import { getRequestOriginFn } from "#/lib/og";
 
 type MatchSearch = { seed?: string };
 
@@ -11,25 +12,39 @@ export const Route = createFileRoute("/s/$host/$guest")({
     seed: typeof raw.seed === "string" ? raw.seed : undefined,
   }),
   loader: async ({ params }) => {
-    const host = await resolveLineupFn({ data: { id: params.host } });
-    const guest = await resolveLineupFn({ data: { id: params.guest } });
+    const [host, guest, origin] = await Promise.all([
+      resolveLineupFn({ data: { id: params.host } }),
+      resolveLineupFn({ data: { id: params.guest } }),
+      getRequestOriginFn(),
+    ]);
     return {
       hostId: params.host,
       guestId: params.guest,
       host: host.lineup,
       guest: guest.lineup,
+      origin,
     };
   },
   head: ({ loaderData }) => {
     const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
     const guestName = loaderData?.guest ? lineupLabel(loaderData.guest) : null;
-    if (!hostName || !guestName) return { meta: [{ title: `Partita — ${club.name}` }] };
+    const origin = loaderData?.origin ?? club.productionUrl;
+    const ogImage = `${origin}/brand/og-match.png`;
+    if (!hostName || !guestName) {
+      return {
+        meta: [
+          { title: `Partita — ${club.name}` },
+          { property: "og:image", content: ogImage },
+          { name: "twitter:card", content: "summary_large_image" },
+        ],
+      };
+    }
     const title = `${hostName} vs ${guestName} — ${club.name}`;
     return {
       meta: [
         { title },
         { property: "og:title", content: title },
-        { property: "og:image", content: `${club.productionUrl}/brand/og-match.svg` },
+        { property: "og:image", content: ogImage },
         { name: "twitter:card", content: "summary_large_image" },
       ],
     };
