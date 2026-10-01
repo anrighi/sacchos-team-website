@@ -8,12 +8,13 @@ describe("public UI", () => {
     expect(src).not.toContain("Le carte.");
   });
 
-  it("does not publish the match archive", () => {
+  it("publishes the match archive at /sfide", () => {
     const page = readFileSync("src/routes/sfide.tsx", "utf8");
     const api = readFileSync("src/lib/challenge/cloud.ts", "utf8");
-    expect(page).toContain('redirect({ to: "/" })');
-    expect(api).not.toContain("listMatchesFn");
-    expect(api).not.toContain("listMatchSummaries");
+    expect(page).toContain("listMatchesFn");
+    expect(page).not.toContain('redirect({ to: "/" })');
+    expect(api).toContain("listMatchesFn");
+    expect(api).toContain("listMatchSummaries");
   });
 
   it("hides player stats in the UI until the Sheet is filled", () => {

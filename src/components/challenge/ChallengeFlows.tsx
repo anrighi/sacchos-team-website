@@ -156,6 +156,7 @@ export function MatchKickoff({
   guestParam,
   hostId,
   guestId,
+  save = true,
 }: {
   host: Lineup;
   guest: Lineup;
@@ -164,6 +165,7 @@ export function MatchKickoff({
   guestParam: string;
   hostId?: string;
   guestId?: string;
+  save?: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -207,19 +209,20 @@ export function MatchKickoff({
         seed={seed}
         hostParam={hostParam}
         guestParam={guestParam}
+        save={save}
         onReplay={() => {
           const next = createMatchSeed();
           if (hostId && guestId) {
             void navigate({
               to: "/s/$host/$guest",
               params: { host: hostId, guest: guestId },
-              search: { seed: next },
+              search: { seed: next, rematch: true },
             });
             return;
           }
           void navigate({
             to: "/sfida",
-            search: { host: hostParam, guest: guestParam, seed: next },
+            search: { host: hostParam, guest: guestParam, seed: next, rematch: true },
           });
         }}
       />

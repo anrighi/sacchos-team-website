@@ -31,6 +31,7 @@ export function MatchView({
   seed,
   hostParam,
   guestParam,
+  save = true,
   onReplay,
 }: {
   host: Lineup;
@@ -38,6 +39,7 @@ export function MatchView({
   seed: string;
   hostParam: string;
   guestParam: string;
+  save?: boolean;
   onReplay: () => void;
 }) {
   const match = useMemo(
@@ -59,6 +61,7 @@ export function MatchView({
 
   useEffect(() => {
     recordMatchIn(window.localStorage, seed, shotsFrom(match.events));
+    if (!save) return;
     const recapUrl = `${window.location.origin}${publicUrl("/sfida")}?host=${encodeURIComponent(hostParam).replace(/%7E/g, "~")}&guest=${encodeURIComponent(guestParam).replace(/%7E/g, "~")}&seed=${encodeURIComponent(seed)}`;
     void saveMatchFn({
       data: matchRecordFrom({ match, host, guest, recapUrl }),
@@ -67,7 +70,7 @@ export function MatchView({
         setArchiveHint("Archivio non raggiungibile. Il link della partita resta valido.");
       }
     });
-  }, [guest, guestParam, host, hostParam, match, seed]);
+  }, [guest, guestParam, host, hostParam, match, save, seed]);
 
   return (
     <section className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-hidden px-4 md:px-8">

@@ -3,11 +3,12 @@ import { MatchKickoff } from "#/components/challenge/ChallengeFlows";
 import { encodeLineup } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
 
-type MatchSearch = { seed?: string };
+type MatchSearch = { seed?: string; rematch?: boolean };
 
 export const Route = createFileRoute("/s/$host/$guest")({
   validateSearch: (raw: Record<string, unknown>): MatchSearch => ({
     seed: typeof raw.seed === "string" ? raw.seed : undefined,
+    rematch: raw.rematch === true || raw.rematch === "true",
   }),
   loader: async ({ params }) => {
     const host = await resolveLineupFn({ data: { id: params.host } });
@@ -51,6 +52,7 @@ function ShortMatchPage() {
       guestParam={encodeLineup(guest)}
       hostId={hostId}
       guestId={guestId}
+      save={!search.rematch}
     />
   );
 }
