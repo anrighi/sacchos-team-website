@@ -3,7 +3,7 @@ import { GuestFlow } from "#/components/challenge/ChallengeFlows";
 import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
 import { club } from "#/lib/club";
-import { getRequestOriginFn } from "#/lib/og";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
 export const Route = createFileRoute("/s/$id")({
   loader: async ({ params }) => {
@@ -16,23 +16,16 @@ export const Route = createFileRoute("/s/$id")({
   head: ({ loaderData }) => {
     const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
     const origin = loaderData?.origin ?? club.productionUrl;
-    const ogImage = `${origin}/brand/og-sfida.png`;
+    const imgMeta = ogImageMeta(origin, "sfida");
     if (!hostName) {
-      return {
-        meta: [
-          { title: `Sfida — ${club.name}` },
-          { property: "og:image", content: ogImage },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
-      };
+      return { meta: [{ title: `Sfida — ${club.name}` }, ...imgMeta] };
     }
     const title = `${hostName} ti sfida — ${club.name}`;
     return {
       meta: [
         { title },
         { property: "og:title", content: title },
-        { property: "og:image", content: ogImage },
-        { name: "twitter:card", content: "summary_large_image" },
+        ...imgMeta,
       ],
     };
   },

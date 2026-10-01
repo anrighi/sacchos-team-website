@@ -3,7 +3,7 @@ import { MatchKickoff } from "#/components/challenge/ChallengeFlows";
 import { encodeLineup, lineupLabel } from "#/lib/challenge";
 import { resolveLineupFn } from "#/lib/challenge/cloud";
 import { club } from "#/lib/club";
-import { getRequestOriginFn } from "#/lib/og";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
 type MatchSearch = { seed?: string };
 
@@ -29,23 +29,16 @@ export const Route = createFileRoute("/s/$host/$guest")({
     const hostName = loaderData?.host ? lineupLabel(loaderData.host) : null;
     const guestName = loaderData?.guest ? lineupLabel(loaderData.guest) : null;
     const origin = loaderData?.origin ?? club.productionUrl;
-    const ogImage = `${origin}/brand/og-match.png`;
+    const imgMeta = ogImageMeta(origin, "match");
     if (!hostName || !guestName) {
-      return {
-        meta: [
-          { title: `Partita — ${club.name}` },
-          { property: "og:image", content: ogImage },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
-      };
+      return { meta: [{ title: `Partita — ${club.name}` }, ...imgMeta] };
     }
     const title = `${hostName} vs ${guestName} — ${club.name}`;
     return {
       meta: [
         { title },
         { property: "og:title", content: title },
-        { property: "og:image", content: ogImage },
-        { name: "twitter:card", content: "summary_large_image" },
+        ...imgMeta,
       ],
     };
   },

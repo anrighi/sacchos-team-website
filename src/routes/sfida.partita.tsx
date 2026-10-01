@@ -12,7 +12,7 @@ import {
 } from "#/lib/challenge/efficiency";
 import { simulateMatch, type SimEvent } from "#/lib/challenge/sim";
 import { club } from "#/lib/club";
-import { getRequestOriginFn } from "#/lib/og";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 import { displayName } from "#/lib/roster";
 import { cn } from "#/lib/utils";
 
@@ -79,15 +79,9 @@ export const Route = createFileRoute("/sfida/partita")({
   },
   head: ({ loaderData }) => {
     const origin = loaderData?.origin ?? club.productionUrl;
-    const ogImage = `${origin}/brand/og-match.png`;
+    const imgMeta = ogImageMeta(origin, "match");
     if (!loaderData) {
-      return {
-        meta: [
-          { title: `Tabellino — ${club.name}` },
-          { property: "og:image", content: ogImage },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
-      };
+      return { meta: [{ title: `Tabellino — ${club.name}` }, ...imgMeta] };
     }
     const { hostName, guestName, score } = loaderData;
     const ogTitle = `${hostName} vs ${guestName} — tabellino`;
@@ -98,8 +92,7 @@ export const Route = createFileRoute("/sfida/partita")({
         { name: "description", content: description },
         { property: "og:title", content: ogTitle },
         { property: "og:description", content: description },
-        { property: "og:image", content: ogImage },
-        { name: "twitter:card", content: "summary_large_image" },
+        ...imgMeta,
       ],
     };
   },

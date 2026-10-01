@@ -7,7 +7,7 @@ import {
 import { clashingSlugs, decodeLineup, isLineupReady, lineupLabel } from "#/lib/challenge";
 import { players } from "#/data/players.generated";
 import { club } from "#/lib/club";
-import { getRequestOriginFn } from "#/lib/og";
+import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
 type ChallengeSearch = {
   host?: string;
@@ -41,23 +41,13 @@ export const Route = createFileRoute("/sfida/")({
     if (hostName && guestName) {
       const title = `${hostName} vs ${guestName} — ${club.name}`;
       return {
-        meta: [
-          { title },
-          { property: "og:title", content: title },
-          { property: "og:image", content: `${origin}/brand/og-match.png` },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
+        meta: [{ title }, { property: "og:title", content: title }, ...ogImageMeta(origin, "match")],
       };
     }
     if (hostName) {
       const title = `${hostName} ti sfida — ${club.name}`;
       return {
-        meta: [
-          { title },
-          { property: "og:title", content: title },
-          { property: "og:image", content: `${origin}/brand/og-sfida.png` },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
+        meta: [{ title }, { property: "og:title", content: title }, ...ogImageMeta(origin, "sfida")],
       };
     }
     return { meta: [{ title: `Sfida — ${club.name}` }] };
