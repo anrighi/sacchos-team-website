@@ -536,11 +536,11 @@ export const players: Player[] = [
     "team": "Saccios Tim",
     "sex": "F",
     "number": 81,
-    "overall": 77,
+    "overall": 75,
     "stats": {
       "velocita": 75,
       "salto": 75,
-      "intercetto": 85,
+      "intercetto": 75,
       "scalpo": 75,
       "finalizzazione": 75,
       "gk": 75
