@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Swords } from "lucide-react";
+import { Play, Swords } from "lucide-react";
 import type { MatchSide, MatchSummary } from "#/lib/challenge/archive";
 import { DEFAULT_FORMATION, SQUAD_SIZE } from "#/lib/challenge/formation";
 import { encodeLineup } from "#/lib/challenge/link";
@@ -45,20 +45,25 @@ function MatchRow({ match }: { match: MatchSummary }) {
   });
 
   return (
-    <li className="flex items-center gap-3 py-3">
+    <li className="flex items-center gap-2 py-3">
       <span className="w-24 shrink-0 text-[13px] tabular-nums text-white/40">{date}</span>
 
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <ChallengeLink side={match.host} />
-        <a
-          href={match.recapUrl}
-          title="Rivedi la partita"
-          className="shrink-0 font-display text-xl text-pink hover:text-pink/80"
-        >
+        <span className="shrink-0 font-display text-xl text-pink">
           {match.mete.host}–{match.mete.guest}
-        </a>
+        </span>
         <ChallengeLink side={match.guest} align="left" />
       </div>
+
+      <a
+        href={match.recapUrl}
+        title="Rivedi la partita"
+        className="shrink-0 rounded-full p-1.5 text-white/30 transition-colors hover:bg-white/8 hover:text-white"
+      >
+        <Play className="size-4 fill-current" aria-hidden />
+        <span className="sr-only">Rivedi</span>
+      </a>
     </li>
   );
 }
