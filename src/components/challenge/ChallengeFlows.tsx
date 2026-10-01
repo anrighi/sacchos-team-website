@@ -138,9 +138,9 @@ export function GuestFlow({
                 search: { host: hostParam, guest: guestParam, seed },
               })
             }
-            className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-pink text-sm font-medium text-navy-deep hover:bg-pink/90"
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-pink text-[15px] font-semibold text-navy-deep transition-all hover:bg-pink/90 active:scale-[0.97]"
           >
-            Fai partire la partita
+            Fai partire la partita →
           </button>
         ) : null}
       </section>
@@ -156,6 +156,7 @@ export function MatchKickoff({
   guestParam,
   hostId,
   guestId,
+  save = true,
 }: {
   host: Lineup;
   guest: Lineup;
@@ -164,6 +165,7 @@ export function MatchKickoff({
   guestParam: string;
   hostId?: string;
   guestId?: string;
+  save?: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -207,19 +209,20 @@ export function MatchKickoff({
         seed={seed}
         hostParam={hostParam}
         guestParam={guestParam}
+        save={save}
         onReplay={() => {
           const next = createMatchSeed();
           if (hostId && guestId) {
             void navigate({
               to: "/s/$host/$guest",
               params: { host: hostId, guest: guestId },
-              search: { seed: next },
+              search: { seed: next, rematch: true },
             });
             return;
           }
           void navigate({
             to: "/sfida",
-            search: { host: hostParam, guest: guestParam, seed: next },
+            search: { host: hostParam, guest: guestParam, seed: next, rematch: true },
           });
         }}
       />

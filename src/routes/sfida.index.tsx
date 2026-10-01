@@ -13,6 +13,7 @@ type ChallengeSearch = {
   host?: string;
   guest?: string;
   seed?: string;
+  rematch?: boolean;
 };
 
 export const Route = createFileRoute("/sfida/")({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/sfida/")({
     host: typeof raw.host === "string" ? raw.host : undefined,
     guest: typeof raw.guest === "string" ? raw.guest : undefined,
     seed: typeof raw.seed === "string" ? raw.seed : undefined,
+    rematch: raw.rematch === true || raw.rematch === "true",
   }),
   loaderDeps: ({ search }) => ({
     host: search.host,
@@ -75,6 +77,7 @@ function SfidaPage() {
         seed={search.seed}
         hostParam={search.host ?? ""}
         guestParam={search.guest ?? ""}
+        save={!search.rematch}
       />
     );
   }

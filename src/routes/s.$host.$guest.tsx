@@ -5,11 +5,12 @@ import { resolveLineupFn } from "#/lib/challenge/cloud";
 import { club } from "#/lib/club";
 import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
 
-type MatchSearch = { seed?: string };
+type MatchSearch = { seed?: string; rematch?: boolean };
 
 export const Route = createFileRoute("/s/$host/$guest")({
   validateSearch: (raw: Record<string, unknown>): MatchSearch => ({
     seed: typeof raw.seed === "string" ? raw.seed : undefined,
+    rematch: raw.rematch === true || raw.rematch === "true",
   }),
   loader: async ({ params }) => {
     const [host, guest, origin] = await Promise.all([
@@ -74,6 +75,7 @@ function ShortMatchPage() {
       guestParam={encodeLineup(guest)}
       hostId={hostId}
       guestId={guestId}
+      save={!search.rematch}
     />
   );
 }

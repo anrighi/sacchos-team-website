@@ -31,6 +31,7 @@ export function MatchView({
   seed,
   hostParam,
   guestParam,
+  save = true,
   onReplay,
 }: {
   host: Lineup;
@@ -38,6 +39,7 @@ export function MatchView({
   seed: string;
   hostParam: string;
   guestParam: string;
+  save?: boolean;
   onReplay: () => void;
 }) {
   const match = useMemo(
@@ -56,9 +58,17 @@ export function MatchView({
   const happened = match.events.slice(0, Math.max(frame.index + 1, 1));
   const newestFirst = happened.toReversed();
   const [archiveHint, setArchiveHint] = useState<string | null>(null);
+  const shareRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (frame.done && shareRef.current) {
+      shareRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [frame.done]);
 
   useEffect(() => {
     recordMatchIn(window.localStorage, seed, shotsFrom(match.events));
+    if (!save) return;
     const recapUrl = `${window.location.origin}${publicUrl("/sfida/partita")}?host=${encodeURIComponent(hostParam).replace(/%7E/g, "~")}&guest=${encodeURIComponent(guestParam).replace(/%7E/g, "~")}&seed=${encodeURIComponent(seed)}`;
     void saveMatchFn({
       data: matchRecordFrom({ match, host, guest, recapUrl }),
@@ -67,7 +77,7 @@ export function MatchView({
         setArchiveHint("Archivio non raggiungibile. Il link della partita resta valido.");
       }
     });
-  }, [guest, guestParam, host, hostParam, match, seed]);
+  }, [guest, guestParam, host, hostParam, match, save, seed]);
 
   return (
     <section className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-hidden px-4 md:px-8">
@@ -95,20 +105,13 @@ export function MatchView({
         <div className="absolute inset-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]">
           <EventLog events={newestFirst} current={frame.event} />
           {frame.done ? (
-            <div className="mt-6 space-y-4 pb-4">
-              <button
-                type="button"
-                onClick={onReplay}
-                className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-white/10 text-sm font-medium text-white hover:bg-white/20"
-              >
-                Rivincita
-              </button>
+            <div ref={shareRef} className="mt-6 space-y-4 pb-4">
               <ShareChallenge
                 ready
                 search={{ host: hostParam, guest: guestParam, seed }}
                 onMint={() => mintMatchLink(hostParam, guestParam, seed)}
                 title={`${match.hostName} ${match.score.host}–${match.score.guest} ${match.guestName}`}
-                cta="Copia il link della partita"
+                cta="Condividi la partita"
                 hint={
                   match.events.some((item) => item.kind === "supplementari")
                     ? "Stesso seed, stesso tabellino. Mandalo a chi si è perso i supplementari."
@@ -119,6 +122,13 @@ export function MatchView({
               {archiveHint ? (
                 <p className="text-center text-[15px] text-white/50">{archiveHint}</p>
               ) : null}
+              <button
+                type="button"
+                onClick={onReplay}
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-white/10 text-sm font-medium text-white hover:bg-white/20"
+              >
+                Rivincita
+              </button>
             </div>
           ) : null}
         </div>
