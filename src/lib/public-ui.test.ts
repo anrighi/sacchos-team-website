@@ -38,7 +38,7 @@ describe("public UI", () => {
     const home = readFileSync("src/components/HomeLanding.tsx", "utf8");
     const carousel = readFileSync("src/components/SquadCarousel.tsx", "utf8");
     expect(home).toContain("SquadCarousel");
-    expect(home).toContain("sortRoster(players)");
+    expect(home).toContain("Math.random()");
     expect(home).not.toContain("giorgia-pappagiorgia");
     expect(carousel).toContain("Giocatore precedente");
     expect(carousel).toContain("Giocatore successivo");

@@ -3,11 +3,10 @@ import { SquadCarousel } from "#/components/SquadCarousel";
 import { Reveal } from "#/components/Reveal";
 import { players } from "#/data/players.generated";
 import { club } from "#/lib/club";
-import { sortRoster } from "#/lib/roster";
 import { publicUrl } from "#/lib/public-url";
 import { cn } from "#/lib/utils";
 
-const squad = sortRoster(players);
+const squad = [...players].sort(() => Math.random() - 0.5);
 
 const kitFan = [
   {
