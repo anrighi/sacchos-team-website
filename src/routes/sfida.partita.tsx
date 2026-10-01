@@ -4,12 +4,6 @@ import { useState } from "react";
 import { players } from "#/data/players.generated";
 import { mvpOf } from "#/lib/challenge/archive";
 import { decodeLineup, isLineupReady } from "#/lib/challenge";
-import {
-  formatPct,
-  formatSplit,
-  rowsFromShots,
-  shotsFrom,
-} from "#/lib/challenge/efficiency";
 import { simulateMatch, type SimEvent } from "#/lib/challenge/sim";
 import { club } from "#/lib/club";
 import { getRequestOriginFn, ogImageMeta } from "#/lib/og";
@@ -40,9 +34,19 @@ export const Route = createFileRoute("/sfida/partita")({
     if (!isLineupReady(host, players) || !isLineupReady(guest, players)) return null;
 
     const match = simulateMatch({ host, guest, roster: players, seed: deps.seed });
-    const shots = shotsFrom(match.events);
-    const boxScore = rowsFromShots(shots);
     const mvp = mvpOf(match.events);
+
+    const boxScoreMap = new Map<string, { mete: number; scalpiPieni: number; scalpiVuoti: number }>();
+    for (const e of match.events) {
+      if (!e.actor) continue;
+      const row = boxScoreMap.get(e.actor) ?? { mete: 0, scalpiPieni: 0, scalpiVuoti: 0 };
+      if (e.kind === "meta") row.mete++;
+      else if (e.kind === "scalpo-pieno") row.scalpiPieni++;
+      else if (e.kind === "scalpo-vuoto") row.scalpiVuoti++;
+      else continue;
+      boxScoreMap.set(e.actor, row);
+    }
+    const boxScore = Array.from(boxScoreMap.entries()).map(([slug, stats]) => ({ slug, ...stats }));
 
     const scalpiHost = match.events.filter(
       (e) => e.kind === "scalpo-pieno" && e.side === "host",
@@ -210,8 +214,8 @@ function PartitaPage() {
                 <tr className="text-[11px] uppercase tracking-[0.12em] text-white/40">
                   <th className="py-2 text-left font-medium">Giocatore</th>
                   <th className="py-2 pr-4 text-right font-medium">Mete</th>
-                  <th className="py-2 pr-4 text-right font-medium">Eff.</th>
-                  <th className="py-2 text-right font-medium">Parate</th>
+                  <th className="py-2 pr-4 text-right font-medium">S.pieni</th>
+                  <th className="py-2 text-right font-medium">S.vuoti</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -219,7 +223,7 @@ function PartitaPage() {
                   .slice()
                   .sort(
                     (a, b) =>
-                      b.metas - a.metas || (b.parate ?? 0) - (a.parate ?? 0),
+                      b.mete - a.mete || b.scalpiPieni - a.scalpiPieni,
                   )
                   .map((row) => {
                     const p = players.find((pl) => pl.slug === row.slug);
@@ -245,22 +249,22 @@ function PartitaPage() {
                           ) : null}
                         </td>
                         <td className="py-2.5 pr-4 text-right font-display text-base">
-                          {row.metas > 0 ? (
-                            formatSplit(row.metas, row.tentativi)
+                          {row.mete > 0 ? (
+                            row.mete
                           ) : (
                             <span className="text-white/30">—</span>
                           )}
                         </td>
                         <td className="py-2.5 pr-4 text-right">
-                          {row.tentativi > 0 ? (
-                            formatPct(row.efficienza)
+                          {row.scalpiPieni > 0 ? (
+                            row.scalpiPieni
                           ) : (
                             <span className="text-white/30">—</span>
                           )}
                         </td>
                         <td className="py-2.5 text-right">
-                          {row.shotsFaced > 0 ? (
-                            formatPct(row.parate)
+                          {row.scalpiVuoti > 0 ? (
+                            row.scalpiVuoti
                           ) : (
                             <span className="text-white/30">—</span>
                           )}
