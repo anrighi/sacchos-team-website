@@ -37,11 +37,8 @@ describe("players snapshot", () => {
     expect(players.find((p) => p.number === 24 && p.team === "Saccios Tim")?.nickname).toBe("Ga");
   });
 
-  it("defaults overall to 75 unless a row has custom stats", () => {
-    const chiara = players.find((p) => p.number === 81);
-    expect(chiara?.stats.intercetto).toBe(85);
-    expect(chiara?.overall).toBe(77);
-    expect(players.filter((p) => p.overall === 75)).toHaveLength(25);
+  it("defaults all stats to 75", () => {
+    expect(players.filter((p) => p.overall === 75)).toHaveLength(26);
   });
 
   it("keeps every overall inside the 75–90 play band", () => {

@@ -23,6 +23,7 @@ jobs:
           node-version: "26"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm ingest-roster:seed
       - run: pnpm test
       - run: pnpm build
         env:

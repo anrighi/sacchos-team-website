@@ -30,10 +30,10 @@ function GuidaPage() {
             <Link to="/sfida" className="text-pink hover:underline">
               Sfida
             </Link>{" "}
-            e inserisci il nome della tua squadra. Scegli 6 giocatori tra la
+            e inserisci il nome della tua squadra. Scegli 7 giocatori tra la
             rosa e disponi il tuo schieramento nel modulo{" "}
             <span className="font-semibold text-white">3-2-1</span>: tre
-            difensori, due centrocampisti e un attaccante.
+            difensori, due centrocampisti, un attaccante e un portiere.
           </Step>
           <Step number={2} title="Manda il link all'avversario">
             Una volta completato lo schieramento, copia il link di sfida e
@@ -123,7 +123,7 @@ function GuidaPage() {
           </GlossaryItem>
           <GlossaryItem term="Modulo 3-2-1">
             Lo schieramento standard dello Scoutball 7v7: 3 difensori, 2
-            centrocampisti, 1 attaccante (più il portiere implicito).
+            centrocampisti, 1 attaccante e 1 portiere — 7 giocatori in totale.
           </GlossaryItem>
           <GlossaryItem term="MVP">
             Il giocatore più influente della partita, calcolato in base a mete
