@@ -8,6 +8,7 @@ describe("siteNavItems", () => {
       "/rosa",
       "/sfida",
       "/sfide",
+      "/guida",
     ]);
   });
 });

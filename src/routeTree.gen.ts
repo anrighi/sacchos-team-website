@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as GuidaRouteImport } from './routes/guida'
 import { Route as RosaRouteImport } from './routes/rosa'
 import { Route as SfidaRouteImport } from './routes/sfida'
 import { Route as SfideRouteImport } from './routes/sfide'
@@ -22,6 +24,16 @@ import { Route as SHostGuestRouteImport } from './routes/s.$host.$guest'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidaRoute = GuidaRouteImport.update({
+  id: '/guida',
+  path: '/guida',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RosaRoute = RosaRouteImport.update({
@@ -67,6 +79,8 @@ const SHostGuestRoute = SHostGuestRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/guida': typeof GuidaRoute
   '/rosa': typeof RosaRoute
   '/sfida': typeof SfidaRouteWithChildren
   '/sfide': typeof SfideRoute
@@ -78,6 +92,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/guida': typeof GuidaRoute
   '/rosa': typeof RosaRoute
   '/sfide': typeof SfideRoute
   '/giocatori/$slug': typeof GiocatoriSlugRoute
@@ -89,6 +105,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/guida': typeof GuidaRoute
   '/rosa': typeof RosaRoute
   '/sfida': typeof SfidaRouteWithChildren
   '/sfide': typeof SfideRoute
@@ -102,6 +120,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/guida'
     | '/rosa'
     | '/sfida'
     | '/sfide'
@@ -113,6 +133,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
+    | '/guida'
     | '/rosa'
     | '/sfide'
     | '/giocatori/$slug'
@@ -123,6 +145,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/guida'
     | '/rosa'
     | '/sfida'
     | '/sfide'
@@ -135,6 +159,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  GuidaRoute: typeof GuidaRoute
   RosaRoute: typeof RosaRoute
   SfidaRoute: typeof SfidaRouteWithChildren
   SfideRoute: typeof SfideRoute
@@ -150,6 +176,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guida': {
+      id: '/guida'
+      path: '/guida'
+      fullPath: '/guida'
+      preLoaderRoute: typeof GuidaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rosa': {
@@ -225,6 +265,8 @@ const SfidaRouteWithChildren = SfidaRoute._addFileChildren(SfidaRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  GuidaRoute: GuidaRoute,
   RosaRoute: RosaRoute,
   SfidaRoute: SfidaRouteWithChildren,
   SfideRoute: SfideRoute,

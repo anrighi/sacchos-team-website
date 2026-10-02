@@ -3,4 +3,5 @@ export const siteNavItems = [
   { to: "/rosa", label: "Rosa", exact: false },
   { to: "/sfida", label: "Sfida", exact: false },
   { to: "/sfide", label: "Archivio", exact: false },
+  { to: "/guida", label: "Guida", exact: false },
 ] as const;
