@@ -103,39 +103,6 @@ function GuidaPage() {
         </div>
       </section>
 
-      <div className="mb-12 border-t border-white/10" />
-
-      {/* Glossario */}
-      <section>
-        <h2 className="mb-5 font-display text-2xl tracking-tight">Glossario</h2>
-        <dl className="space-y-4">
-          <GlossaryItem term="Meta">
-            Il punto principale dello Scoutball 7v7. Vale 1 punto nel
-            punteggio finale.
-          </GlossaryItem>
-          <GlossaryItem term="Scalpo pieno">
-            Azione difensiva andata a buon fine: il difensore strappa la
-            bandana all'attaccante prima che segni.
-          </GlossaryItem>
-          <GlossaryItem term="Scalpo vuoto">
-            Tentativo di scalpo fallito: l'attaccante riesce a evitare il
-            contatto e proseguire l'azione.
-          </GlossaryItem>
-          <GlossaryItem term="Modulo 3-2-1">
-            Lo schieramento standard dello Scoutball 7v7: 3 difensori, 2
-            centrocampisti, 1 attaccante e 1 portiere — 7 giocatori in totale.
-          </GlossaryItem>
-          <GlossaryItem term="MVP">
-            Il giocatore più influente della partita, calcolato in base a mete
-            e scalpi pieni sommati.
-          </GlossaryItem>
-          <GlossaryItem term="Supplementari e golden">
-            Se dopo i due tempi regolamentari il punteggio è in parità, si
-            disputa un tempo supplementare. In caso di ulteriore parità scatta
-            il golden: vince chi segna per primo.
-          </GlossaryItem>
-        </dl>
-      </section>
     </main>
   );
 }
@@ -162,17 +129,3 @@ function Step({
   );
 }
 
-function GlossaryItem({
-  term,
-  children,
-}: {
-  term: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-white/8 px-4 py-3">
-      <dt className="font-semibold text-white">{term}</dt>
-      <dd className="mt-1 text-sm text-white/60">{children}</dd>
-    </div>
-  );
-}
